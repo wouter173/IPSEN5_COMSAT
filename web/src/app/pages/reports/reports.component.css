@@ -1,0 +1,12 @@
+.flex {
+  display: flex;
+}
+
+.chart-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.chart-container > div {
+  flex: 1;
+}

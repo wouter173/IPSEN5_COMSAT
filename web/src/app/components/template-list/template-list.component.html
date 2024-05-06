@@ -1,0 +1,6 @@
+<div class="h-full min-w-96 border-r border-r-base-6">
+    <ul class="flex flex-col gap-2.5 p-2.5" *ngFor="let template of templates" >
+      <li><app-template-list-item (templateEmitter)="receiveTemplate($event)" [template]="template"></app-template-list-item></li>
+    </ul>
+  </div>
+  

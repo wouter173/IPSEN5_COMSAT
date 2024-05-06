@@ -1,0 +1,22 @@
+<button
+  [class]="
+    'flex w-full items-center justify-between rounded-2xl border border-base-6 px-4 py-3.5 text-left transition-all active:scale-[98%] ' +
+    (selected && 'bg-base-5')
+  "
+>
+  <div class="flex flex-col gap-1">
+    <h3 class="font-semibold">{{ batch.name }}</h3>
+    <div class="grid grid-cols-[min-content,1fr] gap-x-1 text-xs opacity-50">
+      <span class="text-right font-medium">Status:</span>
+      <span>{{ { NOTSENT: "Preparing", SENDING: "Sending...", SENT: "Sent" }[batch.state] }}</span>
+      <span class="text-right font-medium">Modified:</span>
+      <span>{{ batch.lastModified | date: "medium" }}</span>
+      <span class="text-right font-medium">Created:</span>
+      <span>{{ batch.createdAt | date: "medium" }}</span>
+    </div>
+  </div>
+
+  <div [class]="'flex flex-col justify-end transition-all ' + (selected ? 'opacity-100' : 'opacity-35')">
+    <lucide-icon name="chevron-right-icon" class="h-[14px] stroke-[2.6]" />
+  </div>
+</button>

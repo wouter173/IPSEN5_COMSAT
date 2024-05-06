@@ -1,0 +1,13 @@
+<div class="flex min-h-full w-full">
+  <div class="min-w-60 shrink-0">
+    <app-batch-list
+      [selectedBatch]="selectedBatch"
+      [onSelectBatch]="onSelectBatch"
+      [batches]="batchesService.batches"
+      [createBatch]="true"
+    />
+  </div>
+  <div class="w-full">
+    <app-batch-detail [selectedBatchId]="selectedBatch" />
+  </div>
+</div>
