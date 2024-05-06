@@ -4,7 +4,7 @@
   </div>
   <div class="mx-auto mt-5 flex h-screen flex-col">
     <div class="title mb-2 h-9 min-w-96 rounded-md border-2">
-      <textarea class="font-xl h-full w-full" style="resize: none"> {{ selectedTemplate?.name }}</textarea>
+      <textarea class="font-xl h-full w-full" style="resize: none"> {{ htmlTitle }}</textarea>
     </div>
     <div class="NgxEditor__Wrapper">
       <ngx-editor-menu [editor]="editor"> </ngx-editor-menu>
@@ -13,6 +13,11 @@
     <div class="buttons min-w-96">
       <button class="m-5 h-min w-20 rounded-xl border bg-green-200">Save</button>
       <button (click)="new()" class="m-5 h-min w-20 rounded-xl border bg-green-200">New</button>
+      <mat-select [(value)]="selectedLanguage" (valueChange)="onDisplay()">
+        <mat-option value="en">English</mat-option>
+        <mat-option value="nl">Dutch</mat-option>
+        <mat-option value="es">Spanish</mat-option>
+      </mat-select>
     </div>
   </div>
 </div>
