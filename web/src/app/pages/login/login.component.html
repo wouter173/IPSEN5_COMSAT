@@ -1,0 +1,41 @@
+<body>
+  <div class="container flex flex-col gap-6" id="login" #login>
+    <img src="assets/logo.png" alt="logo" class="mx-auto mb-4 w-1/2" />
+    <div class="flex flex-col">
+      <label for="uname">
+        <b>Username</b>
+        <input type="text" placeholder="Enter Username" name="uname" #username required />
+      </label>
+
+      <label for="psw" class="flex flex-col">
+        <b>Password</b>
+        <div class="password-container">
+          <input [type]="showPassword ? 'text' : 'password'" placeholder="Enter Password" name="psw" #password required />
+          <button type="button" class="show-password-button" (click)="toggleShowPassword()">
+            @if (showPassword) {
+              <i class="fa-solid fa-eye" style="font-size: larger"></i>
+            } @else {
+              <i class="fa-solid fa-eye-slash" style="font-size: larger"></i>
+            }
+          </button>
+        </div>
+      </label>
+    </div>
+    <button type="submit" class="btn" (click)="onContinueClick()">Login</button>
+  </div>
+  <div class="container" id="2fa" hidden="true" #2fa>
+    <label for="token"><b>Please enter the 2 factor authentication code.</b></label>
+    <input
+      type="text"
+      name="token"
+      id="token"
+      class="partitioned-input"
+      inputmode="numeric"
+      placeholder="2fa code"
+      pattern="[0-9]*"
+      autocomplete="one-time-code"
+      #2facode
+    />
+    <button type="submit" class="btn" (click)="onLoginClick()">Continue</button>
+  </div>
+</body>

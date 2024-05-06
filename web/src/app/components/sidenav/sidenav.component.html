@@ -1,0 +1,42 @@
+<nav class="sticky top-20 flex h-[calc(100vh-80px)] flex-col justify-between bg-secondary-light-2">
+  <ul class="flex flex-col gap-2.5 p-4">
+    <li>
+      <app-navlink key="navlink-batches" pathname="/batches" icon="layers-icon">Batches</app-navlink>
+    </li>
+    <li>
+      <app-navlink key="navlink-contacts" pathname="/contacts" icon="contact-round-icon">Contacts</app-navlink>
+    </li>
+    <li>
+      <app-navlink key="navlink-templates" pathname="/templates" icon="clipboard-icon">templates</app-navlink>
+    </li>
+    <li>
+      <app-navlink key="navlink-reports" pathname="/reports" icon="pie-chart-icon">Reports</app-navlink>
+    </li>
+    <li>
+      <app-navlink key="navlink-users" pathname="/users" icon="users-icon">Users</app-navlink>
+    </li>
+  </ul>
+  <div
+    class="relative bottom-0 w-full outline-transparent focus:outline-transparent focus-visible:outline-transparent active:outline-transparent"
+  >
+    <ul
+      class="flex flex-col gap-2.5 rounded-t-lg border border-b-0 border-black/5 bg-white p-4"
+      [style.display]="isProfileDropdownOpen ? 'block' : 'none'"
+    >
+      <li>
+        <app-navlink key="navlink-settings" pathname="/settings" icon="settings-icon">Settings</app-navlink>
+        <app-navlink key="navlink-logout" pathname="/" icon="log-out-icon">Logout</app-navlink>
+      </li>
+    </ul>
+    <hr class="my-0 border-t border-black/5" style="width: 100%" />
+    <button
+      (click)="toggleProfileDropdown()"
+      class="flex h-full w-full flex-col gap-2.5 p-4 outline-transparent focus-visible:outline-transparent active:outline-transparent"
+    >
+      <div class="relative z-50 flex gap-2 px-2.5 py-2 text-sm font-semibold">
+        <lucide-icon name="user-round-icon" class="h-[18px] stroke-[2.6]" />
+        Profile
+      </div>
+    </button>
+  </div>
+</nav>

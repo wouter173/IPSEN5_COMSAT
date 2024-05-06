@@ -1,0 +1,70 @@
+<dialog #createModal class="w-full max-w-96 rounded-xl">
+  <div class="flex-col gap-5 p-6">
+    <div>
+      <div class="flex justify-between">
+        <h1 class="text-xl font-semibold">Create new batch</h1>
+        <button (click)="closeDialog()">
+          <lucide-icon name="x-icon" />
+        </button>
+      </div>
+      <p class="text-sm">Please provide an import for the new batch</p>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" class="flex flex-col gap-4" #createForm>
+      <label class="flex flex-col gap-1">
+        <span class="text-sm font-semibold opacity-75">Name</span>
+        <input
+          type="text"
+          name="name"
+          class="rounded-md bg-secondary-light-2 px-3 py-2"
+          #nameField
+          (input)="name.set(nameField.value)"
+          [value]="name()"
+        />
+      </label>
+
+      <label class="flex flex-col gap-1">
+        <span class="text-sm font-semibold opacity-75">Import</span>
+        <div
+          class="focusable relative grid h-32 w-full cursor-pointer place-items-center rounded-md border-2 border-dashed bg-secondary-light-2"
+        >
+          <input
+            accept=".json"
+            #fileInput
+            type="file"
+            [disabled]="fileState().state === 'loading'"
+            (change)="onFileDrop($event)"
+            class="absolute inset-0 opacity-0 enabled:cursor-pointer"
+          />
+          <app-spinner *ngIf="fileState().state === 'loading'" class="h-8 w-8 animate-spin fill-primary-red-1 text-gray-200" />
+          @if (fileState().state === "success") {
+            <div class="flex flex-col items-center gap-1">
+              <lucide-icon name="file-text-icon" />
+              <span class="text-sm">{{ fileState().value?.name }}</span>
+            </div>
+          } @else if (fileState().state === "error") {
+            <div class="flex flex-col items-center gap-1">
+              <lucide-icon name="file-x-2-icon" class="text-red-500" />
+              <span class="text-sm text-red-600">{{ fileState().error }}</span>
+            </div>
+          } @else if (fileState().state === "initial") {
+            <span class="text-sm opacity-50">Click or drop your import file here</span>
+          }
+        </div>
+      </label>
+      <button
+        [disabled]="!name() || fileState().state !== 'success'"
+        class="mt-4 w-full rounded-md bg-primary-blue-2 py-2 font-medium text-white transition-all hover:bg-primary-blue-1 enabled:active:scale-[98%] disabled:bg-primary-blue-3"
+      >
+        Create Batch
+      </button>
+    </form>
+  </div>
+</dialog>
+
+<button
+  (click)="openDialog()"
+  class="fixed bottom-0 m-2.5 grid size-12 place-items-center rounded-full bg-[#4d537b] text-white transition-all hover:bg-primary-blue-1 active:scale-[90%]"
+>
+  <lucide-icon name="plus-icon"></lucide-icon>
+</button>

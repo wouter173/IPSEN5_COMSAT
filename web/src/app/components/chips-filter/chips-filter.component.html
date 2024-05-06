@@ -1,0 +1,32 @@
+<form>
+  <div class="text-sm">
+    <mat-form-field class="w-full rounded-2xl border-none bg-secondary-light-2 text-sm" subscriptSizing="dynamic" appearance="outline">
+      <mat-label class="!text-sm !font-medium">Filter</mat-label>
+      <mat-chip-grid #chipGrid aria-label="Fruit selection">
+        @for (fruit of fruits; track fruit) {
+          <mat-chip-row (removed)="remove(fruit)" class="!border-0 !border-none !border-transparent !bg-base-6" disableRipple>
+            {{ fruit }}
+            <button matChipRemove [attr.aria-label]="'remove ' + fruit">
+              <lucide-icon name="x-icon" class="h-[14px]" />
+            </button>
+          </mat-chip-row>
+        }
+      </mat-chip-grid>
+      <input
+        placeholder="Add Filter..."
+        #fruitInput
+        [formControl]="fruitCtrl"
+        [matChipInputFor]="chipGrid"
+        [matAutocomplete]="auto"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        (matChipInputTokenEnd)="add($event)"
+        class="!text-sm placeholder:!font-medium"
+      />
+      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)" class="!rounded-2xl !bg-white">
+        @for (fruit of filteredFruits | async; track fruit) {
+          <mat-option class="!text-sm" [value]="fruit">{{ fruit }}</mat-option>
+        }
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+</form>

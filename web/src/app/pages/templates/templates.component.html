@@ -1,0 +1,14 @@
+<div class="flex w-full min-h-full">
+    <div class="min-w-60">
+        <app-template-list [newStoredTemplate]="sendedData" (templateEmitter)="receiveTemplate($event)"></app-template-list>
+    </div>
+    <div class="mt-5 mx-auto flex h-screen flex-col">
+        <div class="border-2 rounded-md min-w-96 mb-2 h-9"><textarea class="w-full h-full font-xl" style="resize: none;"> {{selectedTemplate?.name}}</textarea></div>
+        <div class="border-2 rounded-md min-w-96 h-3/6 "><textarea class="w-full h-full" style="resize: none;"> {{selectedTemplate?.text}}</textarea></div>
+        <div class="min-w-96">
+            <button class="rounded-xl m-5 border w-20 h-min bg-green-200" >Save</button>
+            <button (click)="new()" class="rounded-xl m-5 border w-20 h-min bg-green-200" >New</button>
+        </div>
+        
+    </div>
+</div>

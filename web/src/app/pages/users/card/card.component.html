@@ -1,0 +1,19 @@
+<div class="card">
+    <button mat-icon-button [matMenuTriggerFor]="useroptions" >
+        <mat-icon>menu</mat-icon>
+    </button>
+    <mat-menu #useroptions class="m-1">
+        <button mat-menu-item >Edit</button>
+        <button mat-menu-item (click)="onDelete()">Delete</button>
+    </mat-menu>
+    <div class="card-header">
+        <img class="avatar" src="assets/profiles/default.png" />
+        <h1 class="name font-bold content-center m-2"> {{user.name}}</h1>
+    </div>
+    <div class="user">
+        <div class="user-info">
+            <p class="id m-2"> {{user.id}}</p>
+            <p class="email m-2"> {{user.email}}</p>
+        </div>
+    </div>
+</div>

@@ -1,1 +1,68 @@
+@use "@angular/material" as mat;
+@use "@angular/material-experimental" as matx;
+
 /* You can add global styles to this file, and also import other style files */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+::view-transition-group(navlink-batches, navlink-contacts, navlink-reports, navlink-users) {
+  z-index: 100;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0ms;
+}
+
+$theme: matx.define-theme(
+  (
+    color: (
+      theme-type: light,
+      primary: matx.$m3-azure-palette,
+      tertiary: matx.$m3-blue-palette,
+    ),
+  )
+);
+
+@include mat.core();
+@include matx.color-variants-back-compat($theme);
+
+:root {
+  @include mat.all-component-themes($theme);
+}
+
+.mdc-notched-outline__leading,
+.mdc-notched-outline__notch,
+.mdc-notched-outline__trailing {
+  border-color: transparent !important;
+}
+
+.mat-form-field-infix {
+  padding: 0.4em 0px;
+}
+
+.mat-form-field-label-wrapper {
+  top: -1.5em;
+}
+
+.mat-form-field-label {
+  transform: translateY(-1.1em) scale(0.75);
+  width: 133.33333%;
+}
+
+.mat-mdc-chip-action::before {
+  border: 0px !important;
+}
+
+*:active,
+*:focus,
+*:focus-visible {
+  outline-color: #4b5e84;
+}
+
+.focusable:focus-visible,
+.focusable:focus-within {
+  outline: 2px solid #4b5e84;
+}
