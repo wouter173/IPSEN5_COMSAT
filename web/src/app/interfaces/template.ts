@@ -1,5 +1,7 @@
+import { Language } from './language';
+
 export interface Template {
-    id: number;
-    name: string;
-    text: string;
+  id: number;
+  name: string;
+  text: Language;
 }
