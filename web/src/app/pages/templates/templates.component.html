@@ -1,27 +1,14 @@
-<div class="flex min-h-full w-full">
-  <div class="min-w-60">
-    <div class="h-full min-w-96 border-r border-r-base-6">
-      <ul class="flex flex-col gap-2.5 p-2.5" *ngFor="let template of templates">
-        <li><app-template-list-item (templateEmitter)="receiveTemplate($event)" [template]="template"></app-template-list-item></li>
-      </ul>
+<div class="flex w-full min-h-full">
+    <div class="min-w-60">
+        <app-template-list [newStoredTemplate]="sendedData" (templateEmitter)="receiveTemplate($event)"></app-template-list>
     </div>
-  </div>
-  <div class="mx-auto mt-5 flex h-screen flex-col">
-    <div class="title mb-2 h-9 min-w-96 rounded-md border-2">
-      <textarea class="font-xl h-full w-full" style="resize: none" [(ngModel)]="htmlTitle"></textarea>
+    <div class="mt-5 mx-auto flex h-screen flex-col">
+        <div class="border-2 rounded-md min-w-96 mb-2 h-9"><textarea class="w-full h-full font-xl" style="resize: none;"> {{selectedTemplate?.name}}</textarea></div>
+        <div class="border-2 rounded-md min-w-96 h-3/6 "><textarea class="w-full h-full" style="resize: none;"> {{selectedTemplate?.text}}</textarea></div>
+        <div class="min-w-96">
+            <button class="rounded-xl m-5 border w-20 h-min bg-green-200" >Save</button>
+            <button (click)="new()" class="rounded-xl m-5 border w-20 h-min bg-green-200" >New</button>
+        </div>
+        
     </div>
-    <div class="NgxEditor__Wrapper">
-      <ngx-editor-menu [editor]="editor"> </ngx-editor-menu>
-      <ngx-editor [editor]="editor" [(ngModel)]="html" [disabled]="false" [placeholder]="'Type here...'"></ngx-editor>
-    </div>
-    <div class="buttons min-w-96">
-      <button class="m-5 h-min w-20 rounded-xl border bg-green-200" (click)="onSave()">Save</button>
-      <button (click)="new()" class="m-5 h-min w-20 rounded-xl border bg-green-200">New</button>
-      <mat-select [(value)]="selectedLanguage" (valueChange)="onDisplay()">
-        <mat-option value="en">English</mat-option>
-        <mat-option value="nl">Dutch</mat-option>
-        <mat-option value="es">Spanish</mat-option>
-      </mat-select>
-    </div>
-  </div>
 </div>
