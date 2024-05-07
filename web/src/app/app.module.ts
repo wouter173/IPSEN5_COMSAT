@@ -36,7 +36,7 @@ import {
   FileX2Icon,
   ClipboardIcon,
   SendIcon,
-  EditIcon,
+  EditIcon, LayoutDashboard,
 } from 'lucide-angular';
 import { HttpClientModule, provideHttpClient } from '@angular/common/http';
 // import { ToastrModule } from 'ngx-toastr';
@@ -78,6 +78,7 @@ import { MatNativeDateModule } from '@angular/material/core';
       UsersIcon,
       XIcon,
       ClipboardIcon,
+      LayoutDashboard
     }),
   ],
   providers: [provideAnimations(), provideHttpClient(), importProvidersFrom(MatNativeDateModule)],

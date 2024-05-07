@@ -20,7 +20,7 @@ export class LoginComponent {
   constructor(private router: Router) {}
 
   onContinueClick(): void {
-    if (this.username.nativeElement.value === 'admin' && this.password.nativeElement.value === 'supersecuurwachtwoord1234!') {
+    if (this.username.nativeElement.value === 'admin' && this.password.nativeElement.value === 'admin') {
       this.login.nativeElement.style.display = 'none';
       this.fa.nativeElement.hidden = false;
     } else {
