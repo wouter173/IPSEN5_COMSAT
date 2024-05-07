@@ -1,4 +1,13 @@
-<nav class="sticky top-20 flex h-[calc(100vh-80px)] flex-col justify-between bg-secondary-light-2">
+
+<div class="sticky flex items-center justify-center bg-secondary-light-2 p-5">
+  <img src="/assets/SpineLogo.png" alt="logo" class="h-10"/>
+  <div class="text-xl text-logo-gray-1 font-bold">
+    <div class="ml-2 mr-0">Spine</div>
+    <div class="ml-2 mr-0">Comsat</div>
+  </div>
+</div>
+  <hr>
+<nav class="sticky flex h-[calc(100vh-80px)] flex-col justify-between bg-secondary-light-2">
   <ul class="flex flex-col gap-2.5 p-4">
     <li>
       <app-navlink key="navlink-reports" pathname="/reports" icon="layout-dashboard">Dashboard</app-navlink>
@@ -28,13 +37,13 @@
         <app-navlink key="navlink-logout" pathname="/" icon="log-out-icon">Logout</app-navlink>
       </li>
     </ul>
-    <hr class="my-0 border-t border-black/5" style="width: 100%" />
+    <hr class="my-0 border-t border-black/5" style="width: 100%"/>
     <button
       (click)="toggleProfileDropdown()"
       class="flex h-full w-full flex-col gap-2.5 p-4 outline-transparent focus-visible:outline-transparent active:outline-transparent"
     >
       <div class="relative z-50 flex gap-2 px-2.5 py-2 text-sm font-semibold">
-        <lucide-icon name="user-round-icon" class="h-[18px] stroke-[2.6]" />
+        <lucide-icon name="user-round-icon" class="h-[18px] stroke-[2.6]"/>
         Profile
       </div>
     </button>
