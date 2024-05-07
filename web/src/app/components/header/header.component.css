@@ -1,0 +1,15 @@
+header {
+  position: relative;
+}
+
+header::after {
+  content: "";
+  position: absolute;
+  left: 240px; /* width of the sidenav */
+  top: 60px;
+  width: 100%; /* width of the stripe */
+  height: 20px;
+  background-color: #e76452;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
