@@ -3,7 +3,7 @@ header {
   left: 0;
   width: 100%;
   z-index: 1000;
-  position: relative;
+  position: sticky;
 }
 
 header::after {
