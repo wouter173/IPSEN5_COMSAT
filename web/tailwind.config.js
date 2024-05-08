@@ -8,6 +8,7 @@ module.exports = {
         "primary-red": { 1: "#D76B59", 2: "#F4A090", 3: "#F2B7B0" },
         "primary-blue": { 1: "#202859", 2: "#4B5E84", 3: "#6D7FAC" },
         "secondary-light": { 1: "#F2F2F2", 2: "#F5F5F5", 3: "#FFFFFF" },
+        "logo-gray": {1: "#4D4A4A"}
       },
       fontFamily: {
         sans: ["Raleway", "sans-serif"],

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="1564693e-c637-4127-98ef-4e7cab26219a" name="Changes" comment="Fix: changed sidebar layout and Reports to dashboard">
+      <change afterPath="$PROJECT_DIR$/web/src/assets/SpineLogo.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/app/components/header/header.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/app/components/header/header.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/app/components/sidenav/sidenav.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/app/components/sidenav/sidenav.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/tailwind.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/tailwind.config.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="development" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="2g8VNZShZhaU9k89VtTXCeFzoO9" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "design-change",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "/Users/roroot/WebstormProjects/IPSEN5_COMSAT/web/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/web/src/assets" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="1564693e-c637-4127-98ef-4e7cab26219a" name="Changes" comment="" />
+      <created>1715079152721</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1715079152721</updated>
+      <workItem from="1715079153836" duration="778000" />
+      <workItem from="1715079937285" duration="536000" />
+      <workItem from="1715080480455" duration="6461000" />
+    </task>
+    <task id="LOCAL-00001" summary="Feat: Added cypress setup">
+      <option name="closed" value="true" />
+      <created>1715079556557</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1715079556557</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Fix: added baseURL">
+      <option name="closed" value="true" />
+      <created>1715079809249</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1715079809249</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Fix: changed sidebar layout and Reports to dashboard">
+      <option name="closed" value="true" />
+      <created>1715081616443</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1715081616443</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Feat: Added cypress setup" />
+    <MESSAGE value="Fix: added baseURL" />
+    <MESSAGE value="Fix: changed sidebar layout and Reports to dashboard" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix: changed sidebar layout and Reports to dashboard" />
+  </component>
+</project>

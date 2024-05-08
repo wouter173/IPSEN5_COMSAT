@@ -1,11 +1,10 @@
 <div class="h-full min-h-screen">
-  <app-header />
-
   <main class="flex h-auto w-full">
     <div class="w-60 shrink-0">
       <app-sidenav />
     </div>
-    <div class="min-h-[calc(100vh-80px)] w-full">
+    <div class="w-full max-h-[96vh] mt-[2vh] overflow-scroll rounded-xl bg-white">
+      <app-header />
       <router-outlet />
     </div>
   </main>
