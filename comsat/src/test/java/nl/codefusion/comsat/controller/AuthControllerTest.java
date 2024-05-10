@@ -43,11 +43,11 @@ public class AuthControllerTest {
 
     @Test
     public void test_Login_Success() throws Exception {
-        String username = "test";
+        String username = "test@acme.com";
         String password = "test";
 
         UserModel userModel = UserModel.builder().username(username).password(password).build();
-        LoginDto loginDto = LoginDto.builder().password(username).username(password).build();
+        LoginDto loginDto = LoginDto.builder().username(username).password(password).build();
 
         when(userDetailsImplService.loadUserByUsername(username)).thenReturn(userModel);
         when(jwtService.generateToken(username)).thenReturn("token");
@@ -67,7 +67,7 @@ public class AuthControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(loginDto)))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("{\"username\":\"Username is required\"}"));
+                .andExpect(content().string("{\"username\":\"username is required\"}"));
     }
 
     @Test
@@ -76,15 +76,15 @@ public class AuthControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{}"))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("{\"password\":\"Password is required\",\"username\":\"Username is required\"}"));
+                .andExpect(content().string("{\"password\":\"password is required\",\"username\":\"username is required\"}"));
     }
 
     @Test
     public void test_Login_BadCredentials() throws Exception {
-        String username = "test";
+        String username = "test@acme.com";
         String password = "test";
 
-        LoginDto loginDto = LoginDto.builder().password(username).username(password).build();
+        LoginDto loginDto = LoginDto.builder().username(username).password(password).build();
 
         when(userDetailsImplService.loadUserByUsername(username)).thenThrow(BadCredentialsException.class);
 
