@@ -22,17 +22,17 @@ public class HealthCheckControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    public void testHealthCheck_Success() throws Exception {
+    public void test_HealthCheck_Success() throws Exception {
         mockMvc.perform(get("/api/v1/health")).andExpect(status().isOk());
     }
 
     @Test
-    public void testHealthCheck_Error() throws Exception {
+    public void test_HealthCheck_Error() throws Exception {
         mockMvc.perform(get("/api/v1/health/error")).andExpect(status().isInternalServerError());
     }
 
     @Test
-    public void testHealthCheck_NotFound() throws Exception {
+    public void test_HealthCheck_NotFound() throws Exception {
         mockMvc.perform(get("/api/v1/health/not-found")).andExpect(status().isNotFound());
     }
 }
