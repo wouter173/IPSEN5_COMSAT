@@ -28,12 +28,10 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/auth/login").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling(eh -> {
-                    eh.authenticationEntryPoint((request, response, ex) -> {
-                        response.setStatus(403);
-                        response.getWriter().write("Access denied");
-                    });
-                })
+                .exceptionHandling(eh -> eh.authenticationEntryPoint((request, response, ex) -> {
+                    response.setStatus(403);
+                    response.getWriter().write("Access denied");
+                }))
                 .build();
     }
 
