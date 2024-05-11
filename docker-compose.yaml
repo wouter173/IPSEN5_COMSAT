@@ -1,4 +1,5 @@
 version: "3.8"
+
 services:
   comsat_web:
     build: ./web
