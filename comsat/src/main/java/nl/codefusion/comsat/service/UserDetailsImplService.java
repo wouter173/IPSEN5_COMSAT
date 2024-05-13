@@ -27,7 +27,7 @@ public class UserDetailsImplService implements UserDetailsService {
         return UserModel.builder()
                 .username(user.getUsername())
                 .password(user.getPassword())
-                .roles(user.getRoles().stream().map(role -> "ROLE_" + role).collect(Collectors.toSet()))
+                .role(user.getRole())
                 .build();
 
     }
