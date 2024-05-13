@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import nl.codefusion.comsat.models.Role;
 import nl.codefusion.comsat.config.PermissionConfig;
 import nl.codefusion.comsat.models.UserModel;
+import nl.codefusion.comsat.repository.RoleRepository;
+import nl.codefusion.comsat.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -13,10 +15,13 @@ import java.util.Set;
 @Component
 public class UserSeeder {
     private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
     public void seedUsers() {
         Role adminRole = seedRoles("admin", PermissionConfig.MANAGE_USERS);
-        UserModel adminUser = seed("admin", "admin", adminRole);
+        UserModel adminUser = seed("admin@gmail.com ", "admin", adminRole);
+        userRepository.save(adminUser);
     }
 
     private UserModel seed(String username, String password, Role role) {
@@ -28,6 +33,8 @@ public class UserSeeder {
     }
 
     private Role seedRoles(String name, int permissions){
-        return new Role(name, permissions);
+        Role role = new Role(name, permissions);
+        roleRepository.save(role);
+        return role;
     }
 }

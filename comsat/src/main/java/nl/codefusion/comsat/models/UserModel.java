@@ -30,7 +30,7 @@ public class UserModel implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Role role;
 
     @Override

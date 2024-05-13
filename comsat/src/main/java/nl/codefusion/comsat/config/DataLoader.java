@@ -20,9 +20,9 @@ public class DataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        if (userRepository.findByUsername("john_doe").isEmpty()) {
+        if (userRepository.findByUsername("john_doe@gmail.com").isEmpty()) {
             UserModel user = new UserModel();
-            user.setUsername("john_doe");
+            user.setUsername("john_doe@gmail.com");
             user.setPassword(passwordEncoder.encode("password"));
             user.setRole(roleRepository.findByName("admin"));
             this.userRepository.save(user);
