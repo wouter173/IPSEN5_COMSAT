@@ -1,6 +1,8 @@
 package nl.codefusion.comsat.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import nl.codefusion.comsat.dto.LoginDto;
 import nl.codefusion.comsat.service.JwtService;
 import nl.codefusion.comsat.service.UserDetailsImplService;
 import org.springframework.http.ResponseEntity;
@@ -25,9 +27,9 @@ public class AuthController {
 
 
     @PostMapping(value = "/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody Map<String, String> request) {
-        String username = request.get("username");
-        String password = request.get("password");
+    public ResponseEntity<Map<String, String>> login(@RequestBody @Valid LoginDto loginDto) {
+        String username = loginDto.getUsername();
+        String password = loginDto.getPassword();
 
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 
