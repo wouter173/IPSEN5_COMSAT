@@ -2,8 +2,8 @@ package nl.codefusion.comsat.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import nl.codefusion.comsat.dao.UserDao;
 import nl.codefusion.comsat.models.UserModel;
-import nl.codefusion.comsat.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,12 +16,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserDetailsImplService implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final UserDao userDao;
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserModel user = userRepository.findByUsername(username)
+        UserModel user = userDao.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
         return UserModel.builder()
@@ -29,6 +29,5 @@ public class UserDetailsImplService implements UserDetailsService {
                 .password(user.getPassword())
                 .role(user.getRole())
                 .build();
-
     }
 }
