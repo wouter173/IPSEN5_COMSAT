@@ -21,6 +21,7 @@ public class UserSeeder {
     public void seedUsers() {
         Role adminRole = seedRoles("admin", PermissionConfig.MANAGE_USERS);
         UserModel adminUser = seed("admin@gmail.com ", "admin", adminRole);
+        roleRepository.save(adminRole);
         userRepository.save(adminUser);
     }
 
@@ -32,9 +33,10 @@ public class UserSeeder {
                 .build();
     }
 
-    private Role seedRoles(String name, int permissions){
-        Role role = new Role(name, permissions);
-        roleRepository.save(role);
-        return role;
+    private Role seedRoles(String name, int permissions) {
+        return Role.builder()
+                .name(name)
+                .permissions(permissions)
+                .build();
     }
 }
