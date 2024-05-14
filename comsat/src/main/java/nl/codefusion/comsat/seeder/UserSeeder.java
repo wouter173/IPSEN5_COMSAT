@@ -2,14 +2,12 @@ package nl.codefusion.comsat.seeder;
 
 import lombok.RequiredArgsConstructor;
 import nl.codefusion.comsat.models.Role;
-import nl.codefusion.comsat.config.PermissionConfig;
+import nl.codefusion.comsat.config.Permission;
 import nl.codefusion.comsat.models.UserModel;
 import nl.codefusion.comsat.repository.RoleRepository;
 import nl.codefusion.comsat.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
-import java.util.Set;
 
 @RequiredArgsConstructor
 @Component
@@ -19,8 +17,8 @@ public class UserSeeder {
     private final RoleRepository roleRepository;
 
     public void seedUsers() {
-        Role adminRole = seedRoles("admin", PermissionConfig.MANAGE_USERS);
-        UserModel adminUser = seed("admin@gmail.com ", "admin", adminRole);
+        Role adminRole = seedRoles("admin", Permission.MANAGE_USERS.getValue());
+        UserModel adminUser = seed("admin@gmail.com", "admin", adminRole);
         roleRepository.save(adminRole);
         userRepository.save(adminUser);
     }
