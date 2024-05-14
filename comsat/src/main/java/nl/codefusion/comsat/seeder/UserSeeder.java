@@ -18,9 +18,14 @@ public class UserSeeder {
 
     public void seedUsers() {
         Role adminRole = seedRoles("admin", Permission.MANAGE_USERS.getValue());
+        Role researcherRole = seedRoles("admin", Permission.EDIT_TEMPLATE.getValue());
         UserModel adminUser = seed("admin@gmail.com", "admin", adminRole);
+        UserModel researcherUser = seed("researcher@gmail.com", "researcher", researcherRole);
         roleRepository.save(adminRole);
+        roleRepository.save(researcherRole);
+
         userRepository.save(adminUser);
+        userRepository.save(researcherUser);
     }
 
     private UserModel seed(String username, String password, Role role) {
