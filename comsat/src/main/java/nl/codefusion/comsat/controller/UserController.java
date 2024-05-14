@@ -13,17 +13,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.naming.NoPermissionException;
+
 @RestController
 @RequestMapping(value = "/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
     private final PermissionService permissionService;
+
     @GetMapping
-    public ResponseEntity<String> getUsers() {
+    public ResponseEntity<String> getUsers() throws NoPermissionException {
         if (permissionService.hasPermission(permissionService.getPrincipalRoles(), Permission.MANAGE_USERS)) {
             return ResponseEntity.ok("Users");
         }
-        return ResponseEntity.status(403).body("Forbidden");
+        throw new NoPermissionException();
     }
+
 }
 
