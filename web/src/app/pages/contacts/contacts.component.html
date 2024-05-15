@@ -1,1 +1,12 @@
-<p>contacts works!</p>
+<div class="flex min-h-full w-full">
+  <div class="min-w-60">
+    <div class="h-full min-w-96 border-r border-r-base-6">
+      <ul>
+        <li *ngFor="let contact of contacts">
+          <app-contacts-list-item [contact]="contact"></app-contacts-list-item>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="mx-auto mt-5 flex h-screen flex-col"></div>
+</div>
