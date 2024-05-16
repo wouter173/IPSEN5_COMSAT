@@ -1,16 +1,16 @@
-<nav class="sticky top-0 h-screen bg-secondary-light-2">
+<nav class="sticky top-0 min-h-screen bg-secondary-light-2">
   <div class="flex items-center justify-center bg-secondary-light-2 p-5">
-    <img src="/assets/SpineLogo.png" alt="logo" class="h-10"/>
-    <div class="text-xl text-logo-gray-1 font-bold">
+    <img src="/assets/SpineLogo.png" alt="logo" class="h-10" />
+    <div class="text-xl font-bold text-logo-gray-1">
       <div class="ml-2 mr-0">Spine</div>
       <div class="ml-2 mr-0">Comsat</div>
     </div>
   </div>
-  <hr>
-  <div class="flex flex-col justify-between h-[calc(100vh-97px)]">
+  <hr />
+  <div class="flex h-[calc(100vh-97px)] flex-col justify-between">
     <ul class="flex flex-col gap-2.5 p-4">
       <li>
-        <app-navlink key="navlink-reports" pathname="/reports" icon="layout-dashboard">Dashboard</app-navlink>
+        <app-navlink key="navlink-reports" pathname="/" icon="layout-dashboard">Dashboard</app-navlink>
       </li>
       <li>
         <app-navlink key="navlink-batches" pathname="/batches" icon="layers-icon">Batches</app-navlink>
@@ -34,20 +34,19 @@
       >
         <li>
           <app-navlink key="navlink-settings" pathname="/settings" icon="settings-icon">Settings</app-navlink>
-          <app-navlink key="navlink-logout" pathname="/" icon="log-out-icon">Logout</app-navlink>
+          <app-navlink key="navlink-logout" (click)="logout()" icon="log-out-icon">Logout</app-navlink>
         </li>
       </ul>
-      <hr class="my-0 border-t border-black/5" style="width: 100%"/>
+      <hr class="my-0 border-t border-black/5" style="width: 100%" />
       <button
         (click)="toggleProfileDropdown()"
         class="flex h-full w-full flex-col gap-2.5 p-4 outline-transparent focus-visible:outline-transparent active:outline-transparent"
       >
         <div class="relative z-50 flex gap-2 px-2.5 py-2 text-sm font-semibold">
-          <lucide-icon name="user-round-icon" class="h-[18px] stroke-[2.6]"/>
+          <lucide-icon name="user-round-icon" class="h-[18px] stroke-[2.6]" />
           Profile
         </div>
       </button>
     </div>
   </div>
 </nav>
-

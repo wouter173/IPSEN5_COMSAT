@@ -33,6 +33,7 @@ export class NavlinkComponent {
   }
 
   private isCurrentPath(pathname: string): boolean {
+    if (pathname === '/') return this.router.url === pathname;
     return this.router.url.startsWith(pathname);
   }
 }
