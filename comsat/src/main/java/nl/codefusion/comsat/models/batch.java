@@ -1,7 +1,13 @@
 package nl.codefusion.comsat.models;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 public class batch {
-    private String id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private Long id;
     private String name;
     private String state;
     private String lastModified;
