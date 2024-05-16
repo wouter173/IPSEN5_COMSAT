@@ -6,7 +6,6 @@ import nl.codefusion.comsat.config.Permission;
 import nl.codefusion.comsat.service.PermissionService;
 import org.springframework.http.ResponseEntity;
 
-import nl.codefusion.comsat.models.Role;
 import nl.codefusion.comsat.repository.RoleRepository;
 import nl.codefusion.comsat.repository.UserRepository;
 import nl.codefusion.comsat.service.PermissionService;
