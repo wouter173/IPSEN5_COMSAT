@@ -8,6 +8,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class PermissionService {
@@ -21,5 +24,9 @@ public class PermissionService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
         return userRepository.findRoleByUsername(currentPrincipalName).getRoleModel();
+    }
+
+    public int sumPermission(Permission... permissions) {
+        return Arrays.stream(permissions).mapToInt(Permission::getValue).distinct().sum();
     }
 }

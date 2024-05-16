@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,6 +31,7 @@ class PermissionServiceTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
     }
+
     @Test
     void hasPermission() {
         RoleModel roleModel = new RoleModel();
@@ -37,13 +39,15 @@ class PermissionServiceTest {
 
         assertTrue(permissionService.hasPermission(roleModel, Permission.DELETE_USER));
     }
+
     @Test
-    void should_fail_with_wrong_permission(){
+    void should_fail_with_wrong_permission() {
         RoleModel roleModel = new RoleModel();
         roleModel.setPermissions(Permission.DELETE_USER.getValue());
 
         assertFalse(permissionService.hasPermission(roleModel, Permission.READ_USER));
     }
+
     @Test
     void getPrincipalRoles() {
         RoleModel roleModel = new RoleModel();
@@ -61,4 +65,18 @@ class PermissionServiceTest {
 
         assertEquals(roleModel, permissionService.getPrincipalRoles());
     }
+
+    @Test
+    void permission_sum_test() {
+        var result = permissionService.sumPermission(Permission.READ_USER, Permission.UPDATE_USER);
+        var expected = Permission.READ_USER.getValue() + Permission.UPDATE_USER.getValue();
+        assertEquals(expected, result);
+    }
+    @Test
+    void permissino_sum_duplicated_test() {
+        var result = permissionService.sumPermission(Permission.READ_USER, Permission.READ_USER, Permission.UPDATE_USER);
+        var expected = Permission.READ_USER.getValue() + Permission.UPDATE_USER.getValue();
+        assertEquals(expected, result);
+    }
+
 }
