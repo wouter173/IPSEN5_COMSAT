@@ -13,13 +13,31 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MosloModel {
+public class ContactModel {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(unique = true, nullable = false)
-    private String displayName;
+    @Column(nullable = true)
+    private String firstname;
+
+    @Column(nullable = true)
+    private String nickname;
+
+    @Column(nullable = true)
+    private String platform;
+
+    @Column(nullable = true)
+    private String audience;
+
+    @Column(nullable = true)
+    private String sex;
+
+    @Column(nullable = true)
+    private String language;
+
+    @Column(nullable = true)
+    private String region;
 
     @ManyToOne
     @JoinColumn(name = "batch_id", nullable = false)
