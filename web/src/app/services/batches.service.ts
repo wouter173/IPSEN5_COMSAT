@@ -1,5 +1,6 @@
 import { Injectable, signal, effect, computed } from '@angular/core';
 import { Batch } from '../models/batch';
+import {HttpClient} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +20,12 @@ export class BatchesService {
     this._batches.set(this._batches().map((b) => (b.id === batchId ? { ...b, ...batch } : b)));
   }
 
-  constructor() {
+  public sendBatchData(batch: Batch) {
+    const url = 'http://localhost:8080/batch';
+    return this.http.post(url, batch);
+  }
+
+  constructor(private http: HttpClient) {
     effect(() => {
       localStorage.setItem('batches', JSON.stringify(this._batches()));
     });
