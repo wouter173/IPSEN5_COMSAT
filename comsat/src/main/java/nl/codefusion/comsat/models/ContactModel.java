@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
-@Table(name = "moslo")
+@Table(name = "contact")
 @Data
 @Builder
 @AllArgsConstructor
