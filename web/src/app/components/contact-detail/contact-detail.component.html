@@ -1,0 +1,38 @@
+<li>
+    <div class="flex flex-col gap-2.5 rounded-xl border border-black/5 bg-secondary-light-2/50 px-4 py-3.5">
+      <div class="flex justify-between">
+        <div class="flex items-center gap-2">
+          <img src="/assets/telegram.png" alt="" class="size-8" />
+          <div class="flex flex-col">
+            <span class="font-semibold">{{ contacts.contact.firstName }}</span>
+            <span class="text-xs font-semibold text-[#676768]">{{ contacts.contact.nickname }}</span>
+          </div>
+        </div>
+        <div class="flex cursor-pointer gap-2 opacity-30 transition-all hover:opacity-100">
+          <lucide-icon name="edit-icon" class="size-[16px]" />
+          <lucide-icon name="trash-icon" class="size-[16px]" />
+        </div>
+      </div>
+      <div class="grid grid-cols-[120px,auto] text-sm font-medium">
+        <span class="text-[#676768]">Status</span>
+        <span>{{
+          contacts.batch.state
+            ? {
+                NOTSENT: "Not sent yet.",
+                SENDING: "Sending...",
+                SENT: "Delivered",
+                ERROR: "Something went wrong sending your message",
+                READ: "Read",
+                REPLIED: "Replied"
+              }[contacts.batch.state]
+            : "-"
+        }}</span>
+        <span class="text-[#676768]">Audience</span>
+        <span>{{ contacts.contact.audience ? contacts.contact.audience : "-" }}</span>
+        <span class="text-[#676768]">Locale</span>
+        <span>{{ contacts.contact.language ? contacts.contact.region + " - " + contacts.contact.language : "-" }}</span>
+        <span class="text-[#676768]">Sex</span>
+        <span>{{ contacts.contact.sex ? contacts.contact.sex : "-" }}</span>
+      </div>
+    </div>
+  </li>

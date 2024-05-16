@@ -13,6 +13,15 @@ import { z } from 'zod';
 })
 export class ContactsComponent {
   contacts: { contact: Contact; batch: Batch }[] = [];
+  
+  ngOnInit() {
+    for (const batch of this.batches) {
+      for (const contact of batch.contacts) {
+        this.contacts.push({ contact, batch });
+      }
+    }
+  }
+
   batches: Batch[] = [
     {
       id: '1',
@@ -345,11 +354,4 @@ export class ContactsComponent {
     },
   ];
 
-  ngOnInit() {
-    for (const batch of this.batches) {
-      for (const contact of batch.contacts) {
-        this.contacts.push({ contact, batch });
-      }
-    }
-  }
 }
