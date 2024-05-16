@@ -13,7 +13,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class moslo {
+public class MosloModel {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -23,5 +23,5 @@ public class moslo {
 
     @ManyToOne
     @JoinColumn(name = "batch_id", nullable = false)
-    private batch batch;
+    private Batch batch;
 }
