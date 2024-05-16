@@ -2,6 +2,7 @@ package nl.codefusion.comsat.config;
 
 import lombok.Getter;
 
+
 @Getter
 public enum Permission {
     CREATE_BATCH(1),
@@ -36,8 +37,5 @@ public enum Permission {
         this.value = value;
     }
 }
-
-
-
 
 

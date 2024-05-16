@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.UUID;
+
+
+
+
 @Table(name = "role")
 @Data
 @Entity
@@ -19,8 +23,4 @@ public class Role {
     @Getter
     private int permissions;
 
-    public Role(String name, int permissions) {
-        this.name = name;
-        this.permissions = permissions;
-    }
 }

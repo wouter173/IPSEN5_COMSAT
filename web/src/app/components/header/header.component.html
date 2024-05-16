@@ -1,3 +1,3 @@
-<header class="w-full py-2.5 px-4 bg-[#e76452] rounded-t-lg text-white sticky top-0 z-20">{{currentPage}}</header>
-
-
+<header [class]="'sticky top-0 z-20 w-full bg-[#e76452] px-4 py-2.5 text-white ' + (hasScrolled || 'rounded-t-lg')">
+  {{ currentPage }}
+</header>
