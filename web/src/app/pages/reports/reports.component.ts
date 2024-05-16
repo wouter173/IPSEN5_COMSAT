@@ -24,7 +24,6 @@ import { Batch } from '../../models/batch';
     LucideAngularModule,
   ],
   templateUrl: './reports.component.html',
-  styleUrl: './reports.component.css',
 })
 export class ReportsComponent {
   public batchesService = inject(BatchesService);

@@ -7,19 +7,20 @@ import { ReportsComponent } from './pages/reports/reports.component';
 import { BatchesComponent } from './pages/batches/batches.component';
 import { LoginComponent } from './pages/login/login.component';
 import { TemplatesComponent } from './pages/templates/templates.component';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
-  { path: '', component: LoginComponent },
+  { path: 'login', component: LoginComponent },
   {
+    canActivate: [authGuard],
     path: '',
     component: DashboardComponent,
     children: [
-
       { path: 'batches', component: BatchesComponent },
       { path: 'contacts', component: ContactsComponent },
-      { path: 'templates', component: TemplatesComponent},
+      { path: 'templates', component: TemplatesComponent },
       { path: 'users', component: UsersComponent },
-      { path: 'reports', component: ReportsComponent },
+      { path: '', component: ReportsComponent },
     ],
   },
 ];
@@ -28,4 +29,4 @@ export const routes: Routes = [
   providers: [provideRouter(routes, withViewTransitions({ skipInitialTransition: true }))],
   exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
