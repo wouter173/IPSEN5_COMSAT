@@ -23,5 +23,5 @@ public class MosloModel {
 
     @ManyToOne
     @JoinColumn(name = "batch_id", nullable = false)
-    private Batch batch;
+    private BatchModel batch;
 }

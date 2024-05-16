@@ -1,10 +1,9 @@
 package nl.codefusion.comsat.service;
 
 import nl.codefusion.comsat.config.Permission;
-import nl.codefusion.comsat.models.Role;
+import nl.codefusion.comsat.models.RoleModel;
 import nl.codefusion.comsat.models.UserModel;
 import nl.codefusion.comsat.repository.UserRepository;
-import nl.codefusion.comsat.service.PermissionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -32,21 +31,21 @@ class PermissionServiceTest {
     }
     @Test
     void hasPermission() {
-        Role role = new Role();
+        RoleModel role = new RoleModel();
         role.setPermissions(Permission.MANAGE_USERS.getValue());
 
         assertTrue(permissionService.hasPermission(role, Permission.MANAGE_USERS));
     }
     @Test
     void should_fail_with_wrong_permission(){
-        Role role = new Role();
+        RoleModel role = new RoleModel();
         role.setPermissions(Permission.MANAGE_USERS.getValue());
 
         assertFalse(permissionService.hasPermission(role, Permission.EDIT_TEMPLATE));
     }
     @Test
     void getPrincipalRoles() {
-        Role role = new Role();
+        RoleModel role = new RoleModel();
         UserModel user = new UserModel();
         user.setRole(role);
         when(userRepository.findRoleByUsername("username")).thenReturn(user);

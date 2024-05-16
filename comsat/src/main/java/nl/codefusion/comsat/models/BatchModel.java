@@ -5,7 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-public class Batch {
+public class BatchModel {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private Long id;

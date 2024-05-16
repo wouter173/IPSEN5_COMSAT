@@ -1,6 +1,6 @@
 package nl.codefusion.comsat.service;
 
-import nl.codefusion.comsat.models.Batch;
+import nl.codefusion.comsat.models.BatchModel;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -8,7 +8,7 @@ import java.time.format.DateTimeFormatter;
 public class BatchProcesses {
 
         public void processBatch(org.hibernate.engine.jdbc.batch.spi.Batch batch) {
-            Batch customBatch = (Batch) batch;
+            BatchModel customBatch = (BatchModel) batch;
             customBatch.setState("processed");
 
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");

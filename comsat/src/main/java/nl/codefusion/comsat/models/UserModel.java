@@ -31,7 +31,7 @@ public class UserModel implements UserDetails {
     private String password;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    private Role role;
+    private RoleModel role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

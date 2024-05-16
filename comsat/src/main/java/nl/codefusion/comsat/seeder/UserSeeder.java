@@ -1,7 +1,7 @@
 package nl.codefusion.comsat.seeder;
 
 import lombok.RequiredArgsConstructor;
-import nl.codefusion.comsat.models.Role;
+import nl.codefusion.comsat.models.RoleModel;
 import nl.codefusion.comsat.config.Permission;
 import nl.codefusion.comsat.models.UserModel;
 import nl.codefusion.comsat.repository.RoleRepository;
@@ -17,8 +17,8 @@ public class UserSeeder {
     private final RoleRepository roleRepository;
 
     public void seedUsers() {
-        Role adminRole = seedRoles("admin", Permission.MANAGE_USERS.getValue());
-        Role researcherRole = seedRoles("admin", Permission.EDIT_TEMPLATE.getValue());
+        RoleModel adminRole = seedRoles("admin", Permission.MANAGE_USERS.getValue());
+        RoleModel researcherRole = seedRoles("admin", Permission.EDIT_TEMPLATE.getValue());
         UserModel adminUser = seed("admin@gmail.com", "admin", adminRole);
         UserModel researcherUser = seed("researcher@gmail.com", "researcher", researcherRole);
         roleRepository.save(adminRole);
@@ -28,7 +28,7 @@ public class UserSeeder {
         userRepository.save(researcherUser);
     }
 
-    private UserModel seed(String username, String password, Role role) {
+    private UserModel seed(String username, String password, RoleModel role) {
         return UserModel.builder()
                 .username(username)
                 .password(passwordEncoder.encode(password))
@@ -36,8 +36,8 @@ public class UserSeeder {
                 .build();
     }
 
-    private Role seedRoles(String name, int permissions) {
-        return Role.builder()
+    private RoleModel seedRoles(String name, int permissions) {
+        return RoleModel.builder()
                 .name(name)
                 .permissions(permissions)
                 .build();
