@@ -1,11 +1,11 @@
 package nl.codefusion.comsat.seeder;
 
 import lombok.RequiredArgsConstructor;
-import nl.codefusion.comsat.models.Role;
+import nl.codefusion.comsat.dao.RoleDao;
+import nl.codefusion.comsat.dao.UserDao;
+import nl.codefusion.comsat.models.RoleModel;
 import nl.codefusion.comsat.config.Permission;
 import nl.codefusion.comsat.models.UserModel;
-import nl.codefusion.comsat.repository.RoleRepository;
-import nl.codefusion.comsat.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -13,33 +13,32 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserSeeder {
     private final PasswordEncoder passwordEncoder;
-    private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
+    private final UserDao userDao;
+    private final RoleDao roleDao;
 
     public void seedUsers() {
-        Role adminRole = seedRoles("admin", Permission.MANAGE_USERS.getValue());
-        Role researcherRole = seedRoles("admin", Permission.EDIT_TEMPLATE.getValue());
-        UserModel adminUser = seed("admin@gmail.com", "admin", adminRole);
-        UserModel researcherUser = seed("researcher@gmail.com", "researcher", researcherRole);
-        roleRepository.save(adminRole);
-        roleRepository.save(researcherRole);
+        RoleModel adminRole = seedRole("admin", Permission.READ_USER.getValue());
+        RoleModel researcherRole = seedRole("researcher", Permission.UPDATE_USER.getValue());
 
-        userRepository.save(adminUser);
-        userRepository.save(researcherUser);
+        seedUser("admin@gmail.com", "admin", adminRole );
+        seedUser("researcher@gmail.com", "researcher", researcherRole);
     }
 
-    private UserModel seed(String username, String password, Role role) {
-        return UserModel.builder()
+    @SuppressWarnings("UnusedReturnValue")
+    private UserModel seedUser(String username, String password, RoleModel roleModel) {
+        UserModel user = UserModel.builder()
                 .username(username)
                 .password(passwordEncoder.encode(password))
-                .role(role)
+                .roleModel(roleModel)
                 .build();
+        return userDao.create(user);
     }
 
-    private Role seedRoles(String name, int permissions) {
-        return Role.builder()
+    private RoleModel seedRole(String name, int permissions) {
+        RoleModel roleModel = RoleModel.builder()
                 .name(name)
                 .permissions(permissions)
                 .build();
+        return roleDao.create(roleModel);
     }
 }

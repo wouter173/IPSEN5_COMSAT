@@ -1,10 +1,9 @@
 package nl.codefusion.comsat.service;
 
 import nl.codefusion.comsat.config.Permission;
-import nl.codefusion.comsat.models.Role;
+import nl.codefusion.comsat.models.RoleModel;
 import nl.codefusion.comsat.models.UserModel;
 import nl.codefusion.comsat.repository.UserRepository;
-import nl.codefusion.comsat.service.PermissionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -26,29 +25,30 @@ class PermissionServiceTest {
     @InjectMocks
     PermissionService permissionService;
 
+    @SuppressWarnings("resource")
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
     }
     @Test
     void hasPermission() {
-        Role role = new Role();
-        role.setPermissions(Permission.MANAGE_USERS.getValue());
+        RoleModel roleModel = new RoleModel();
+        roleModel.setPermissions(Permission.DELETE_USER.getValue());
 
-        assertTrue(permissionService.hasPermission(role, Permission.MANAGE_USERS));
+        assertTrue(permissionService.hasPermission(roleModel, Permission.DELETE_USER));
     }
     @Test
     void should_fail_with_wrong_permission(){
-        Role role = new Role();
-        role.setPermissions(Permission.MANAGE_USERS.getValue());
+        RoleModel roleModel = new RoleModel();
+        roleModel.setPermissions(Permission.DELETE_USER.getValue());
 
-        assertFalse(permissionService.hasPermission(role, Permission.EDIT_TEMPLATE));
+        assertFalse(permissionService.hasPermission(roleModel, Permission.READ_USER));
     }
     @Test
     void getPrincipalRoles() {
-        Role role = new Role();
+        RoleModel roleModel = new RoleModel();
         UserModel user = new UserModel();
-        user.setRole(role);
+        user.setRoleModel(roleModel);
         when(userRepository.findRoleByUsername("username")).thenReturn(user);
 
         Authentication authentication = Mockito.mock(Authentication.class);
@@ -59,6 +59,6 @@ class PermissionServiceTest {
 
         SecurityContextHolder.setContext(securityContext);
 
-        assertEquals(role, permissionService.getPrincipalRoles());
+        assertEquals(roleModel, permissionService.getPrincipalRoles());
     }
 }

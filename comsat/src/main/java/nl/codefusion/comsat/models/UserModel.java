@@ -31,11 +31,11 @@ public class UserModel implements UserDetails {
     private String password;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    private Role role;
+    private RoleModel roleModel;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Set.of(new SimpleGrantedAuthority(role.getName()));
+        return Set.of(new SimpleGrantedAuthority(roleModel.getName()));
     }
 
     @Override
