@@ -27,12 +27,4 @@ public class BatchModel {
     @Column(nullable = false)
     private String createdAt;
 
-    public void setLastModified(String format) {
-        this.lastModified = format;
-    }
-
-    public void setState(String processed) {
-        this.state = processed;
-    }
-
 }

@@ -5,10 +5,18 @@ import nl.codefusion.comsat.models.ContactModel;
 import nl.codefusion.comsat.repository.ContactRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class ContactDao {
     private final ContactRepository contactRepository;
 
-    public ContactModel create(ContactModel contactModel) {return contactRepository.save(contactModel);}
+    public ContactModel create(ContactModel contactModel) {
+        return contactRepository.save(contactModel);
+    }
+
+    public List<ContactModel> getAllContacts() {
+        return contactRepository.findAll();
+    }
 }

@@ -1,21 +1,29 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Contact, contactSchema } from '../models/contact';
 import { Batch } from '../models/batch';
 import { Observable, map } from 'rxjs';
+import { AuthService } from './auth.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ContactsService {
+  auth = inject(AuthService);
+  url = environment.apiUrl;
+  token = 'Bearer ' + this.auth.getToken();
+
   constructor(private http: HttpClient) {}
+
   contacts: { contact: Contact; batch: Batch }[] = [];
 
   getContacts(): Observable<{ contact: Contact; batch: Batch }[]> {
-    const token = localStorage.getItem('token');
     const headers = {
-      Authorization: 'Bearer ' + token,
+      Authorization: this.token,
     };
+    const contactUrl = this.url + '/api/v1/contacts';
+
     return this.http
       .get<
         {
@@ -29,7 +37,7 @@ export class ContactsService {
           region: string;
           batch: Batch;
         }[]
-      >('http://127.0.0.1:8080/api/v1/contacts', { headers })
+      >(contactUrl, { headers })
       .pipe(
         map(
           (data) =>
@@ -45,7 +53,6 @@ export class ContactsService {
                   language: item.language,
                   region: item.region,
                 };
-
                 try {
                   contactSchema.parse(contact);
                 } catch (error) {

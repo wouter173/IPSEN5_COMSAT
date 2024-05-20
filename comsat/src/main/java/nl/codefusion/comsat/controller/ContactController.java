@@ -2,6 +2,7 @@ package nl.codefusion.comsat.controller;
 
 import lombok.RequiredArgsConstructor;
 import nl.codefusion.comsat.config.Permission;
+import nl.codefusion.comsat.dao.ContactDao;
 import nl.codefusion.comsat.models.ContactModel;
 import nl.codefusion.comsat.service.ContactService;
 import nl.codefusion.comsat.service.PermissionService;
@@ -18,12 +19,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ContactController {
     private final PermissionService permissionService;
-    private final ContactService contactService;
-    private boolean skipPermissions = false;
-
+    private final ContactDao contactService;
     @GetMapping
     public ResponseEntity<List<ContactModel>> getContacts() throws NoPermissionException{
-        if (permissionService.hasPermission(permissionService.getPrincipalRoles(), Permission.READ_CONTACT_DETAILS) || skipPermissions) {
+        if (permissionService.hasPermission(permissionService.getPrincipalRoles(), Permission.READ_CONTACT_DETAILS)) {
             return ResponseEntity.ok(contactService.getAllContacts());
         }
         throw new NoPermissionException();
