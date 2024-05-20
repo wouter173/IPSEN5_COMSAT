@@ -13,33 +13,34 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 public class ContactModel {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = true)
+    @Column
     private String firstname;
 
-    @Column(nullable = true)
+    @Column
     private String nickname;
 
-    @Column(nullable = true)
+    @Column
     private String platform;
 
-    @Column(nullable = true)
+    @Column
     private String audience;
 
-    @Column(nullable = true)
+    @Column
     private String sex;
 
-    @Column(nullable = true)
+    @Column
     private String language;
 
-    @Column(nullable = true)
+    @Column
     private String region;
 
     @ManyToOne
-    @JoinColumn(name = "batch_id", nullable = false)
+    @JoinColumn(name = "batch_id")
     private BatchModel batch;
 }
