@@ -16,13 +16,13 @@ public class ContactService {
             for (int i = 0; i < numberOfContacts; i++) {
                 ContactModel contact = ContactModel.builder()
                         .id(UUID.randomUUID())
-                        .firstname("Firstname" + i)
-                        .nickname("Nickname" + i)
+                        .firstname("Firstname " + i)
+                        .nickname("Nickname " + i)
                         .platform("kik")
-                        .audience("Audience" + i)
+                        .audience("Audience " + i)
                         .sex(i % 2 == 0 ? "Male" : "Female")
-                        .language("Language" + i)
-                        .region("Region" + i)
+                        .language("Language " + i)
+                        .region("Region " + i)
                         .batch(new BatchModel())
                         .build();
                 contacts.add(contact);
