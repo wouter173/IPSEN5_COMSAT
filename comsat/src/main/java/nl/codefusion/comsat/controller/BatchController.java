@@ -24,7 +24,6 @@ public class BatchController {
     public ResponseEntity<String> handleBatch(@RequestBody BatchModel batch) {
         batchProcesses.processBatch(batch);
         batchProcesses.saveBatch(batch);
-
         return ResponseEntity.ok("Batch processed successfully");
     }
 }

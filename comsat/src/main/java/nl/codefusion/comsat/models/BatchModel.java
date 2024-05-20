@@ -1,6 +1,10 @@
 package nl.codefusion.comsat.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDateTime;
@@ -8,7 +12,11 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-
+@Table(name = "batch")
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class BatchModel {
     @Id
     @GeneratedValue(generator = "UUID")
@@ -29,6 +37,10 @@ public class BatchModel {
 
     @OneToMany(mappedBy = "batch", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ContactModel> contacts;
+
+    public List<ContactModel> getContacts() {
+        return contacts;
+    }
 
     public void setLastModified(String format) {
         this.lastModified = format;
@@ -52,5 +64,9 @@ public class BatchModel {
 
     public void setName(String batch) {
         this.name=name;
+    }
+
+    public void setId(UUID newId) {
+        this.id = newId;
     }
 }
