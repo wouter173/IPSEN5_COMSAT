@@ -1,6 +1,7 @@
 package nl.codefusion.comsat.controller;
 
 import nl.codefusion.comsat.models.BatchModel;
+import nl.codefusion.comsat.models.OmitIdBatchModel;
 import nl.codefusion.comsat.service.BatchProcesses;
 import org.hibernate.engine.jdbc.batch.spi.Batch;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,18 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class BatchController {
 
-    private final BatchProcesses batchProcesses;
-
     @Autowired
-    public BatchController(BatchProcesses batchProcesses) {
-        this.batchProcesses = batchProcesses;
-
-    }
+    private BatchProcesses batchProcesses;
 
     @PostMapping("/batch")
-    public ResponseEntity<String> handleBatch(@RequestBody BatchModel batch) {
+    public ResponseEntity<String> handleBatch(@RequestBody OmitIdBatchModel batchModel) {
+        BatchModel batch = new BatchModel();
         batchProcesses.processBatch(batch);
-        batchProcesses.saveBatch(batch);
         return ResponseEntity.ok("Batch processed successfully");
     }
 }

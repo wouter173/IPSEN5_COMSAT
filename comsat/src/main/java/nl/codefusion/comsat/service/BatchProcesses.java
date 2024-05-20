@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.UUID;
 
 @Service
@@ -38,10 +39,14 @@ public class BatchProcesses {
 
         batch.setName("Test Batch");
 
+        if (batch.getContacts() == null) {
+            batch.setContacts(new ArrayList<>());
+        }
 
         for (ContactModel contact : batch.getContacts()) {
             contactService.saveContact(contact);
         }
+        saveBatch(batch);
     }
 
     public BatchModel saveBatch(BatchModel batch) {

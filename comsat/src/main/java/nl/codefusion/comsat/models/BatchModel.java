@@ -70,3 +70,4 @@ public class BatchModel {
         this.id = newId;
     }
 }
+
