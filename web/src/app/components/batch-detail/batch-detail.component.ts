@@ -39,9 +39,19 @@ export class BatchDetailComponent {
           status: contactStatus[Math.round(Math.random() * contactStatus.length)] as 'NOTSENT',
         })) ?? [],
     });
-
     await sleep(2000);
     this.batchesService.updateBatch(id, { state: 'SENT' });
-    this.batchesService.sendBatchData(this.selectedBatch()!);
+
+    const batch = this.selectedBatch();
+    if (!batch) {
+      console.error('Batch not found');
+      return;
+    }
+    this.batchesService.sendBatchData(batch).subscribe(
+      response => console.log('Batch sent successfully', response),
+      error => console.error('Error sending batch', error)
+    );
+  } catch (error: any) {
+    console.error('Error sending batch', error);
   }
 }
