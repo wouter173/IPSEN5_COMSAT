@@ -1,4 +1,3 @@
-
 import { Component, inject } from '@angular/core';
 import { ContactsListItemComponent } from '../../components/contacts-list-item/contacts-list-item.component';
 import { Contact, contactSchema } from '../../models/contact';
@@ -6,7 +5,6 @@ import { CommonModule } from '@angular/common';
 import { Batch } from '../../models/batch';
 import { z } from 'zod';
 import { ContactsService } from '../../services/contacts.service';
-
 
 @Component({
   selector: 'app-contacts',
@@ -17,14 +15,16 @@ import { ContactsService } from '../../services/contacts.service';
 export class ContactsComponent {
   contacts: { contact: Contact; batch: Batch }[] = [];
   contactService = inject(ContactsService);
-  
+
   ngOnInit() {
-    this.contactService.getContacts();
-    for (const batch of this.batches) {
-      for (const contact of batch.contacts) {
-        this.contacts.push({ contact, batch });
-      }
-    }
+    this.contactService.getContacts().subscribe(
+      (contactsWithBatch) => {
+        this.contacts = contactsWithBatch;
+      },
+      (error) => {
+        console.error('Error:', error);
+      },
+    );
   }
 
   batches: Batch[] = [
@@ -358,5 +358,4 @@ export class ContactsComponent {
       lastModified: new Date(),
     },
   ];
-
 }

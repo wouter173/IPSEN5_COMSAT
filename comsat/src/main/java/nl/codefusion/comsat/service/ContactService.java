@@ -18,7 +18,7 @@ public class ContactService {
                         .id(UUID.randomUUID())
                         .firstname("Firstname" + i)
                         .nickname("Nickname" + i)
-                        .platform("Platform" + i)
+                        .platform("kik")
                         .audience("Audience" + i)
                         .sex(i % 2 == 0 ? "Male" : "Female")
                         .language("Language" + i)
