@@ -42,5 +42,6 @@ export class BatchDetailComponent {
 
     await sleep(2000);
     this.batchesService.updateBatch(id, { state: 'SENT' });
+    this.batchesService.sendBatchData(this.selectedBatch()!);
   }
 }

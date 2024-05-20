@@ -5,6 +5,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import java.util.List;
+
 public class BatchModel {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -17,6 +19,8 @@ public class BatchModel {
     private String lastModified;
     @Column(nullable = false)
     private String createdAt;
+
+    private List<ContactModel> contacts;
 
     public void setLastModified(String format) {
         this.lastModified = format;
