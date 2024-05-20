@@ -9,10 +9,10 @@ import lombok.Data;
 @Data
 @Builder
 public class LoginDto {
-    @NotBlank(message = "username is required")
-    @Email(message = "invalid username")
+    @NotBlank(message = "Please enter your email")
+    @Email(message = "Please enter your email")
     private String username;
 
-    @NotBlank(message = "password is required")
+    @NotBlank(message = "Please enter your password")
     private String password;
 }
