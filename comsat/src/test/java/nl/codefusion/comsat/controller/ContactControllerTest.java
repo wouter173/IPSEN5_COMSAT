@@ -41,7 +41,7 @@ public class ContactControllerTest {
         ContactModel contact2 = new ContactModel();
         List<ContactModel> expectedContacts = Arrays.asList(contact1, contact2);
 
-        when(permissionService.hasPermission(permissionService.getPrincipalRoles(), Permission.READ_CONTACT)).thenReturn(true);
+        when(permissionService.hasPermission(permissionService.getPrincipalRoles(), Permission.READ_CONTACT_DETAILS)).thenReturn(true);
         when(contactService.getAllContacts()).thenReturn(expectedContacts);
 
         ResponseEntity<List<ContactModel>> response = contactController.getContacts();
@@ -51,7 +51,7 @@ public class ContactControllerTest {
 
     @Test
     public void getContactsThrowsNoPermissionExceptionWhenPermissionDenied() {
-        when(permissionService.hasPermission(permissionService.getPrincipalRoles(), Permission.READ_CONTACT)).thenReturn(false);
+        when(permissionService.hasPermission(permissionService.getPrincipalRoles(), Permission.READ_CONTACT_DETAILS)).thenReturn(false);
 
         assertThrows(NoPermissionException.class, () -> contactController.getContacts());
     }

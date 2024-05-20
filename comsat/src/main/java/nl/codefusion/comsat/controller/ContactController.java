@@ -23,7 +23,7 @@ public class ContactController {
 
     @GetMapping
     public ResponseEntity<List<ContactModel>> getContacts() throws NoPermissionException{
-        if (permissionService.hasPermission(permissionService.getPrincipalRoles(), Permission.READ_CONTACT) || skipPermissions) {
+        if (permissionService.hasPermission(permissionService.getPrincipalRoles(), Permission.READ_CONTACT_DETAILS) || skipPermissions) {
             return ResponseEntity.ok(contactService.getAllContacts());
         }
         throw new NoPermissionException();
