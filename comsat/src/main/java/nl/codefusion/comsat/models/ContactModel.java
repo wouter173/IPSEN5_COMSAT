@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.util.UUID;
 
@@ -16,28 +17,35 @@ import java.util.UUID;
 @Entity
 public class ContactModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
-    @Column
+
+
+    @Column(name = "firstname")
     private String firstname;
 
-    @Column
+    @Column(name = "nickname")
     private String nickname;
 
-    @Column
+    @Column(name = "platform")
     private String platform;
 
-    @Column
+    @Column(name = "audience")
     private String audience;
 
-    @Column
+    @Column(name = "sex")
     private String sex;
 
-    @Column
+    @Column(name="language")
     private String language;
 
-    @Column
+    @Column(name = "region")
     private String region;
 
     @ManyToOne
