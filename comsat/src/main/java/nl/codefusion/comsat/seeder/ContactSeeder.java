@@ -8,6 +8,7 @@ import nl.codefusion.comsat.models.ContactModel;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -138,8 +139,8 @@ public class ContactSeeder {
         BatchModel batch = BatchModel.builder()
                 .name("Batch1")
                 .state("SENDING")
-                .lastModified("Yesterday")
-                .createdAt("Wednesday")
+                .lastModified(new Date())
+                .createdAt(new Date())
                 .build();
         return batchDao.create(batch);
     }

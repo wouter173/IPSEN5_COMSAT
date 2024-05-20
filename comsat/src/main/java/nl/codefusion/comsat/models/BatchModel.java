@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -23,8 +24,8 @@ public class BatchModel {
     @Column(nullable = false)
     private String state;
     @Column(nullable = false)
-    private String lastModified;
+    private Date lastModified;
     @Column(nullable = false)
-    private String createdAt;
+    private Date createdAt;
 
 }
