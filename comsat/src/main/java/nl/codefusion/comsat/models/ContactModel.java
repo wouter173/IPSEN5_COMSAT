@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
+@Entity
 @Table(name = "contact")
 @Data
 @Builder

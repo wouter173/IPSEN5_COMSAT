@@ -23,7 +23,7 @@ public class ContactController {
     @GetMapping//TODO reset the permission
     public ResponseEntity<List<ContactModel>> getContacts() {
         if (skipPermissions){
-            return ResponseEntity.ok(contactService.generateFakeContacts(10));
+            return ResponseEntity.ok(contactService.getAllContacts());
         }
         return ResponseEntity.status(403).body(null);
     }

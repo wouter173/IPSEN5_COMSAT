@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class DatabaseSeeder {
     private final UserSeeder userSeeder;
+    private final ContactSeeder contactSeeder;
 
 
     private boolean alreadySeeded = false;
@@ -20,6 +21,7 @@ public class DatabaseSeeder {
             return;
         }
         this.userSeeder.seedUsers();
+        this.contactSeeder.seedContacts();
 
 
         this.alreadySeeded = true;

@@ -12,9 +12,9 @@ export class ContactsService {
   contacts: { contact: Contact; batch: Batch }[] = [];
 
   getContacts(): Observable<{ contact: Contact; batch: Batch }[]> {
+    const token = localStorage.getItem('token');
     const headers = {
-      Authorization:
-        'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE3MTYyMDA0NDYsImV4cCI6MTcxNjI4Njg0Nn0.SaAZnz6dLB8X6YzCn11Kk7knTY8trzPNrzL4fWvLr-w',
+      Authorization: 'Bearer ' + token,
     };
     return this.http
       .get<
