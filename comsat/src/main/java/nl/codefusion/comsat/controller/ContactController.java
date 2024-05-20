@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.naming.NoPermissionException;
 import java.util.List;
 
 @RestController
@@ -18,14 +19,15 @@ import java.util.List;
 public class ContactController {
     private final PermissionService permissionService;
     private final ContactService contactService;
-    private boolean skipPermissions = true;
+    private boolean skipPermissions = false;
 
-    @GetMapping//TODO reset the permission
-    public ResponseEntity<List<ContactModel>> getContacts() {
-        if (skipPermissions){
+    @GetMapping
+    public ResponseEntity<List<ContactModel>> getContacts() throws NoPermissionException{
+        if (permissionService.hasPermission(permissionService.getPrincipalRoles(), Permission.READ_CONTACT) || skipPermissions) {
             return ResponseEntity.ok(contactService.getAllContacts());
         }
-        return ResponseEntity.status(403).body(null);
+        throw new NoPermissionException();
+
     }
 
 }
