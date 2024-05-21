@@ -39,10 +39,6 @@ public class BatchProcesses {
 
         batch.setName("Test Batch");
 
-        if (batch.getContacts() == null) {
-            batch.setContacts(new ArrayList<>());
-        }
-
         for (ContactModel contact : batch.getContacts()) {
             contactService.saveContact(contact);
         }

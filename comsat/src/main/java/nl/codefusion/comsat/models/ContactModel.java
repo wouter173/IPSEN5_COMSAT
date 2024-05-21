@@ -48,7 +48,11 @@ public class ContactModel {
     @Column(name = "region")
     private String region;
 
+    @Column(name = "status")
+    private String status;
+
     @ManyToOne
     @JoinColumn(name = "batch_id")
     private BatchModel batch;
+
 }

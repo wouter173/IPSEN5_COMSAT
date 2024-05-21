@@ -9,5 +9,9 @@ public class OmitIdBatchModel {
     private String createdAt;
     private List<ContactModel> contacts;
 
+    public List<ContactModel> getContacts() {
+        return contacts;
+    }
+
     // getters and setters
 }
