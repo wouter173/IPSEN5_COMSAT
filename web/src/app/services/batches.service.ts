@@ -1,6 +1,7 @@
 import { Injectable, signal, effect, computed } from '@angular/core';
 import { Batch } from '../models/batch';
 import {HttpClient} from "@angular/common/http";
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +14,10 @@ export class BatchesService {
   });
 
   public createBatch(batch: Batch) {
+
+    if (batch.contacts) {
+      batch.contacts = batch.contacts.map(contact => ({ ...contact, id: uuidv4() }));
+    }
     this._batches.set([...this._batches(), batch]);
   }
 

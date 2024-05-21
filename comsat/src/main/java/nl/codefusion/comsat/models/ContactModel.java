@@ -52,7 +52,7 @@ public class ContactModel {
     private String status;
 
     @ManyToOne
-    @JoinColumn(name = "batch_id")
+    @JoinColumn(name = "batch_id", referencedColumnName = "id")
     private BatchModel batch;
 
 }

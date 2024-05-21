@@ -40,9 +40,8 @@ public class BatchProcesses {
         batch.setName("Test Batch");
 
         for (ContactModel contact : batch.getContacts()) {
-            contactService.saveContact(contact);
+            contact.setBatch(batch);
         }
-        saveBatch(batch);
     }
 
     public BatchModel saveBatch(BatchModel batch) {
