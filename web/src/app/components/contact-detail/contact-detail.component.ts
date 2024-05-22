@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 import { Contact } from '../../models/contact';
 import { Batch } from '../../models/batch';
+import { ContactWithBatch } from '../../models/contactwithbatch';
 
 @Component({
   selector: 'app-contact-detail',
@@ -10,5 +11,5 @@ import { Batch } from '../../models/batch';
   templateUrl: './contact-detail.component.html',
 })
 export class ContactDetailComponent {
-  contacts!: { contact: Contact, batch: Batch}
+  contacts!: ContactWithBatch;
 }

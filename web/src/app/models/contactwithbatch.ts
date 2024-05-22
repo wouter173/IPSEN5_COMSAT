@@ -14,10 +14,7 @@ export const contactWithBatchSchema = z.object({
   batch: z.object({
     id: z.string(),
     state: z.enum(['NOTSENT', 'SENDING', 'SENT']),
-    name: z.string(),
-    contacts: z.array(batchContactSchema).optional(),
-    createdAt: z.date(),
-    lastModified: z.date(),
+    name: z.string(),    
   }),
 });
 

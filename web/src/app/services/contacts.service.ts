@@ -5,7 +5,7 @@ import { Batch, batchSchema } from '../models/batch';
 import { Observable, map } from 'rxjs';
 import { AuthService } from './auth.service';
 import { environment } from '../../environments/environment';
-import { contactWithBatchSchema } from '../models/contactwithbatch';
+import { ContactWithBatch, contactWithBatchSchema } from '../models/contactwithbatch';
 import { z } from 'zod';
 
 @Injectable({
@@ -18,23 +18,23 @@ export class ContactsService {
 
   constructor(private http: HttpClient) {}
 
-  getContacts(): Observable<{ contact: Contact; batch: Batch }[]> {
+  getContacts(): Observable<ContactWithBatch[]> {
     const headers = {
       Authorization: this.token,
     };
     const contactUrl = this.url + '/api/v1/contacts';
 
-    return this.http.get<any[]>(contactUrl, { headers }).pipe(
+    return this.http.get<unknown>(contactUrl, { headers }).pipe(
       map(
-        (data) =>
-          data
+        (data) => {
+          const parsedData = z.array(contactWithBatchSchema).parse(data);
+          return parsedData
             .map((item) => {
-              item.batch.createdAt = new Date(item.batch.createdAt);
-              item.batch.lastModified = new Date(item.batch.lastModified);
               const contactAndBatch = contactWithBatchSchema.parse(item);
-              return { contact: contactAndBatch, batch: contactAndBatch.batch };
+              return contactAndBatch;
             })
-            .filter((contactAndBatch) => contactAndBatch !== null) as { contact: Contact; batch: Batch }[],
+            .filter((contactAndBatch) => contactAndBatch !== null);
+          }
       ),
     );
   }
