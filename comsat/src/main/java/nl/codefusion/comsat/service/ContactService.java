@@ -15,7 +15,4 @@ public class ContactService {
         this.contactRepository = contactRepository;
     }
 
-    public ContactModel saveContact(ContactModel contact) {
-        return contactRepository.save(contact);
-    }
 }

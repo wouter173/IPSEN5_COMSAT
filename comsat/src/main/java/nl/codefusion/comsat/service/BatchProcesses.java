@@ -17,15 +17,10 @@ import java.util.UUID;
 public class BatchProcesses {
 
     private final BatchRepository batchRepository;
-    private final ContactService contactService;
-
-    @Autowired
-    private BatchDao batchDao;
 
     @Autowired
     public BatchProcesses(BatchRepository batchRepository, ContactService contactService) {
         this.batchRepository = batchRepository;
-        this.contactService = contactService;
     }
 
     public void processBatch(BatchModel batch) {
@@ -48,10 +43,6 @@ public class BatchProcesses {
 
     public BatchModel saveBatch(BatchModel batch) {
         return batchRepository.save(batch);
-    }
-
-    public BatchModel getBatch(UUID id) {
-        return batchDao.findById(id).orElse(null);
     }
 
 

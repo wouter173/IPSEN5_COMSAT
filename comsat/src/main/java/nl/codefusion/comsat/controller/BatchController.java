@@ -29,9 +29,6 @@ public class BatchController {
     private BatchDao batchDao;
 
     private Set<BatchModel> sentBatches = new HashSet<>();
-
-    private static final Logger logger = (Logger) LoggerFactory.getLogger(BatchController.class);
-    private static final ObjectMapper objectMapper = new ObjectMapper();
     @PostMapping("/batch")
     public ResponseEntity<String> handleBatch(@RequestBody OmitIdBatchModel batchModel) {
         BatchModel batch = new BatchModel();

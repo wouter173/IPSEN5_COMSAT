@@ -30,11 +30,9 @@ public sendBatchData(batch: Batch) {
   const url = 'http://localhost:8080/batch';
   return this.http.post(url, batch).pipe(
     tap(() => {
-      // Update the batch status to 'SENT' after the POST request has been made
-      this.updateBatch(batch.id, { state: 'SENT' });
+      this.updateBatch( batch.id, { state: 'SENT' });
     }),
     catchError((error) => {
-      // Update the batch status to 'ERROR' if the POST request fails
       return throwError(error);
     })
   );

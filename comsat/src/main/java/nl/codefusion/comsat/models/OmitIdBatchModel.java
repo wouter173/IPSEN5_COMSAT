@@ -20,6 +20,4 @@ public class OmitIdBatchModel {
     public void setName(String name) {
         this.name = name;
     }
-
-    // getters and setters
 }
