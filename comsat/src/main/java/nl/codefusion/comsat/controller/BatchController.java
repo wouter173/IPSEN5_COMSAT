@@ -34,12 +34,10 @@ public class BatchController {
     private static final ObjectMapper objectMapper = new ObjectMapper();
     @PostMapping("/batch")
     public ResponseEntity<String> handleBatch(@RequestBody OmitIdBatchModel batchModel) {
-
         BatchModel batch = new BatchModel();
         List<ContactModel> contacts = batchModel.getContacts();
         for (ContactModel contact : contacts) {
             contact.setId(UUID.randomUUID());
-            System.out.println("Contact name before saving: " + contact.getFirstName());
         }
         batch.setContacts(contacts);
         batch.setName(batchModel.getName());
@@ -55,14 +53,6 @@ public class BatchController {
         List<BatchModel> batches = batchDao.findAll();
         batches.removeIf(sentBatches::contains);
         sentBatches.addAll(batches);
-
-        try {
-            String json = objectMapper.writeValueAsString(batches);
-            logger.info("JSON response: {}", json);
-        } catch (Exception e) {
-            logger.error("Error converting batches to JSON", e);
-        }
-
         return ResponseEntity.ok(batches);
     }
 
