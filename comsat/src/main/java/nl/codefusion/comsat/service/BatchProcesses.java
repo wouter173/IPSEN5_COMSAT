@@ -41,8 +41,6 @@ public class BatchProcesses {
             batch.setCreatedAt(now);
         }
 
-        batch.setName("Test Batch");
-
         for (ContactModel contact : batch.getContacts()) {
             contact.setBatch(batch);
         }

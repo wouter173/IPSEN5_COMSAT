@@ -64,8 +64,8 @@ public class BatchModel {
         return name;
     }
 
-    public void setName(String batch) {
-        this.name=name;
+    public void setName(String batchName) {
+        this.name=batchName;
     }
 
     public void setId(UUID newId) {

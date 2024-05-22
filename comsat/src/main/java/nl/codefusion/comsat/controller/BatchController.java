@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.SQLOutput;
 import java.util.*;
 
 @RestController
@@ -33,14 +34,15 @@ public class BatchController {
     private static final ObjectMapper objectMapper = new ObjectMapper();
     @PostMapping("/batch")
     public ResponseEntity<String> handleBatch(@RequestBody OmitIdBatchModel batchModel) {
+
         BatchModel batch = new BatchModel();
         List<ContactModel> contacts = batchModel.getContacts();
         for (ContactModel contact : contacts) {
             contact.setId(UUID.randomUUID());
-            System.out.println(contact.getId());
-            System.out.println(contact.getFirstname());
         }
         batch.setContacts(contacts);
+        batch.setName(batchModel.getName());
+
         batchProcesses.processBatch(batch);
         batchProcesses.saveBatch(batch);
 
