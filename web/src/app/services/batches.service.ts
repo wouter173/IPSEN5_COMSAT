@@ -34,10 +34,14 @@ export class BatchesService {
     return this.http.get<Batch[]>("http://localhost:8080/batches");
   }
 
+  public wipeAllBatches() {
+    this._batches.set([]);
+    localStorage.setItem('batches', JSON.stringify(this._batches()));
+  }
+
   constructor(private http: HttpClient) {
-    effect(() => {
-      localStorage.setItem('batches', JSON.stringify(this._batches()));
-    });
+    this.wipeAllBatches()
+    this.getAllBatches().subscribe((batches) => { this._batches.set(batches) } );
   }
 
 

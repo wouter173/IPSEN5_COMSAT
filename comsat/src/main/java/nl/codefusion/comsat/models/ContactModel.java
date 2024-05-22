@@ -1,5 +1,6 @@
 package nl.codefusion.comsat.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -51,6 +52,7 @@ public class ContactModel {
     @Column(name = "status")
     private String status;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "batch_id", referencedColumnName = "id")
     private BatchModel batch;

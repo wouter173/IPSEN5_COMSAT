@@ -1,5 +1,6 @@
 package nl.codefusion.comsat.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,6 +36,7 @@ public class BatchModel {
     @Column(name = "created_at",nullable = false)
     private String createdAt;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "batch", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ContactModel> contacts;
 

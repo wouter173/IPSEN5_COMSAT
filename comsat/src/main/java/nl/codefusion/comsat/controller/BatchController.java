@@ -1,11 +1,14 @@
 package nl.codefusion.comsat.controller;
 
+import ch.qos.logback.classic.Logger;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.codefusion.comsat.dao.BatchDao;
 import nl.codefusion.comsat.models.BatchModel;
 import nl.codefusion.comsat.models.ContactModel;
 import nl.codefusion.comsat.models.OmitIdBatchModel;
 import nl.codefusion.comsat.service.BatchProcesses;
 import org.hibernate.engine.jdbc.batch.spi.Batch;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,8 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 public class BatchController {
@@ -25,6 +27,10 @@ public class BatchController {
     @Autowired
     private BatchDao batchDao;
 
+    private Set<BatchModel> sentBatches = new HashSet<>();
+
+    private static final Logger logger = (Logger) LoggerFactory.getLogger(BatchController.class);
+    private static final ObjectMapper objectMapper = new ObjectMapper();
     @PostMapping("/batch")
     public ResponseEntity<String> handleBatch(@RequestBody OmitIdBatchModel batchModel) {
         BatchModel batch = new BatchModel();
@@ -44,6 +50,16 @@ public class BatchController {
     @GetMapping("/batches")
     public ResponseEntity<List<BatchModel>> getAllBatches() {
         List<BatchModel> batches = batchDao.findAll();
+        batches.removeIf(sentBatches::contains);
+        sentBatches.addAll(batches);
+
+        try {
+            String json = objectMapper.writeValueAsString(batches);
+            logger.info("JSON response: {}", json);
+        } catch (Exception e) {
+            logger.error("Error converting batches to JSON", e);
+        }
+
         return ResponseEntity.ok(batches);
     }
 
