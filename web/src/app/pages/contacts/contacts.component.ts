@@ -1,8 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { ContactsListItemComponent } from '../../components/contacts-list-item/contacts-list-item.component';
-import { Contact, contactSchema } from '../../models/contact';
 import { CommonModule } from '@angular/common';
-import { Batch } from '../../models/batch';
 import { ContactsService } from '../../services/contacts.service';
 import { ContactWithBatch } from '../../models/contactwithbatch';
 

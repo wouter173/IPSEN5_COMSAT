@@ -1,7 +1,5 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Contact, contactSchema } from '../models/contact';
-import { Batch, batchSchema } from '../models/batch';
 import { Observable, map } from 'rxjs';
 import { AuthService } from './auth.service';
 import { environment } from '../../environments/environment';
