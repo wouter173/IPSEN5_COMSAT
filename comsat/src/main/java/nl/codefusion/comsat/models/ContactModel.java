@@ -29,7 +29,7 @@ public class ContactModel {
 
 
     @Column(name = "firstname")
-    private String firstname;
+    private String firstName;
 
     @Column(name = "nickname")
     private String nickname;

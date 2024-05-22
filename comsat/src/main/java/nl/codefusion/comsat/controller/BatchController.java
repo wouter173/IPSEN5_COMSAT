@@ -39,6 +39,7 @@ public class BatchController {
         List<ContactModel> contacts = batchModel.getContacts();
         for (ContactModel contact : contacts) {
             contact.setId(UUID.randomUUID());
+            System.out.println("Contact name before saving: " + contact.getFirstName());
         }
         batch.setContacts(contacts);
         batch.setName(batchModel.getName());

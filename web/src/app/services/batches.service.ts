@@ -2,6 +2,7 @@ import { Injectable, signal, effect, computed } from '@angular/core';
 import { Batch } from '../models/batch';
 import {HttpClient} from "@angular/common/http";
 import { v4 as uuidv4 } from 'uuid';
+import {catchError, tap, throwError} from "rxjs";
 
 @Injectable({
   providedIn: 'root',
@@ -25,10 +26,19 @@ export class BatchesService {
     this._batches.set(this._batches().map((b) => (b.id === batchId ? { ...b, ...batch } : b)));
   }
 
-  public sendBatchData(batch: Batch) {
-    const url = 'http://localhost:8080/batch';
-    return this.http.post(url, batch);
-  }
+public sendBatchData(batch: Batch) {
+  const url = 'http://localhost:8080/batch';
+  return this.http.post(url, batch).pipe(
+    tap(() => {
+      // Update the batch status to 'SENT' after the POST request has been made
+      this.updateBatch(batch.id, { state: 'SENT' });
+    }),
+    catchError((error) => {
+      // Update the batch status to 'ERROR' if the POST request fails
+      return throwError(error);
+    })
+  );
+}
 
   getAllBatches() {
     return this.http.get<Batch[]>("http://localhost:8080/batches");
