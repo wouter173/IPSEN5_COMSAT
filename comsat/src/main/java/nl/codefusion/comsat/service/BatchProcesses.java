@@ -1,5 +1,6 @@
 package nl.codefusion.comsat.service;
 
+import nl.codefusion.comsat.dao.BatchDao;
 import nl.codefusion.comsat.models.BatchModel;
 import nl.codefusion.comsat.models.ContactModel;
 import nl.codefusion.comsat.repository.BatchRepository;
@@ -17,6 +18,9 @@ public class BatchProcesses {
 
     private final BatchRepository batchRepository;
     private final ContactService contactService;
+
+    @Autowired
+    private BatchDao batchDao;
 
     @Autowired
     public BatchProcesses(BatchRepository batchRepository, ContactService contactService) {
@@ -46,6 +50,10 @@ public class BatchProcesses {
 
     public BatchModel saveBatch(BatchModel batch) {
         return batchRepository.save(batch);
+    }
+
+    public BatchModel getBatch(UUID id) {
+        return batchDao.findById(id).orElse(null);
     }
 
 

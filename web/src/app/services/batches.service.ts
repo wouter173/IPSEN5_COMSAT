@@ -30,9 +30,15 @@ export class BatchesService {
     return this.http.post(url, batch);
   }
 
+  getAllBatches() {
+    return this.http.get<Batch[]>("http://localhost:8080/batches");
+  }
+
   constructor(private http: HttpClient) {
     effect(() => {
       localStorage.setItem('batches', JSON.stringify(this._batches()));
     });
   }
+
+
 }
