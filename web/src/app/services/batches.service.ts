@@ -27,7 +27,7 @@ export class BatchesService {
   }
 
 public sendBatchData(batch: Batch) {
-  const url = 'http://localhost:8080/batch';
+  const url = 'http://localhost:8080/api/v1/batch';
   return this.http.post(url, batch).pipe(
     tap(() => {
       this.updateBatch( batch.id, { state: 'SENT' });
@@ -39,7 +39,7 @@ public sendBatchData(batch: Batch) {
 }
 
   getAllBatches() {
-    return this.http.get<Batch[]>("http://localhost:8080/batches");
+    return this.http.get<Batch[]>("http://localhost:8080/api/v1/batches");
   }
 
   public wipeAllBatches() {

@@ -29,7 +29,7 @@ public class BatchController {
     private BatchDao batchDao;
 
     private Set<BatchModel> sentBatches = new HashSet<>();
-    @PostMapping("/batch")
+    @PostMapping("/api/v1/batch")
     public ResponseEntity<String> handleBatch(@RequestBody OmitIdBatchModel batchModel) {
         BatchModel batch = new BatchModel();
         List<ContactModel> contacts = batchModel.getContacts();
@@ -45,7 +45,7 @@ public class BatchController {
         return ResponseEntity.ok("Batch processed successfully");
     }
 
-    @GetMapping("/batches")
+    @GetMapping("/api/v1/batches")
     public ResponseEntity<List<BatchModel>> getAllBatches() {
         List<BatchModel> batches = batchDao.findAll();
         batches.removeIf(sentBatches::contains);
@@ -53,7 +53,7 @@ public class BatchController {
         return ResponseEntity.ok(batches);
     }
 
-    @GetMapping("/batch/{id}")
+    @GetMapping("/api/v1/batch/{id}")
     public ResponseEntity<BatchModel> getBatch(UUID id) {
         BatchModel batch = batchDao.findById(id).orElse(null);
                 if (batch == null) {
