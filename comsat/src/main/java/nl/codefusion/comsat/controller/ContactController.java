@@ -7,16 +7,14 @@ import nl.codefusion.comsat.models.ContactModel;
 import nl.codefusion.comsat.repository.ContactRepository;
 import nl.codefusion.comsat.service.PermissionService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.naming.NoPermissionException;
 import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/api/v1")
 public class ContactController {
 
     private final ContactRepository contactRepository;
