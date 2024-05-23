@@ -1,19 +1,14 @@
 package nl.codefusion.comsat.controller;
 
-import ch.qos.logback.classic.Logger;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.codefusion.comsat.dao.BatchDao;
 import nl.codefusion.comsat.models.BatchModel;
 import nl.codefusion.comsat.models.ContactModel;
-import nl.codefusion.comsat.models.OmitIdBatchModel;
+import nl.codefusion.comsat.dto.OmitIdBatchDto;
 import nl.codefusion.comsat.service.BatchProcesses;
-import org.hibernate.engine.jdbc.batch.spi.Batch;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLOutput;
 import java.util.*;
 
 @RequestMapping(value = "/api/v1")
@@ -28,7 +23,7 @@ public class BatchController {
 
     private Set<BatchModel> sentBatches = new HashSet<>();
     @PostMapping("/batch")
-    public ResponseEntity<String> handleBatch(@RequestBody OmitIdBatchModel batchModel) {
+    public ResponseEntity<String> handleBatch(@RequestBody OmitIdBatchDto batchModel) {
         BatchModel batch = new BatchModel();
         List<ContactModel> contacts = batchModel.getContacts();
         for (ContactModel contact : contacts) {
@@ -45,7 +40,7 @@ public class BatchController {
 
     @GetMapping("/batches")
     public ResponseEntity<List<BatchModel>> getAllBatches() {
-        List<BatchModel> batches = batchDao.findAll();
+        List<BatchModel> batches = batchDao.getAllBatches();
         batches.removeIf(sentBatches::contains);
         sentBatches.addAll(batches);
         return ResponseEntity.ok(batches);
@@ -53,10 +48,10 @@ public class BatchController {
 
     @GetMapping("/batch/{id}")
     public ResponseEntity<BatchModel> getBatch(UUID id) {
-        BatchModel batch = batchDao.findById(id).orElse(null);
-                if (batch == null) {
-                    return ResponseEntity.notFound().build();
-                }
+        BatchModel batch = batchDao.findById(id);
+        if (batch == null) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.ok(batch);
     }
 }

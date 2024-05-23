@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.UUID;
 
 @Service
@@ -28,12 +29,10 @@ public class BatchProcesses {
 
         UUID newId = UUID.randomUUID();
         batch.setId(newId);
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
-        batch.setLastModified(dtf.format(now));
+        batch.setLastModified(new Date());
 
         if (batch.getCreatedAt() == null) {
-            batch.setCreatedAt(now);
+            batch.setCreatedAt(new Date());
         }
 
         for (ContactModel contact : batch.getContacts()) {

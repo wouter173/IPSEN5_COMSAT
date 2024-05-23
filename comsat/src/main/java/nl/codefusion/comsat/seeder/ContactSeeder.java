@@ -34,7 +34,7 @@ public class ContactSeeder {
 
     private ContactModel seedContact(String firstName, String nickname, String platform, String audience, String sex, String language, String region, BatchModel batch) {
         ContactModel contact = ContactModel.builder()
-                .firstname(firstName)
+                .firstName(firstName)
                 .nickname(nickname)
                 .platform(platform)
                 .audience(audience)
