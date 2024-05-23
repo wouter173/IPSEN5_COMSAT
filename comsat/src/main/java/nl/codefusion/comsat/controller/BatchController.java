@@ -32,6 +32,8 @@ public class BatchController {
         batch.setContacts(contacts);
         batch.setName(batchModel.getName());
 
+        batch.setState("NOTSENT");
+        batchModel.setState("NOTSENT");
         batchProcesses.processBatch(batch);
         batchProcesses.saveBatch(batch);
 

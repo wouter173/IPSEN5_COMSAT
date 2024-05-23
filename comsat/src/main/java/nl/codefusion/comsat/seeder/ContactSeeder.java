@@ -54,7 +54,7 @@ public class ContactSeeder {
 
     private BatchModel seedBatch() {
         BatchModel batch = BatchModel.builder()
-                .name("Batch1")
+                .name("Batch-1")
                 .state("NOTSENT")
                 .lastModified(new Date())
                 .createdAt(new Date())
