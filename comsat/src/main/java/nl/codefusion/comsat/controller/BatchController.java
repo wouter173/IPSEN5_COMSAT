@@ -11,14 +11,12 @@ import org.hibernate.engine.jdbc.batch.spi.Batch;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLOutput;
 import java.util.*;
 
+@RequestMapping(value = "/api/v1")
 @RestController
 public class BatchController {
 
@@ -29,7 +27,7 @@ public class BatchController {
     private BatchDao batchDao;
 
     private Set<BatchModel> sentBatches = new HashSet<>();
-    @PostMapping("/api/v1/batch")
+    @PostMapping("/batch")
     public ResponseEntity<String> handleBatch(@RequestBody OmitIdBatchModel batchModel) {
         BatchModel batch = new BatchModel();
         List<ContactModel> contacts = batchModel.getContacts();
@@ -45,7 +43,7 @@ public class BatchController {
         return ResponseEntity.ok("Batch processed successfully");
     }
 
-    @GetMapping("/api/v1/batches")
+    @GetMapping("/batches")
     public ResponseEntity<List<BatchModel>> getAllBatches() {
         List<BatchModel> batches = batchDao.findAll();
         batches.removeIf(sentBatches::contains);
@@ -53,7 +51,7 @@ public class BatchController {
         return ResponseEntity.ok(batches);
     }
 
-    @GetMapping("/api/v1/batch/{id}")
+    @GetMapping("/batch/{id}")
     public ResponseEntity<BatchModel> getBatch(UUID id) {
         BatchModel batch = batchDao.findById(id).orElse(null);
                 if (batch == null) {
