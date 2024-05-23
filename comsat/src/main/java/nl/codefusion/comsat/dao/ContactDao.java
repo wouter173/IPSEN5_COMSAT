@@ -1,11 +1,22 @@
 package nl.codefusion.comsat.dao;
 
+import lombok.RequiredArgsConstructor;
 import nl.codefusion.comsat.models.ContactModel;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import nl.codefusion.comsat.repository.ContactRepository;
+import org.springframework.stereotype.Component;
 
-import java.util.UUID;
+import java.util.List;
 
-@Repository
-public interface ContactDao extends JpaRepository<ContactModel, UUID> {
+@Component
+@RequiredArgsConstructor
+public class ContactDao {
+    private final ContactRepository contactRepository;
+
+    public ContactModel create(ContactModel contactModel) {
+        return contactRepository.save(contactModel);
+    }
+
+    public List<ContactModel> getAllContacts() {
+        return contactRepository.findAll();
+    }
 }

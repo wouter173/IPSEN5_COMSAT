@@ -1,7 +1,7 @@
 FROM node:20-alpine as angular
 WORKDIR /ng-app
 COPY package*.json .
-RUN npm ci --force
+RUN npm install
 COPY . .
 RUN npm run build
 

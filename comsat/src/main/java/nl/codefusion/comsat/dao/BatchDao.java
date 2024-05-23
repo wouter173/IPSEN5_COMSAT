@@ -1,11 +1,16 @@
 package nl.codefusion.comsat.dao;
 
+import lombok.RequiredArgsConstructor;
 import nl.codefusion.comsat.models.BatchModel;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import nl.codefusion.comsat.repository.BatchRepository;
+import org.springframework.stereotype.Component;
 
-import java.util.UUID;
+@Component
+@RequiredArgsConstructor
+public class BatchDao {
+    private final BatchRepository batchRepository;
 
-@Repository
-public interface BatchDao extends JpaRepository<BatchModel, UUID> {
+    public BatchModel create(BatchModel batchModel) {
+        return batchRepository.save(batchModel);
+    }
 }
