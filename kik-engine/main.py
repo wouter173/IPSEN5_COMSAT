@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from kik_unofficial.client import KikClient
 from kik_unofficial.callbacks import KikClientCallback
 from kik_unofficial.datatypes.exceptions import KikApiException
+from kik_unofficial.datatypes.xmpp import chatting
 from kik_unofficial.datatypes.xmpp.errors import SignUpError, LoginError
 from kik_unofficial.datatypes.xmpp.login import ConnectionFailedResponse
 
@@ -48,6 +49,7 @@ def send_message_to_users():
     user_checked = []
 
     for user in users:
+        user.lower()
         try:
             if bot.client.get_jid(user) is None:
                 return {"status": "error", "message": f"User {user} not found"}, 400
@@ -64,7 +66,18 @@ def send_message_to_users():
     return {"status": "success"}, 200
 
 
+@app.route('/get_chat_status', methods=['GET'])
+def get_chat_status():
+    return {bot.user_message_status}, 200
+
+
+def jid_to_username(jid):
+    return jid.split("@")[0][:-4]
+
+
 class EchoBot(KikClientCallback):
+    user_message_status = {}
+
     def __init__(self, creds: dict):
         username = creds["username"]
         password = creds.get("password") or input("Enter your password: ")
@@ -86,6 +99,20 @@ class EchoBot(KikClientCallback):
     def send_template_messages(self, usernames, message):
         for user in usernames:
             self.client.send_chat_message(user, message)
+            self.user_message_status[user] = 'sent'
+        print(self.user_message_status)
+
+    def on_message_read(self, read: chatting.IncomingMessageReadEvent):
+        self.user_message_status[jid_to_username(read.from_jid)] = 'read'
+        print(self.user_message_status)
+
+    def on_message_delivered(self, delivered: chatting.IncomingMessageDeliveredEvent):
+        self.user_message_status[jid_to_username(delivered.from_jid)] = 'delivered'
+        print(self.user_message_status)
+
+    def on_chat_message_received(self, message: chatting.IncomingChatMessage):
+        self.user_message_status[jid_to_username(message.from_jid)] = 'answered'
+        print(self.user_message_status)
 
 
 if __name__ == "__main__":
