@@ -19,14 +19,9 @@ import java.util.UUID;
 @NoArgsConstructor
 public class ContactModel {
     @Id
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
-
-
 
     @Column(name = "firstname")
     private String firstName;

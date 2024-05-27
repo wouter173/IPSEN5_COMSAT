@@ -24,7 +24,7 @@ public class ContactDao {
 
     public void updateBatchStatusByUsername(String nickName, String status){
         ContactModel contact = contactRepository.findContactByNickname(nickName);
-        contact.setChatStatus(status);
+        contact.setStatus(status);
         contactRepository.save(contact);
     }
 }
