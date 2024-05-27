@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import json
 import os
 import time
 
@@ -68,7 +69,7 @@ def send_message_to_users():
 
 @app.route('/get_chat_status', methods=['GET'])
 def get_chat_status():
-    return {bot.user_message_status}, 200
+    return bot.user_message_status, 200
 
 
 def jid_to_username(jid):

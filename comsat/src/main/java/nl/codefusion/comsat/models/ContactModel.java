@@ -30,6 +30,9 @@ public class ContactModel {
     private String platform;
 
     @Column(nullable = true)
+    private String chatStatus;
+
+    @Column(nullable = true)
     private String audience;
 
     @Column(nullable = true)
