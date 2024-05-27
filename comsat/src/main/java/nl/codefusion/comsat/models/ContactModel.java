@@ -1,11 +1,13 @@
 package nl.codefusion.comsat.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFilter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.util.UUID;
 
@@ -17,34 +19,42 @@ import java.util.UUID;
 @NoArgsConstructor
 public class ContactModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
-    @Column(nullable = true)
-    private String firstname;
 
-    @Column(nullable = true)
+
+    @Column(name = "firstname")
+    private String firstName;
+
+    @Column(name = "nickname")
     private String nickname;
 
-    @Column(nullable = true)
+    @Column(name = "platform")
     private String platform;
 
-    @Column(nullable = true)
-    private String chatStatus;
-
-    @Column(nullable = true)
+    @Column(name = "audience")
     private String audience;
 
-    @Column(nullable = true)
+    @Column(name = "sex")
     private String sex;
 
-    @Column(nullable = true)
+    @Column(name="language")
     private String language;
 
-    @Column(nullable = true)
+    @Column(name = "region")
     private String region;
 
+    @Column(name = "status")
+    private String status;
+
+    @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "batch_id", nullable = false)
+    @JoinColumn(name = "batch_id", referencedColumnName = "id")
     private BatchModel batch;
+
 }
