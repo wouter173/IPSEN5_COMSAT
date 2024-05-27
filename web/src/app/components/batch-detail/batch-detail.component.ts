@@ -47,10 +47,6 @@ export class BatchDetailComponent {
       console.error('Batch not found');
       return;
     }
-    this.batchesService.sendBatchData(batch).subscribe(
-      response => console.log('Batch sent successfully', response),
-      error => console.error('Error sending batch', error)
-    );
   } catch (error: any) {
     console.error('Error sending batch', error);
   }

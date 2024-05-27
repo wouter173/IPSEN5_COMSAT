@@ -1,13 +1,13 @@
-import { CommonModule } from '@angular/common';
-import { Component, ElementRef, inject, Signal, signal, ViewChild, WritableSignal } from '@angular/core';
-import { LucideAngularModule } from 'lucide-angular';
-import { minDelay } from '../../utils/mindelay';
-import { SpinnerComponent } from '../spinner/spinner.component';
-import { z } from 'zod';
-import { Contact, contactSchema } from '../../models/contact';
-import { FormsModule } from '@angular/forms';
-import { BatchesService } from '../../services/batches.service';
-import { nanoid } from 'nanoid';
+import {CommonModule} from '@angular/common';
+import {Component, ElementRef, inject, Signal, signal, ViewChild, WritableSignal} from '@angular/core';
+import {LucideAngularModule} from 'lucide-angular';
+import {minDelay} from '../../utils/mindelay';
+import {SpinnerComponent} from '../spinner/spinner.component';
+import {z} from 'zod';
+import {Contact, contactSchema} from '../../models/contact';
+import {FormsModule} from '@angular/forms';
+import {BatchesService} from '../../services/batches.service';
+import {nanoid} from 'nanoid';
 
 @Component({
   selector: 'app-batch-create-dialog',
@@ -21,13 +21,13 @@ export class BatchCreateDialogComponent {
   @ViewChild('createForm') createForm!: ElementRef<HTMLFormElement>;
   public batchesService = inject(BatchesService);
 
-  public fileState: WritableSignal<FileState> = signal({ state: 'initial' });
+  public fileState: WritableSignal<FileState> = signal({state: 'initial'});
   public name = signal('');
 
   openDialog() {
     this.createModal.nativeElement.showModal();
     this.name.set('Batch-' + (this.batchesService.batches().length + 1));
-    this.fileState.set({ state: 'initial' });
+    this.fileState.set({state: 'initial'});
   }
 
   closeDialog() {
@@ -44,16 +44,16 @@ export class BatchCreateDialogComponent {
   async onFileDrop(event: Event) {
     const file = (event.target as HTMLInputElement).files?.[0];
     if (!file) return;
-    this.fileState.set({ state: 'loading' });
+    this.fileState.set({state: 'loading'});
 
     const output = await minDelay(this.readFileContent(file));
 
     try {
       const json = JSON.parse(output);
       const data = z.array(contactSchema).parse(json);
-      this.fileState.set({ state: 'success', value: file, contacts: data });
+      this.fileState.set({state: 'success', value: file, contacts: data});
     } catch (e) {
-      this.fileState.set({ state: 'error', error: 'Please upload a correctly formatted document' });
+      this.fileState.set({state: 'error', error: 'Please upload a correctly formatted document'});
       return;
     }
   }
@@ -63,14 +63,29 @@ export class BatchCreateDialogComponent {
     const name = this.name();
 
     if (this.fileState().state === 'success') {
-      this.batchesService.createBatch({
+      const newBatch = {
         id: nanoid(),
-        state: 'NOTSENT',
+        state: 'NOTSENT' as 'NOTSENT' | 'SENDING' | 'SENT',
         createdAt: new Date(),
         lastModified: new Date(),
         name,
-        contacts: contacts.map((contact) => ({ ...contact, status: 'NOTSENT' })),
-      });
+        contacts: contacts.map((contact) => ({
+          ...contact,
+          status: 'NOTSENT' as 'NOTSENT' | 'SENDING' | 'SENT' | 'ERROR' | 'READ' | 'REPLIED'
+        })),
+      };
+
+      this.batchesService.createBatch(newBatch);
+
+      // Call sendBatchData function
+      this.batchesService.sendBatchData(newBatch).subscribe(
+        () => {
+          console.log('Batch data sent successfully');
+        },
+        (error) => {
+          console.error('Error sending batch data:', error);
+        }
+      );
 
       this.createForm.nativeElement.reset();
       this.closeDialog();
