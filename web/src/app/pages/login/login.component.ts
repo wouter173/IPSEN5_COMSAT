@@ -6,6 +6,7 @@ import { LucideAngularModule } from 'lucide-angular';
 import { ToastrService } from 'ngx-toastr';
 import { SpinnerComponent } from '../../components/spinner/spinner.component';
 import { CommonModule } from '@angular/common';
+import { LoginService } from '../../services/login.service';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +22,7 @@ export class LoginComponent {
 
   showPassword = false;
 
-  private auth = inject(AuthService);
+  private loginService = inject(LoginService);
   private router = inject(Router);
   private toastr = inject(ToastrService);
 
@@ -29,7 +30,7 @@ export class LoginComponent {
     this.form.disable();
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    const result = await this.auth.login(this.form.value.username ?? '', this.form.value.password ?? '');
+    const result = await this.loginService.login(this.form.value.username ?? '', this.form.value.password ?? '');
     if (result.success === false) {
       console.log(result);
       if (result.message === 'INVALID_FIELDS' && result.fields) {
