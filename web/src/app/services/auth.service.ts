@@ -6,10 +6,10 @@ import { computed, Injectable, signal } from '@angular/core';
 export class AuthService {
   private _token = signal(localStorage.getItem('token'));
 
-  public token = this._token.asReadonly();
-  public isLoggedIn = computed(() => this.token() !== null);
+  token = this._token.asReadonly();
+  isLoggedIn = computed(() => this.token() !== null);
 
-  private removeToken(): void {
+  removeToken(): void {
     localStorage.removeItem('token');
     this._token.set(null);
   }
@@ -17,10 +17,6 @@ export class AuthService {
   setToken(token: string): void {
     localStorage.setItem('token', token);
     this._token.set(token);
-  }
-
-  logout(): void {
-    this.removeToken();
   }
 
   /**

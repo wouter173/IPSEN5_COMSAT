@@ -37,6 +37,4 @@ export class LoginService {
 
     return { success: true };
   }
-
-  constructor() {}
 }

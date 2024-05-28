@@ -2,12 +2,14 @@ import { inject, Injectable } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
+import { LogoutService } from './logout.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
   private auth = inject(AuthService);
+  private logoutService = inject(LogoutService);
   private toastr = inject(ToastrService);
 
   public async request(
@@ -27,7 +29,7 @@ export class ApiService {
     }
 
     if (options.authorized) {
-      const token = 'asd';
+      const token = this.auth.token();
       init.headers = { ...init.headers, Authorization: `Bearer ${token}` };
     }
 
@@ -39,10 +41,8 @@ export class ApiService {
         throw new Error(`[${response.status}] ${response.statusText}: ${text}`);
       }
 
-      console.log(options.authorized, response.status);
-
       if (options.authorized && response.status === 403) {
-        this.auth.logout();
+        this.logoutService.logout();
       }
 
       return response;
