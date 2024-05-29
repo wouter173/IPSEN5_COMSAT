@@ -1,14 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, ElementRef, inject, ViewChild } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { NgOtpInputModule } from 'ng-otp-input';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { settingsService } from '../../services/settings.service';
-import { ToastrService } from 'ngx-toastr';
-import { UserService } from '../../services/user.service';
 import { ModalComponent } from '../../components/modal/modal.component';
-import { SettingsTotpEnableModalComponent } from '../../components/settings-totp-enable-modal/settings-totp-enable-modal.component';
 import { SettingsTotpDisableModalComponent } from '../../components/settings-totp-disable-modal/settings-totp-disable-modal.component';
+import { SettingsTotpEnableModalComponent } from '../../components/settings-totp-enable-modal/settings-totp-enable-modal.component';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-settings',
@@ -26,8 +24,6 @@ import { SettingsTotpDisableModalComponent } from '../../components/settings-tot
   ],
 })
 export class SettingsComponent {
-  private settings = inject(settingsService);
-  private toastr = inject(ToastrService);
   private user = inject(UserService);
 
   mfaEnabled = computed(() => this.user.me()?.mfaEnabled ?? true);
