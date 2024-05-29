@@ -1,5 +1,6 @@
 package nl.codefusion.comsat.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,17 +28,22 @@ public class UserModel implements UserDetails {
     @Column(unique = true, nullable = false)
     private String username;
 
+    @JsonIgnore
     @Column(nullable = false)
     private String password;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @Column(nullable = false)
+    private boolean mfaEnabled = false;
 
+    @JsonIgnore
+    private String TotpSecret;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     private RoleModel roleModel;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Set.of(new SimpleGrantedAuthority(roleModel.getName()));
-
     }
 
     @Override
