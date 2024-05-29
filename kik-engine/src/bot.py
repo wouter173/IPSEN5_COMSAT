@@ -30,10 +30,9 @@ class EchoBot(KikClientCallback):
     def on_register_error(self, response: SignUpError):
         self.client.log.error(f"Register error: {response.message}")
 
-    def send_template_messages(self, usernames, message):
-        for user in usernames:
-            self.client.send_chat_message(user, message)
-            self.user_message_status[user] = 'sent'
+    def send_template_messages(self, username, message):
+        self.client.send_chat_message(username, message)
+        self.user_message_status[username] = 'sent'
         print(self.user_message_status)
 
     def on_message_read(self, read: chatting.IncomingMessageReadEvent):

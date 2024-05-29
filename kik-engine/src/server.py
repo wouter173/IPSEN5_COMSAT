@@ -1,6 +1,5 @@
 import os
 import time
-import requests;
 
 from dotenv import load_dotenv
 from flask import Flask, request
@@ -38,26 +37,26 @@ def start_bot():
 @app.route('/send_message', methods=['POST'])
 def send_message_to_users():
     data = request.get_json()
-    users = data.get("users")
-    message = data.get("message")
+    user_message = data["user_message"]
+    print(data)
+    user_checked = {}
 
-    user_checked = []
-
-    for user in users:
-        user.lower()
+    for key, value in user_message.items():
+        key = key.lower()
         try:
-            if bot.client.get_jid(user) is None:
-                return {"status": "error", "message": f"User {user} not found"}, 400
+            if bot.client.get_jid(key) is None:
+                return {"status": "error", "message": f"User {key} not found"}, 400
             else:
-                user_checked.append(user)
+                user_checked[key] = value
         except KikApiException:
             return {"status": "error",
-                    "message": f"An error occurred while checking user {user}, username not found"}, 500
+                    "message": f"An error occurred while checking user {key}, username not found"}, 500
         except TimeoutError:
             return {"status": "error",
-                    "message": f"Timeout occurred while checking user {user}, username not found"}, 500
-
-    bot.send_template_messages(user_checked, message)
+                    "message": f"Timeout occurred while checking user {key}, username not found"}, 500
+    for key, value in user_checked.items():
+        print(key, value)
+        bot.send_template_messages(key, value)
     return {"status": "success"}, 200
 
 
