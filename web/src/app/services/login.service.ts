@@ -17,7 +17,7 @@ export class LoginService {
     | { success: true }
     | { success: false; message: 'OTP_REQUIRED' | 'BAD_CREDENTIALS' | 'INVALID_FIELDS'; fields?: { username?: string; password?: string } }
   > {
-    const result = await this.api.post('/api/v1/auth/login', { username, password }, { authorized: false });
+    const result = await this.api.post('/api/v1/auth/login', { body: { username, password }, authorized: false });
 
     if (result.status === 400) {
       const fields = z
