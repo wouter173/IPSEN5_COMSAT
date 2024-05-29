@@ -72,3 +72,12 @@ $theme: matx.define-theme(
 .header-margin {
   margin-top: 20px;
 }
+
+.pressable {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.pressable:active {
+  transform: scale(0.95);
+}
