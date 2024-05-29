@@ -27,7 +27,6 @@ public class ContactController {
 
     private final PermissionService permissionService;
     private final ContactDao contactDao;
-    private final String kik_api = "http://127.0.0.1:5000";
 
 
     RestTemplate restTemplate = new RestTemplate();
@@ -38,7 +37,7 @@ public class ContactController {
         return contactRepository.save(contact);
     }
 
-    @Value(kik_api)
+    @Value("${kik.engine}")
     private String engineUrl;
 
     @GetMapping
@@ -50,7 +49,7 @@ public class ContactController {
 
     }
 
-    @GetMapping(value = "/test")
+    @GetMapping(value = "/status")
     public ResponseEntity<Map<String, String>> getUserStatuses() {
         ResponseEntity<Map<String, String>> response = restTemplate.exchange(
                 engineUrl + "/get_chat_status",
