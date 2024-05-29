@@ -21,15 +21,16 @@ export class settingsService {
     return data.qrCode;
   }
 
-  async enableTotp(
+  async setTotpEnabled(
     totp?: string,
+    enabled = true,
   ): Promise<
     | { success: false; message: 'INVALID_FIELDS'; fields: { totp?: string } }
     | { success: false; message: 'INVALID_TOTP' }
     | { success: false; message: 'UNKNOWN_ERROR' }
     | { success: true }
   > {
-    const result = await this.api.put('/api/v1/settings/totp', { body: { totp, mfaEnabled: true } });
+    const result = await this.api.put('/api/v1/settings/totp', { body: { totp, mfaEnabled: enabled } });
 
     if (result.status === 400) {
       return { success: false, message: 'INVALID_FIELDS', fields: z.object({ totp: z.string().optional() }).parse(await result.json()) };
