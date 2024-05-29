@@ -57,12 +57,12 @@ export class ApiService {
     return this.request('GET', endpoint, options);
   }
 
-  public async post(endpoint: string, body: Object, options?: { authorized?: boolean }) {
-    return this.request('POST', endpoint, { body, ...options });
+  public async post(endpoint: string, options?: { body?: Object; authorized?: boolean }) {
+    return this.request('POST', endpoint, options);
   }
 
-  public async put(endpoint: string, body: Object, options?: { authorized?: boolean }) {
-    return this.request('PUT', endpoint, { body, ...options });
+  public async put(endpoint: string, options?: { body?: Object; authorized?: boolean }) {
+    return this.request('PUT', endpoint, options);
   }
 
   public async delete(endpoint: string, options?: { authorized?: boolean }) {
