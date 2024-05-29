@@ -8,7 +8,6 @@ import nl.codefusion.comsat.models.UserModel;
 import nl.codefusion.comsat.service.JwtService;
 import nl.codefusion.comsat.service.TotpService;
 import nl.codefusion.comsat.service.UserDetailsImplService;
-import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,7 +32,7 @@ public class AuthController {
 
 
     @PostMapping(value = "/login")
-    public ResponseEntity login(@RequestBody @Valid LoginDto loginDto) throws BadRequestException {
+    public ResponseEntity<Map<String, String>> login(@RequestBody @Valid LoginDto loginDto) {
         String username = loginDto.getUsername();
         String password = loginDto.getPassword();
 
@@ -42,7 +41,7 @@ public class AuthController {
 
         UserModel userModel = userDao.findByUsername(userDetails.getUsername()).orElse(null);
         if (userModel == null) {
-            throw new BadRequestException();
+            return ResponseEntity.status(401).body(Map.of("error", "BAD_CREDENTIALS"));
         }
 
 
@@ -50,8 +49,8 @@ public class AuthController {
             String totp = loginDto.getTotp();
             String secret = userModel.getTotpSecret();
 
-            if (totp == null) {
-                return ResponseEntity.status(401).body(Map.of("error", "TOTP_REQUIRED"));
+            if (totp == null || totp.isBlank() || totp.length() != 6) {
+                return ResponseEntity.status(400).body(Map.of("totp", "Please enter a valid code"));
             }
 
             if (!totpService.validateCode(secret, totp)) {
