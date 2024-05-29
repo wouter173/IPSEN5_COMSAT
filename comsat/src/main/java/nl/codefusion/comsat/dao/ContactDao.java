@@ -22,9 +22,9 @@ public class ContactDao {
     }
 
 
-    public void updateBatchStatusByUsername(String nickName, String status){
+    public ContactModel updateBatchStatusByUsername(String nickName, String status){
         ContactModel contact = contactRepository.findContactByNickname(nickName);
         contact.setStatus(status);
-        contactRepository.save(contact);
+        return contactRepository.save(contact);
     }
 }
