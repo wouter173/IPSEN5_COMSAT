@@ -1,0 +1,35 @@
+<div class="p-8">
+  <section class="flex w-fit flex-col gap-2">
+    <h1 class="text-lg font-semibold">2fa: {{ mfaEnabled ? "Enabled" : "Disabled" }}</h1>
+    <button class="pressable rounded-md border px-2 py-1" (click)="openDialog()">enable</button>
+  </section>
+</div>
+
+<dialog #totpModal class="w-full max-w-96 rounded-xl">
+  <div class="flex-col gap-5 p-6">
+    <div>
+      <div class="flex justify-between">
+        <h1 class="text-xl font-semibold">Scan Qr code</h1>
+        <button (click)="closeDialog()">
+          <lucide-icon name="x-icon" />
+        </button>
+      </div>
+      <p class="max-w-72 text-balance text-sm">Please scan this qr code by your totp authenticator of choice.</p>
+    </div>
+    <img src="{{ imageUrl }}" alt="" class="size-[336px] bg-slate-50" />
+
+    <form [formGroup]="form" (ngSubmit)="submitForm()">
+      <h2 class="text-lg font-semibold">Confirm Code</h2>
+      <ng-otp-input
+        [formCtrl]="form.controls.totp"
+        [config]="{ length: 6, inputClass: '!size-10 !text-lg', containerClass: 'flex items-center w-full', allowNumbersOnly: true }"
+      />
+      <span class="text-sm font-medium text-red-500">{{ form.getError("totp") }}</span>
+      <button
+        class="mt-4 w-full rounded-md bg-primary-blue-2 py-2 font-medium text-white transition-all hover:bg-primary-blue-1 enabled:active:scale-[98%] disabled:bg-primary-blue-3"
+      >
+        Enable 2fa
+      </button>
+    </form>
+  </div>
+</dialog>
