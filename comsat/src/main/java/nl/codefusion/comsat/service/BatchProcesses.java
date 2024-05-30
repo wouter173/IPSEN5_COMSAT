@@ -1,15 +1,12 @@
 package nl.codefusion.comsat.service;
 
-import nl.codefusion.comsat.dao.BatchDao;
+import nl.codefusion.comsat.engine.KikEngine;
 import nl.codefusion.comsat.models.BatchModel;
 import nl.codefusion.comsat.models.ContactModel;
 import nl.codefusion.comsat.repository.BatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 
@@ -20,7 +17,7 @@ public class BatchProcesses {
     private final BatchRepository batchRepository;
 
     @Autowired
-    public BatchProcesses(BatchRepository batchRepository, ContactService contactService) {
+    public BatchProcesses(BatchRepository batchRepository, KikEngine kikEngine) {
         this.batchRepository = batchRepository;
     }
 

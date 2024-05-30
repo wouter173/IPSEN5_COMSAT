@@ -1,6 +1,7 @@
 package nl.codefusion.comsat.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFilter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,23 +11,17 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.util.UUID;
 
+@Entity
 @Table(name = "contact")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
 public class ContactModel {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
-
-
 
     @Column(name = "firstname")
     private String firstName;

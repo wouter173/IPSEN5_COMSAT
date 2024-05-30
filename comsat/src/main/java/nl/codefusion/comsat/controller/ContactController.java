@@ -7,26 +7,29 @@ import nl.codefusion.comsat.models.ContactModel;
 import nl.codefusion.comsat.repository.ContactRepository;
 import nl.codefusion.comsat.service.PermissionService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.naming.NoPermissionException;
+import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping(value = "/api/v1/contacts")
 public class ContactController {
 
     private final ContactRepository contactRepository;
 
     private final PermissionService permissionService;
-
     private final ContactDao contactDao;
 
     @PostMapping("/contacts")
     public ContactModel createContact(@RequestBody ContactModel contact) {
         return contactRepository.save(contact);
     }
+
 
     @GetMapping
     public ResponseEntity<List<ContactModel>> getContacts() throws NoPermissionException {
@@ -36,4 +39,5 @@ public class ContactController {
         throw new NoPermissionException();
 
     }
+
 }
