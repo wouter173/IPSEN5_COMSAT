@@ -4,7 +4,7 @@ from kik_unofficial.datatypes.xmpp import chatting
 from kik_unofficial.datatypes.xmpp.errors import LoginError, SignUpError
 from kik_unofficial.datatypes.xmpp.login import ConnectionFailedResponse
 
-from src.contact import Contact
+from contact import Contact
 
 
 def jid_to_username(jid):

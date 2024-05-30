@@ -8,8 +8,8 @@ from flask import Flask, request
 from kik_unofficial.datatypes.exceptions import KikApiException
 
 from bot import EchoBot
-from src.contact import Contact
-from src.message_queue import Queue
+from contact import Contact
+from message_queue import Queue
 
 app = Flask(__name__)
 load_dotenv()
