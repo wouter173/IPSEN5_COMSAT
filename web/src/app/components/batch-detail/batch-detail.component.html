@@ -105,8 +105,8 @@
                     </div>
                   </div>
                   <div class="flex cursor-pointer gap-3 opacity-30 transition-all hover:opacity-100">
-                    <lucide-icon name="edit-icon" class="size-[16px]" />
-                    <lucide-icon name="trash-icon" class="size-[16px]" />
+                    <lucide-icon name="edit-icon" class="size-[16px]" (click)="onEditClick(contact)"/>
+                    <lucide-icon name="trash-icon" class="size-[16px]" (click)="onDeleteClick(contact)"/>
                     <lucide-icon name="box-select" class="size-[16px]" />
                   </div>
                 </div>

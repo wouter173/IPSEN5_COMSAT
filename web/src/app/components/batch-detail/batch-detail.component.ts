@@ -5,6 +5,7 @@ import { LucideAngularModule } from 'lucide-angular';
 import { platforms } from '../../models/platform';
 import { SpinnerComponent } from '../spinner/spinner.component';
 import { minDelay, sleep } from '../../utils/mindelay';
+import {Contact} from "../../models/contact";
 
 @Component({
   selector: 'app-batch-detail',
@@ -16,7 +17,7 @@ export class BatchDetailComponent {
   @Input() selectedBatchId!: Signal<string | null>;
   public batchesService = inject(BatchesService);
   public selectedBatch = computed(() => this.batchesService.batches().find((batch) => batch.id === this.selectedBatchId()));
-
+  public editingContact: Contact | null = null;
   public platforms = platforms;
 
   async onSendClick() {
@@ -49,5 +50,13 @@ export class BatchDetailComponent {
     }
   } catch (error: any) {
     console.error('Error sending batch', error);
+  }
+
+  onDeleteClick(contact: Contact) {
+    console.log(contact.nickname + ' deleted');
+  }
+
+  onEditClick(contact: Contact) {
+    this.editingContact = contact;
   }
 }
