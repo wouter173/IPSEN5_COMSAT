@@ -4,6 +4,8 @@ from kik_unofficial.datatypes.xmpp import chatting
 from kik_unofficial.datatypes.xmpp.errors import LoginError, SignUpError
 from kik_unofficial.datatypes.xmpp.login import ConnectionFailedResponse
 
+from src.contact import Contact
+
 
 def jid_to_username(jid):
     return jid.split("@")[0][:-4]
@@ -19,7 +21,9 @@ class EchoBot(KikClientCallback):
 
         self.client = KikClient(self, username, str(password), device_id, enable_console_logging=True)
 
-    # Error Handling
+    def set_contact_error_status(self, contact: Contact, error: str):
+        self.user_message_status[contact.username] = error
+
     def on_connection_failed(self, response: ConnectionFailedResponse):
         self.client.log.error(f"Connection failed: {response.message}")
 

@@ -1,25 +1,44 @@
 import os
+import threading
 import time
+from dataclasses import dataclass
 
 from dotenv import load_dotenv
 from flask import Flask, request
 from kik_unofficial.datatypes.exceptions import KikApiException
 
 from bot import EchoBot
+from src.contact import Contact
+from src.message_queue import Queue
 
 app = Flask(__name__)
-global bot
-
 load_dotenv()
 
+queue = Queue()
 userList = {}
 
 
-def main():
-    start_bot()
-    app.run(use_reloader=False, debug=True)
+def create_queue():
     while True:
-        time.sleep(5)
+        if queue.size() > 0:
+            contact = queue.dequeue()
+            print(contact)
+            send_message_to_contact(contact)
+
+
+def send_message_to_contact(contact: Contact):
+    try:
+        if bot.client.get_jid(contact.username) is None:
+            bot.set_contact_error_status(contact, 'username not found')
+        else:
+            bot.send_template_messages(contact.username, contact.message)
+
+    except KikApiException:
+        bot.set_contact_error_status(contact,
+                                     f"Username not found")
+    except TimeoutError:
+        bot.set_contact_error_status(contact,
+                                     f"Username not found")
 
 
 def start_bot():
@@ -38,31 +57,23 @@ def start_bot():
 def send_message_to_users():
     data = request.get_json()
     user_message = data["user_message"]
-    print(data)
-    user_checked = {}
 
     for key, value in user_message.items():
         key = key.lower()
-        try:
-            if bot.client.get_jid(key) is None:
-                return {"status": "error", "message": f"User {key} not found"}, 400
-            else:
-                user_checked[key] = value
-        except KikApiException:
-            return {"status": "error",
-                    "message": f"An error occurred while checking user {key}, username not found"}, 500
-        except TimeoutError:
-            return {"status": "error",
-                    "message": f"Timeout occurred while checking user {key}, username not found"}, 500
-    for key, value in user_checked.items():
-        print(key, value)
-        bot.send_template_messages(key, value)
+        queue.enqueue(Contact(key, value))
+
     return {"status": "success"}, 200
 
 
 @app.route('/get_chat_status', methods=['GET'])
 def get_chat_status():
     return bot.user_message_status, 200
+
+
+def main():
+    start_bot()
+    threading.Thread(target=create_queue).start()
+    app.run(use_reloader=False, debug=True)
 
 
 if __name__ == '__main__':
