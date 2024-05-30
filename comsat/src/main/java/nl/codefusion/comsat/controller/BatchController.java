@@ -1,10 +1,11 @@
 package nl.codefusion.comsat.controller;
 
+import lombok.RequiredArgsConstructor;
 import nl.codefusion.comsat.dao.BatchDao;
 import nl.codefusion.comsat.models.BatchModel;
 import nl.codefusion.comsat.models.ContactModel;
 import nl.codefusion.comsat.dto.OmitIdBatchDto;
-import nl.codefusion.comsat.service.BatchProcesses;
+import nl.codefusion.comsat.service.BatchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,13 +14,12 @@ import java.util.*;
 
 @RequestMapping(value = "/api/v1")
 @RestController
+@RequiredArgsConstructor
 public class BatchController {
 
-    @Autowired
-    private BatchProcesses batchProcesses;
+    private final BatchService batchService;
 
-    @Autowired
-    private BatchDao batchDao;
+    private final BatchDao batchDao;
 
     private Set<BatchModel> sentBatches = new HashSet<>();
     @PostMapping("/batch")
@@ -31,11 +31,8 @@ public class BatchController {
         }
         batch.setContacts(contacts);
         batch.setName(batchModel.getName());
-
-        batch.setState("NOTSENT");
-        batchModel.setState("NOTSENT");
-        batchProcesses.processBatch(batch);
-        batchProcesses.saveBatch(batch);
+        batchService.processBatch(batch);
+        batchService.saveBatch(batch);
 
         return ResponseEntity.ok("Batch processed successfully");
     }
