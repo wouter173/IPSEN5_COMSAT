@@ -48,8 +48,14 @@ export class LoginComponent {
         this.form.enable();
         this.form.setErrors(result.fields);
       }
+
       if (result.message === 'BAD_CREDENTIALS') {
         this.toastr.error('Invalid username or password');
+        this.form.enable();
+      }
+
+      if (result.message === 'TOTP_INVALID') {
+        this.toastr.error('Invalid two-factor code');
         this.form.enable();
       }
 
