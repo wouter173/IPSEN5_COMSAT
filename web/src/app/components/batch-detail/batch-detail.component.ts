@@ -6,12 +6,14 @@ import { platforms } from '../../models/platform';
 import { SpinnerComponent } from '../spinner/spinner.component';
 import { minDelay, sleep } from '../../utils/mindelay';
 import {Contact} from "../../models/contact";
+import {FormsModule} from "@angular/forms";
+import {CommonModule} from "@angular/common";
 
 @Component({
   selector: 'app-batch-detail',
   standalone: true,
   templateUrl: './batch-detail.component.html',
-  imports: [LucideAngularModule, SpinnerComponent],
+  imports: [LucideAngularModule, SpinnerComponent, FormsModule, CommonModule],
 })
 export class BatchDetailComponent {
   @Input() selectedBatchId!: Signal<string | null>;
