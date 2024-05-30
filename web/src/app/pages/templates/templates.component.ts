@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Template } from '../../interfaces/template';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { HttpClientModule } from '@angular/common/http';
@@ -7,6 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { TemplateListItemComponent } from '../../components/template-list-item/template-list-item.component';
 import { CommonModule } from '@angular/common';
+import { TemplatesService } from '../../services/templates.service';
 
 @Component({
   selector: 'app-templates',
@@ -31,8 +32,10 @@ export class TemplatesComponent {
   selectedLanguage = 'en';
   selectedTemplate: Template | undefined;
   sendedData: Template | undefined;
+  templateService = inject(TemplatesService);
 
   ngOnInit() {
+    const templates = this.templateService.getTemplates();
     this.selectedTemplate = this.templates[0];
     this.onDisplay();
   }
