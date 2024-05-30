@@ -54,11 +54,16 @@ export class BatchDetailComponent {
     console.error('Error sending batch', error);
   }
 
-  onDeleteClick(contact: Contact) {
+  onDeleteClick(contact: Contact) { //To delete the contact
     console.log(contact.nickname + ' deleted');
   }
 
-  onEditClick(contact: Contact) {
+  onEditClick(contact: Contact) { //To edit the contact
     this.editingContact = contact;
+  }
+
+  onSaveClick() { //Click the save button in editing mode
+    console.log(this.editingContact?.nickname);
+    this.editingContact = null;
   }
 }
