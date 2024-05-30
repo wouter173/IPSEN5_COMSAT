@@ -2,9 +2,11 @@ package nl.codefusion.comsat.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.codefusion.comsat.config.GlobalExceptionHandler;
+import nl.codefusion.comsat.dao.UserDao;
 import nl.codefusion.comsat.dto.LoginDto;
 import nl.codefusion.comsat.models.UserModel;
 import nl.codefusion.comsat.service.JwtService;
+import nl.codefusion.comsat.service.TotpService;
 import nl.codefusion.comsat.service.UserDetailsImplService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -40,6 +44,12 @@ public class AuthControllerTest {
     @MockBean
     private UserDetailsImplService userDetailsImplService;
 
+    @MockBean
+    private UserDao userDao;
+
+    @MockBean
+    private TotpService totpService;
+
 
     @Test
     public void test_Login_Success() throws Exception {
@@ -50,6 +60,7 @@ public class AuthControllerTest {
         LoginDto loginDto = LoginDto.builder().username(username).password(password).build();
 
         when(userDetailsImplService.loadUserByUsername(username)).thenReturn(userModel);
+        when(userDao.findByUsername(username)).thenReturn(Optional.ofNullable(userModel));
         when(jwtService.generateToken(username)).thenReturn("token");
 
         mockMvc.perform(post("/api/v1/auth/login")
@@ -57,6 +68,69 @@ public class AuthControllerTest {
                         .content(new ObjectMapper().writeValueAsString(loginDto)))
                 .andExpect(status().isOk());
     }
+
+    @Test
+    public void test_Login_withMfaEnabled_Success() throws Exception {
+        String username = "test@acme.com";
+        String password = "test";
+        String totpSecret = "test";
+
+        String totp = "123456";
+
+        UserModel userModel = UserModel.builder().username(username).password(password).TotpSecret(totpSecret).mfaEnabled(true).build();
+        LoginDto loginDto = LoginDto.builder().username(username).password(password).totp(totp).build();
+
+        when(userDetailsImplService.loadUserByUsername(username)).thenReturn(userModel);
+        when(userDao.findByUsername(username)).thenReturn(Optional.ofNullable(userModel));
+        when(totpService.validateCode(totpSecret, totp)).thenReturn(true);
+        when(jwtService.generateToken(username)).thenReturn("token");
+
+        mockMvc.perform(post("/api/v1/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(loginDto)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void test_Login_withMfaEnabled_InvalidCode() throws Exception {
+        String username = "test@acme.com";
+        String password = "test";
+        String totpSecret = "test";
+
+        String totp = "123456";
+
+        UserModel userModel = UserModel.builder().username(username).password(password).TotpSecret(totpSecret).mfaEnabled(true).build();
+        LoginDto loginDto = LoginDto.builder().username(username).password(password).totp(totp).build();
+
+        when(userDetailsImplService.loadUserByUsername(username)).thenReturn(userModel);
+        when(userDao.findByUsername(username)).thenReturn(Optional.ofNullable(userModel));
+        when(totpService.validateCode(totpSecret, totp)).thenReturn(false);
+
+        mockMvc.perform(post("/api/v1/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(loginDto)))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().string("{\"error\":\"TOTP_INVALID\"}"));
+    }
+
+    @Test
+    public void test_Login_withMfaEnabled_MalformedBody() throws Exception {
+        String username = "test@acme.com";
+        String password = "test";
+
+        UserModel userModel = UserModel.builder().username(username).password(password).mfaEnabled(true).build();
+        LoginDto loginDto = LoginDto.builder().username(username).password(password).build();
+
+        when(userDetailsImplService.loadUserByUsername(username)).thenReturn(userModel);
+        when(userDao.findByUsername(username)).thenReturn(Optional.ofNullable(userModel));
+
+        mockMvc.perform(post("/api/v1/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(loginDto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("{\"totp\":\"Please enter a valid code\"}"));
+    }
+
 
     @Test
     public void test_Login_MalformedBody() throws Exception {
@@ -67,7 +141,7 @@ public class AuthControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(loginDto)))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("{\"username\":\"username is required\"}"));
+                .andExpect(content().string("{\"username\":\"Please enter your email\"}"));
     }
 
     @Test
@@ -76,7 +150,7 @@ public class AuthControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{}"))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("{\"password\":\"password is required\",\"username\":\"username is required\"}"));
+                .andExpect(content().string("{\"password\":\"Please enter your password\",\"username\":\"Please enter your email\"}"));
     }
 
     @Test
