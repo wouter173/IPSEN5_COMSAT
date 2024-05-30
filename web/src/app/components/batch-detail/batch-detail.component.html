@@ -129,11 +129,15 @@
                       : "-"
                   }}</span>
                   <span class="text-[#676768]">Audience</span>
-                  <span>{{ contact.audience ? contact.audience : "-" }}</span>
+                  <span class="font-semibold text-[#676768]" *ngIf="editingContact !== contact"> {{ contact.audience }}</span>
+                  <input [ngModel]="editingContact.audience" (ngModelChange)="editingContact && (editingContact.audience = $event)" *ngIf="editingContact === contact" />
+
                   <span class="text-[#676768]">Locale</span>
                   <span>{{ contact.language ? contact.region + " - " + contact.language : "-" }}</span>
+
                   <span class="text-[#676768]">Sex</span>
-                  <span>{{ contact.sex ? contact.sex : "-" }}</span>
+                  <span class="font-semibold text-[#676768]" *ngIf="editingContact !== contact"> {{ contact.sex }}</span>
+                  <input [ngModel]="editingContact?.sex" (ngModelChange)="editingContact && (editingContact.sex = $event)" *ngIf="editingContact === contact" />
                 </div>
               </div>
             </li>
