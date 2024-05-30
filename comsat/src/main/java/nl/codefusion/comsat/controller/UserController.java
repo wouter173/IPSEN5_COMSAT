@@ -26,6 +26,8 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity<UserResponseDto> getMe() {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        // Not sure how to throw a 404 error
         UserModel user = userDao.findByUsername(name).orElse(null);
 
         if (user == null) {

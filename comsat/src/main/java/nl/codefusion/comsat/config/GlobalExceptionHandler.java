@@ -56,7 +56,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NoPermissionException.class)
     public ResponseEntity<String> handleNoPermission() {
-        return new ResponseEntity<>("No permission", HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>("No permission", HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(Exception.class)

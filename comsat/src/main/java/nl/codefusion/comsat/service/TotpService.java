@@ -17,7 +17,7 @@ import static dev.samstevens.totp.util.Utils.getDataUriForImage;
 public class TotpService {
     @SuppressWarnings("FieldCanBeLocal")
     private final String issuer = "Spine Comsat";
-    private final HashingAlgorithm algorithm = HashingAlgorithm.SHA512;
+    private final HashingAlgorithm algorithm = HashingAlgorithm.SHA1;
 
     private final TimeProvider timeProvider = new SystemTimeProvider();
     private final CodeGenerator codeGenerator = new DefaultCodeGenerator(algorithm);
@@ -34,6 +34,7 @@ public class TotpService {
                 .issuer(issuer)
                 .label(email)
                 .algorithm(algorithm)
+                .digits(6)
                 .build();
 
         QrGenerator generator = new ZxingPngQrGenerator();
