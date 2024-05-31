@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.naming.NoPermissionException;
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
@@ -26,6 +27,12 @@ public class ContactController {
     @PostMapping("/contacts")
     public ContactModel createContact(@RequestBody ContactModel contact) {
         return contactRepository.save(contact);
+    }
+
+    @DeleteMapping("/contacts/{id}")
+    public ResponseEntity<Void> deleteContact(@PathVariable UUID id) {
+        contactRepository.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping
