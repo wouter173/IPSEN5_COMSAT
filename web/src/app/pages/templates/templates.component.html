@@ -8,19 +8,19 @@
   </div>
   <div class="mx-auto mt-5 flex h-screen flex-col">
     <div class="title mb-2 h-9 min-w-96 rounded-md border-2">
-      <textarea class="font-xl h-full w-full" style="resize: none" [(ngModel)]="htmlTitle"></textarea>
+      <textarea class="font-xl h-full w-full" style="resize: none" [(ngModel)]="templateHeader"></textarea>
     </div>
     <div class="NgxEditor__Wrapper">
       <ngx-editor-menu [editor]="editor"> </ngx-editor-menu>
-      <ngx-editor [editor]="editor" [(ngModel)]="html" [disabled]="false" [placeholder]="'Type here...'"></ngx-editor>
+      <ngx-editor [editor]="editor" [(ngModel)]="templateBody" [disabled]="false" [placeholder]="'Type here...'"></ngx-editor>
     </div>
     <div class="buttons min-w-96">
       <button class="m-5 h-min w-20 rounded-xl border bg-green-200" (click)="onSave()">Save</button>
       <button (click)="new()" class="m-5 h-min w-20 rounded-xl border bg-green-200">New</button>
       <mat-select [(value)]="selectedLanguage" (valueChange)="onDisplay()">
-        <mat-option value="en">English</mat-option>
-        <mat-option value="nl">Dutch</mat-option>
-        <mat-option value="es">Spanish</mat-option>
+        @for (translation of selectedTemplate?.translations; track $index) {
+          <mat-option [value]="translation.language">{{ translation.language }}</mat-option>
+        }
       </mat-select>
     </div>
   </div>
