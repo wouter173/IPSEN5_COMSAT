@@ -1,5 +1,6 @@
 import {Component, computed, effect, inject, Inject, Input, signal, Signal} from '@angular/core';
 import {BatchesService} from '../../services/batches.service';
+import {ContactsService} from '../../services/contacts.service';
 import {Batch} from '../../models/batch';
 import {LucideAngularModule} from 'lucide-angular';
 import {platforms} from '../../models/platform';
@@ -23,6 +24,10 @@ export class BatchDetailComponent {
     public editingContact: Contact | null = null;
     public platforms = platforms;
     selectedContacts: Contact[] = [];
+
+    constructor(private contactService: ContactsService) {
+
+    }
 
     async onSendClick() {
         const id = this.selectedBatchId();
@@ -59,7 +64,11 @@ export class BatchDetailComponent {
     }
 
     onDeleteClick(contact: Contact) { //To delete the contact
-        console.log(contact.nickname + ' deleted');
+        if (window.confirm('Are you sure you want to delete this contact?')) {
+            this.contactService.deleteContact(contact.id).subscribe(() => {
+                console.log(contact.nickname + " deleted");
+            });
+        }
     }
 
     onEditClick(contact: Contact) { //To edit the contact

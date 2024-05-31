@@ -36,4 +36,12 @@ export class ContactsService {
       ),
     );
   }
+
+  deleteContact(id: string): Observable<void> {
+    const headers = {
+      Authorization: this.token,
+    };
+    const contactUrl = this.url + '/api/v1/contacts/' + id;
+    return this.http.delete<void>(contactUrl, { headers });
+  }
 }
