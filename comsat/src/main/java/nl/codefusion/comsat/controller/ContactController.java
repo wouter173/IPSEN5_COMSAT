@@ -35,6 +35,26 @@ public class ContactController {
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping("/contacts/{id}")
+    public ResponseEntity<ContactModel> updateContact(@PathVariable UUID id, @RequestBody ContactModel contactDetails) {
+        ContactModel contact = contactRepository.findById(id).orElseThrow();
+
+        if (contactDetails.getFirstName() != null) {
+            contact.setFirstName(contactDetails.getFirstName());
+        }
+        if (contactDetails.getNickname() != null) {
+            contact.setNickname(contactDetails.getNickname());
+        }
+        if (contactDetails.getAudience() != null) {
+            contact.setAudience(contactDetails.getAudience());
+        }
+        if (contactDetails.getSex() != null) {
+            contact.setSex(contactDetails.getSex());
+        }
+        ContactModel updatedContact = contactRepository.save(contact);
+        return ResponseEntity.ok(updatedContact);
+    }
+
     @GetMapping
     public ResponseEntity<List<ContactModel>> getContacts() throws NoPermissionException {
         if (permissionService.hasPermission(permissionService.getPrincipalRoles(), Permission.READ_CONTACT_DETAILS)) {
