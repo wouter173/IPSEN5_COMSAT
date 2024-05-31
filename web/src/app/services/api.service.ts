@@ -4,23 +4,23 @@ import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
 import { LogoutService } from './logout.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+type Options = Partial<{
+  authorized: boolean;
+  body: Object;
+  version: 'v1';
+}>;
+
+@Injectable({ providedIn: 'root' })
 export class ApiService {
   private auth = inject(AuthService);
   private logoutService = inject(LogoutService);
   private toastr = inject(ToastrService);
 
-  public async request(
-    method: 'GET' | 'POST' | 'PUT' | 'DELETE',
-    endpoint: string,
-    options?: { authorized?: boolean; body?: Object },
-  ): Promise<Response> {
-    if (!options) options = {};
-    options.authorized = options.authorized === undefined || options.authorized === true;
+  public async request(method: 'GET' | 'POST' | 'PUT' | 'DELETE', endpoint: string, options?: Options): Promise<Response> {
+    options = { authorized: true, version: 'v1', ...options };
 
-    const url = new URL(endpoint, environment.apiUrl).toString();
+    const baseUrl = '/api/' + options.version;
+    const url = new URL(baseUrl + endpoint, environment.apiUrl).toString();
     const init: RequestInit = { method, headers: {} };
 
     if (options.body) {
@@ -53,19 +53,19 @@ export class ApiService {
     }
   }
 
-  public async get(endpoint: string, options?: { authorized?: boolean }) {
+  public async get(endpoint: string, options?: Omit<Options, 'body'>) {
     return this.request('GET', endpoint, options);
   }
 
-  public async post(endpoint: string, options?: { body?: Object; authorized?: boolean }) {
+  public async post(endpoint: string, options?: Options) {
     return this.request('POST', endpoint, options);
   }
 
-  public async put(endpoint: string, options?: { body?: Object; authorized?: boolean }) {
+  public async put(endpoint: string, options?: Options) {
     return this.request('PUT', endpoint, options);
   }
 
-  public async delete(endpoint: string, options?: { authorized?: boolean }) {
+  public async delete(endpoint: string, options?: Omit<Options, 'body'>) {
     return this.request('DELETE', endpoint, options);
   }
 }
