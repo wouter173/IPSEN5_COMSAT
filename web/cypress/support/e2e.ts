@@ -14,7 +14,28 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './commands'
+import './commands';
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+declare global {
+  namespace Cypress {
+    interface Chainable<Subject> {
+      login(): Chainable<Subject>;
+    }
+  }
+}
+
+Cypress.Commands.add('login', () => {
+  cy.request({
+    method: 'POST',
+    url: 'http://localhost:8080/api/v1/auth/login',
+    body: {
+      username: 'admin@gmail.com',
+      password: 'admin',
+    },
+  }).then((resp) => {
+    window.localStorage.setItem('bearer ', resp.body.token);
+  });
+});
