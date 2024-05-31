@@ -17,7 +17,7 @@ export class UserService {
   }
 
   public async updateMe() {
-    const result = await this.api.get('/api/v1/users/me');
+    const result = await this.api.get('/users/me');
     const data = z
       .object({
         username: z.string(),

@@ -22,7 +22,7 @@ export class LoginService {
         fields?: { username?: string; password?: string };
       }
   > {
-    const result = await this.api.post('/api/v1/auth/login', { body: { username, password, totp }, authorized: false });
+    const result = await this.api.post('/auth/login', { body: { username, password, totp }, authorized: false });
 
     if (result.status === 400) {
       const fields = z
