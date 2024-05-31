@@ -8,6 +8,9 @@ import { TemplateListItemComponent } from '../../components/template-list-item/t
 import { CommonModule } from '@angular/common';
 import { TemplatesService } from '../../services/templates.service';
 import { Template } from '../../models/templates';
+import { v4 as uuidv4 } from 'uuid';
+import { LanguageDialogComponent } from '../../components/language-dialog/language-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-templates',
@@ -38,7 +41,7 @@ export class TemplatesComponent {
   templates: Template[] = [];
   selectedTemplate: Template | undefined;
 
-  constructor() {}
+  constructor(public dialog: MatDialog) {}
 
   async ngOnInit() {
     this.templates = await this.templateService.getTemplates();
@@ -50,10 +53,22 @@ export class TemplatesComponent {
     this.editor.destroy();
   }
 
+  onTextChanged() {
+    this.selectedTemplate!.translations!.find((t) => t.language === this.selectedLanguage)!.body = this.templateBody;
+  }
+
   onDisplay() {
     this.templateHeader = this.selectedTemplate!.header;
     const translation = this.selectedTemplate!.translations!.find((t) => t.language === this.selectedLanguage);
     this.templateBody = translation!.body;
+  }
+
+  onSave() {
+    if (this.selectedTemplate) {
+      this.selectedTemplate.header = this.templateHeader;
+      this.selectedTemplate.updatedAt = new Date().toISOString();
+      this.templateService.updateTemplate(this.selectedTemplate);
+    }
   }
 
   receiveTemplate(template: Template) {
@@ -61,18 +76,40 @@ export class TemplatesComponent {
     this.onDisplay();
   }
 
-  onSave() {
-    if (this.selectedTemplate) {
-      this.templateService
-        .updateTemplate(this.selectedTemplate)
-        .then(() => {
-          console.log('Template saved successfully');
-        })
-        .catch((error) => {
-          console.error('Error saving template:', error);
-        });
-    }
+  newLanguage() {
+    console.log('new language');
+    const dialogRef = this.dialog.open(LanguageDialogComponent, {
+      data: '',
+    });
+    dialogRef.afterClosed().subscribe((result: string) => {
+      if (result === undefined) {
+        this.selectedLanguage = 'english';
+        return;
+      }
+      this.selectedTemplate!.translations!.push({
+        language: result,
+        body: '',
+      });
+      this.selectedLanguage = result;
+    });
   }
 
-  new() {}
+  onNewTemplate() {
+    this.selectedTemplate = {
+      id: uuidv4(),
+      platform: 'kik' as 'snapchat' | 'kik' | 'whatsapp' | 'instagram' | 'telegram',
+      header: '',
+      body: '',
+      translations: [
+        {
+          language: 'english',
+          body: '',
+        },
+      ],
+      metadata: '',
+      updatedAt: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+    };
+    this.onDisplay();
+  }
 }

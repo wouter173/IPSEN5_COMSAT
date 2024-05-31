@@ -23,11 +23,15 @@ export class TemplatesService {
   }
 
   public async updateTemplate(template: Template) {
-    template.body = JSON.stringify(template.translations);
-    console.log(template.body);
-    template.translations = undefined;
-    await this.api.put(`/templates/${template.id}`, {
-      body: template,
-    });
+    template = {
+      id: template.id,
+      platform: template.platform,
+      header: template.header,
+      body: JSON.stringify(template.translations),
+      metadata: template.metadata,
+      updatedAt: template.updatedAt,
+      createdAt: template.createdAt,
+    };
+    await this.api.put(`/templates`, { body: template });
   }
 }
