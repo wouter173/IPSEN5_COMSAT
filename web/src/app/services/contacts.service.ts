@@ -5,6 +5,7 @@ import { AuthService } from './auth.service';
 import { environment } from '../../environments/environment';
 import { ContactWithBatch, contactWithBatchSchema } from '../models/contactwithbatch';
 import { z } from 'zod';
+import {Contact} from "../models/contact";
 
 @Injectable({
   providedIn: 'root',
@@ -44,4 +45,12 @@ export class ContactsService {
     const contactUrl = this.url + '/api/v1/contacts/' + id;
     return this.http.delete<void>(contactUrl, { headers });
   }
+
+    updateContact(id: string, contact: Contact): Observable<void> {
+    const headers = {
+        Authorization: this.token,
+        };
+    const contactUrl = this.url + '/api/v1/contacts/' + id;
+    return this.http.put<void>(contactUrl, contact, { headers });
+    }
 }
