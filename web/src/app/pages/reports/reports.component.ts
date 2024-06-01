@@ -35,16 +35,35 @@ export class ReportsComponent implements OnInit {
 
   ngOnInit(): void {
     this.chartService.getGenderData().subscribe((data) => {
-      this.genderData = data;
+      this.genderData = this.transformData(data);
     });
 
     this.chartService.getPlatformData().subscribe((data) => {
-      this.platformData = data;
+      this.platformData = this.transformData(data);
     });
 
     this.chartService.getRegionData().subscribe((data) => {
-      this.regionData = data;
+      this.regionData = this.transformData(data);
     });
+  }
+
+  transformData(response: any[]): any {
+    const labels = response.map(item => item[0]);
+    const data = response.map(item => item[1]);
+
+    return {
+      labels: labels,
+      datasets: [
+        {
+          data: data,
+          backgroundColor: [
+            '#FF6384',
+            '#36A2EB',
+            '#FFCE56',
+          ],
+        }
+      ]
+    };
   }
 
   public generalBatch: Batch = {

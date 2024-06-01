@@ -10,7 +10,7 @@ import {AuthService} from "./auth.service";
 export class ChartService {
   constructor(private http: HttpClient, private authService: AuthService) { }
 
-  getPlatformData() {
+  getPlatformData(): Observable<any> {
     const url = environment.apiUrl + '/api/v1/contacts/platorm-data';
     return this.http.get(url, {headers: {
       "Authorization": "Bearer " + this.authService.getToken()
