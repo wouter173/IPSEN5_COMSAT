@@ -1,5 +1,5 @@
 <div class="flex min-h-full w-full">
-  <app-batch-list [selectedBatch]="selectedBatch" [onSelectBatch]="onSelectBatch" [batches]="batchesWithGeneral" [createBatch]="false" />
+  <app-batch-list [selectedBatch]="selectedBatch" [onSelectBatch]="onSelectBatch.bind(this)" [batches]="batchesWithGeneral" [createBatch]="false" />
 
   <div class="flex w-full flex-col gap-7 p-8">
     <h1 class="text-3xl font-semibold">General</h1>

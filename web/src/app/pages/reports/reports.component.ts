@@ -33,7 +33,7 @@ export class ReportsComponent implements OnInit {
     constructor(private chartService: ChartService) {
     }
 
-    onSelectedBatch(id: string) {
+    onSelectBatch(id: string) {
         console.log('selectedBatch', id);
         this.selectedBatch.set(id);
 
@@ -92,8 +92,4 @@ export class ReportsComponent implements OnInit {
         lastModified: new Date(),
     };
     public batchesWithGeneral = computed(() => [this.generalBatch, ...this.batchesService.batches()]);
-
-    onSelectBatch(id: string) {
-        console.log('selectedBatch', id);
-    }
 }
