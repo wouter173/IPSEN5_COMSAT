@@ -14,6 +14,7 @@ import javax.naming.NoPermissionException;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
@@ -41,26 +42,20 @@ public class ContactController {
 
     @GetMapping("/platform-data")
     public List<Object[]> getPlatformData(@RequestParam(required = false) String batchId) {
-        if (batchId != null) {
-
-        }
-        return contactRepository.findPlatfromData();
+        UUID batchUUID = batchId != null ? UUID.fromString(batchId) : null;
+        return contactRepository.findPlatfromData(batchUUID);
     }
 
     @GetMapping("/region-data")
     public List<Object[]> getRegionData(@RequestParam(required = false) String batchId) {
-        if (batchId != null) {
-
-        }
-        return contactRepository.findRegionData();
+        UUID batchUUID = batchId != null ? UUID.fromString(batchId) : null;
+        return contactRepository.findRegionData(batchUUID);
     }
 
     @GetMapping("/gender-data")
     public List<Object[]> getGenderData(@RequestParam(required = false) String batchId) {
-        if (batchId != null) {
-
-        }
-        return contactRepository.findGenderData();
+        UUID batchUUID = batchId != null ? UUID.fromString(batchId) : null;
+        return contactRepository.findGenderData(batchUUID);
     }
 
 }

@@ -35,34 +35,33 @@ export class ReportsComponent implements OnInit {
 
     onSelectedBatch(id: string) {
         console.log('selectedBatch', id);
+        this.selectedBatch.set(id);
 
-        this.chartService.getGenderDataForBatch(id).subscribe((data) => {
+        this.chartService.getGenderData(id).subscribe((data) => {
             this.genderData = this.transformData(data);
         });
 
-        this.chartService.getPlatformDataForBatch(id).subscribe((data) => {
+        this.chartService.getPlatformData(id).subscribe((data) => {
             this.platformData = this.transformData(data);
         });
 
-        this.chartService.getRegionDataForBatch(id).subscribe((data) => {
+        this.chartService.getRegionData(id).subscribe((data) => {
             this.regionData = this.transformData(data);
         });
     }
 
     ngOnInit(): void {
-        if (!this.selectedBatch()) {
-            this.chartService.getGenderData().subscribe((data) => {
-                this.genderData = this.transformData(data);
-            });
+        this.chartService.getGenderData().subscribe((data) => {
+            this.genderData = this.transformData(data);
+        });
 
-            this.chartService.getPlatformData().subscribe((data) => {
-                this.platformData = this.transformData(data);
-            });
+        this.chartService.getPlatformData().subscribe((data) => {
+            this.platformData = this.transformData(data);
+        });
 
-            this.chartService.getRegionData().subscribe((data) => {
-                this.regionData = this.transformData(data);
-            });
-        }
+        this.chartService.getRegionData().subscribe((data) => {
+            this.regionData = this.transformData(data);
+        });
     }
 
     transformData(response: any[]): any {
