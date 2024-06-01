@@ -40,17 +40,26 @@ public class ContactController {
     }
 
     @GetMapping("/platform-data")
-    public List<Object[]> getPlatformData() {
+    public List<Object[]> getPlatformData(@RequestParam(required = false) String batchId) {
+        if (batchId != null) {
+
+        }
         return contactRepository.findPlatfromData();
     }
 
     @GetMapping("/region-data")
-    public List<Object[]> getRegionData() {
+    public List<Object[]> getRegionData(@RequestParam(required = false) String batchId) {
+        if (batchId != null) {
+
+        }
         return contactRepository.findRegionData();
     }
 
     @GetMapping("/gender-data")
-    public List<Object[]> getGenderData() {
+    public List<Object[]> getGenderData(@RequestParam(required = false) String batchId) {
+        if (batchId != null) {
+
+        }
         return contactRepository.findGenderData();
     }
 

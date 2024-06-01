@@ -10,22 +10,31 @@ import {AuthService} from "./auth.service";
 export class ChartService {
   constructor(private http: HttpClient, private authService: AuthService) { }
 
-  getPlatformData(): Observable<any> {
-    const url = environment.apiUrl + '/api/v1/contacts/platform-data';
+  getPlatformData(id?: string): Observable<any> {
+    let url = environment.apiUrl + '/api/v1/contacts/platform-data';
+    if (id) {
+      url += `?batchId=${id}`;
+    }
     return this.http.get(url, {headers: {
       "Authorization": "Bearer " + this.authService.getToken()
       }});
   }
 
-  getRegionData(): Observable<any> {
-    const url = environment.apiUrl + '/api/v1/contacts/region-data';
+  getRegionData(id?: string): Observable<any> {
+    let url = environment.apiUrl + '/api/v1/contacts/region-data';
+    if (id) {
+      url += `?batchId=${id}`;
+    }
     return this.http.get(url, {headers: {
       "Authorization": "Bearer " + this.authService.getToken()
       }});
   }
 
-  getGenderData(): Observable<any> {
-    const url = environment.apiUrl + '/api/v1/contacts/gender-data';
+  getGenderData(id?: string): Observable<any> {
+    let url = environment.apiUrl + '/api/v1/contacts/gender-data';
+    if (id) {
+      url += '?batchId=' + id;
+    }
     return this.http.get(url, {headers: {
       "Authorization": "Bearer " + this.authService.getToken()
       }});
