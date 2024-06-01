@@ -21,7 +21,6 @@ import java.util.Map;
 public class ContactController {
 
     private final ContactRepository contactRepository;
-
     private final PermissionService permissionService;
     private final ContactDao contactDao;
 
@@ -38,6 +37,21 @@ public class ContactController {
         }
         throw new NoPermissionException();
 
+    }
+
+    @GetMapping("/platform-data")
+    public List<Object[]> getPlatformData() {
+        return contactRepository.findPlatfromData();
+    }
+
+    @GetMapping("/region-data")
+    public List<Object[]> getRegionData() {
+        return contactRepository.findRegionData();
+    }
+
+    @GetMapping("/gender-data")
+    public List<Object[]> getGenderData() {
+        return contactRepository.findGenderData();
     }
 
 }

@@ -1,14 +1,13 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import {Component, computed, inject, OnInit, signal} from '@angular/core';
 import { BatchCreateDialogComponent } from '../../components/batch-create-dialog/batch-create-dialog.component';
 import { BatchListItemComponent } from '../../components/batch-list-item/batch-list-item.component';
 import { ChipsFilterComponent } from '../../components/chips-filter/chips-filter.component';
 import { BatchListComponent } from '../../components/batch-list/batch-list.component';
-import { ChartPlatformComponent } from '../../components/charts/chart-platforms/chart-platform.component';
-import { ChartRegionComponent } from '../../components/charts/chart-region/chart-region.component';
-import { ChartGenderComponent } from '../../components/charts/chart-gender/chart-gender.component';
 import { LucideAngularModule } from 'lucide-angular';
 import { BatchesService } from '../../services/batches.service';
 import { Batch } from '../../models/batch';
+import {ChartReportComponent} from "../../components/charts/chart-report/chart-report.component";
+import {ChartService} from "../../services/chart.service";
 
 @Component({
   selector: 'app-reports',
@@ -18,16 +17,35 @@ import { Batch } from '../../models/batch';
     BatchListItemComponent,
     ChipsFilterComponent,
     BatchListComponent,
-    ChartPlatformComponent,
-    ChartRegionComponent,
-    ChartGenderComponent,
+    ChartReportComponent,
     LucideAngularModule,
   ],
   templateUrl: './reports.component.html',
 })
-export class ReportsComponent {
+export class ReportsComponent implements OnInit {
   public batchesService = inject(BatchesService);
   public selectedBatch = signal<string | null>(null);
+  platformData: any;
+  regionData: any;
+  genderData: any;
+
+
+  constructor(private chartService: ChartService) {
+  }
+
+  ngOnInit(): void {
+    this.chartService.getGenderData().subscribe((data) => {
+      this.genderData = data;
+    });
+
+    this.chartService.getPlatformData().subscribe((data) => {
+      this.platformData = data;
+    });
+
+    this.chartService.getRegionData().subscribe((data) => {
+      this.regionData = data;
+    });
+  }
 
   public generalBatch: Batch = {
     id: 'general',
