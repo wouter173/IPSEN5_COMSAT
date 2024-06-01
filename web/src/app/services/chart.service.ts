@@ -11,7 +11,7 @@ export class ChartService {
   constructor(private http: HttpClient, private authService: AuthService) { }
 
   getPlatformData(): Observable<any> {
-    const url = environment.apiUrl + '/api/v1/contacts/platorm-data';
+    const url = environment.apiUrl + '/api/v1/contacts/platform-data';
     return this.http.get(url, {headers: {
       "Authorization": "Bearer " + this.authService.getToken()
       }});
