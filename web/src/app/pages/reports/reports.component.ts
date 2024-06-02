@@ -21,6 +21,7 @@ import {ChartService} from "../../services/chart.service";
         LucideAngularModule,
     ],
     templateUrl: './reports.component.html',
+    styleUrl: './reports.component.scss',
 })
 export class ReportsComponent implements OnInit {
     public batchesService = inject(BatchesService);
@@ -95,4 +96,10 @@ export class ReportsComponent implements OnInit {
         lastModified: new Date(),
     };
     public batchesWithGeneral = computed(() => [this.generalBatch, ...this.batchesService.batches()]);
+
+getSelectedBatchName(): string {
+    const selectedBatchId = this.selectedBatch();
+    const selectedBatch = this.batchesWithGeneral().find(batch => batch.id === selectedBatchId);
+    return selectedBatch ? selectedBatch.name : 'General';
+}
 }
