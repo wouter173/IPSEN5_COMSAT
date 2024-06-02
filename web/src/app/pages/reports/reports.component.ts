@@ -37,6 +37,9 @@ export class ReportsComponent implements OnInit {
         console.log('selectedBatch', id);
         this.selectedBatch.set(id);
 
+        if (id === 'general') {
+            id = '';
+        }
         this.chartService.getGenderData(id).subscribe((data) => {
             this.genderData = this.transformData(data);
         });
