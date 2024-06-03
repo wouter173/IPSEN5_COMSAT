@@ -6,7 +6,6 @@ import nl.codefusion.comsat.repository.ContactRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -17,14 +16,11 @@ public class ContactDao {
         return contactRepository.save(contactModel);
     }
 
-    public List<ContactModel> getAllContacts() {
-        return contactRepository.findAll();
+    public ContactModel findByNickname(String nickname) {
+        return contactRepository.findContactByNickname(nickname);
     }
 
-
-    public ContactModel updateBatchStatusByUsername(String nickName, String status){
-        ContactModel contact = contactRepository.findContactByNickname(nickName);
-        contact.setStatus(status);
-        return contactRepository.save(contact);
+    public List<ContactModel> getAllContacts() {
+        return contactRepository.findAll();
     }
 }
