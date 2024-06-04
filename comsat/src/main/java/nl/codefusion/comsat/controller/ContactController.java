@@ -16,7 +16,7 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/contact")
 public class ContactController {
 
     private final ContactRepository contactRepository;
@@ -27,7 +27,7 @@ public class ContactController {
 
     private final ContactService contactService;
 
-    @PostMapping("/contacts")
+    @PostMapping()
     public ContactModel createContact(@RequestBody ContactModel contact) throws NoPermissionException {
         if (permissionService.hasPermission(permissionService.getPrincipalRoles(), Permission.CREATE_CONTACT)) {
             return contactRepository.save(contact);
@@ -35,7 +35,7 @@ public class ContactController {
         throw new NoPermissionException();
     }
 
-    @DeleteMapping("/contacts/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteContact(@PathVariable UUID id) throws NoPermissionException {
         if (permissionService.hasPermission(permissionService.getPrincipalRoles(), Permission.READ_CONTACT_DETAILS)) {
             contactRepository.deleteById(id);
@@ -45,7 +45,7 @@ public class ContactController {
 
     }
 
-    @PutMapping("/contacts/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<ContactModel> updateContact(@PathVariable UUID id, @RequestBody ContactModel contactDetails) throws NoPermissionException {
         if (permissionService.hasPermission(permissionService.getPrincipalRoles(), Permission.UPDATE_CONTACT)) {
             return contactService.updateContact(id, contactDetails);

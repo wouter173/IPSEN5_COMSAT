@@ -1,13 +1,13 @@
-import {CommonModule} from '@angular/common';
-import {Component, ElementRef, inject, Signal, signal, ViewChild, WritableSignal} from '@angular/core';
-import {LucideAngularModule} from 'lucide-angular';
-import {minDelay} from '../../utils/mindelay';
-import {SpinnerComponent} from '../spinner/spinner.component';
-import {z} from 'zod';
-import {Contact, contactSchema} from '../../models/contact';
-import {FormsModule} from '@angular/forms';
-import {BatchesService} from '../../services/batches.service';
-import {nanoid} from 'nanoid';
+import { CommonModule } from '@angular/common';
+import { Component, ElementRef, inject, Signal, signal, ViewChild, WritableSignal } from '@angular/core';
+import { LucideAngularModule } from 'lucide-angular';
+import { minDelay } from '../../utils/mindelay';
+import { SpinnerComponent } from '../spinner/spinner.component';
+import { z } from 'zod';
+import { Contact, contactSchema } from '../../models/contact';
+import { FormsModule } from '@angular/forms';
+import { BatchesService } from '../../services/batches.service';
+import { nanoid } from 'nanoid';
 
 @Component({
   selector: 'app-batch-create-dialog',

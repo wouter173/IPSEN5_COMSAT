@@ -13,8 +13,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Getter
-@Setter
 public class ContactModel {
     @Id
     @GeneratedValue(generator = "UUID")

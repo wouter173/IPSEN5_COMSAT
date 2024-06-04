@@ -1,5 +1,6 @@
 package nl.codefusion.comsat.service;
 
+import lombok.RequiredArgsConstructor;
 import nl.codefusion.comsat.models.BatchModel;
 import nl.codefusion.comsat.models.ContactModel;
 import nl.codefusion.comsat.repository.BatchRepository;
@@ -10,15 +11,10 @@ import java.util.Date;
 import java.util.UUID;
 
 @Service
-
+@RequiredArgsConstructor
 public class BatchService {
 
     private final BatchRepository batchRepository;
-
-    @Autowired
-    public BatchService(BatchRepository batchRepository, ContactService contactService) {
-        this.batchRepository = batchRepository;
-    }
 
     public void processBatch(BatchModel batch) {
         batch.setState("processed");
