@@ -18,11 +18,11 @@ public class TemplateDao {
         return templateRepository.save(templateModel);
     }
 
-    public List<TemplateModel> getAllTemplates() {
+    public List<TemplateModel> getAll() {
         return templateRepository.findAll();
     }
 
-    public void updateTemplate(TemplateModel template) {
+    public void update(UUID id,TemplateModel template) {
         Optional<TemplateModel> existingTemplateOpt = templateRepository.findById(template.getId());
         if (existingTemplateOpt.isPresent()) {
             TemplateModel existingTemplate = existingTemplateOpt.get();
@@ -31,14 +31,13 @@ public class TemplateDao {
             existingTemplate.setBody(template.getBody());
             existingTemplate.setMetadata(template.getMetadata());
             existingTemplate.setUpdatedAt(template.getUpdatedAt());
-            // Save the updated template back to the repository
             templateRepository.save(existingTemplate);
         } else {
             templateRepository.save(template);
         }
     }
 
-    public TemplateModel getTemplateById(UUID id) {
+    public TemplateModel getById(UUID id) {
         Optional<TemplateModel> template = templateRepository.findById(id);
         return template.orElse(null);
     }

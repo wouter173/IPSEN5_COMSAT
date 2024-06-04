@@ -9,8 +9,6 @@ import org.mockito.InjectMocks;
 
 import org.mockito.MockitoAnnotations;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -44,7 +42,8 @@ public class TemplateDaoTest {
     @Test
     public void updateTemplateUpdatesExistingTemplate() {
         TemplateModel template = new TemplateModel();
-        template.setId(UUID.randomUUID());
+        UUID id = UUID.randomUUID();
+        template.setId(id);
 
         TemplateModel existingTemplate = new TemplateModel();
         existingTemplate.setId(template.getId());
@@ -52,7 +51,7 @@ public class TemplateDaoTest {
         when(templateRepository.findById(template.getId())).thenReturn(Optional.of(existingTemplate));
         when(templateRepository.save(any(TemplateModel.class))).thenAnswer(i -> i.getArguments()[0]);
 
-        templateDao.updateTemplate(template);
+        templateDao.update(id, template);
 
         verify(templateRepository).save(template);
     }
@@ -64,7 +63,7 @@ public class TemplateDaoTest {
 
         when(templateRepository.findById(id)).thenReturn(Optional.empty());
 
-        TemplateModel result = templateDao.getTemplateById(id);
+        TemplateModel result = templateDao.getById(id);
 
         assertNull(result);
     }

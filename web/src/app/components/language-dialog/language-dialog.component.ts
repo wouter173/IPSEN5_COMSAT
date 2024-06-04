@@ -26,7 +26,6 @@ import {
     MatDialogClose,
   ],
   templateUrl: './language-dialog.component.html',
-  styleUrl: './language-dialog.component.scss',
 })
 export class LanguageDialogComponent {
   constructor(

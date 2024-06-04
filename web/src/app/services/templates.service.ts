@@ -18,7 +18,6 @@ export class TemplatesService {
     data.forEach((template) => {
       template.translations = JSON.parse(template.body);
     });
-    console.log(data);
     return data;
   }
 
