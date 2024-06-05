@@ -5,18 +5,20 @@
     <h1 class="text-3xl font-semibold">{{ getSelectedBatchName() }}</h1>
     <div class="grid w-full grid-cols-3 gap-16">
       <div class="flex w-full flex-col gap-2">
-        <p class="text-center font-semibold">Messages per platform</p>
+        <p class="text-center font-semibold">Contacts per platform</p>
         <app-chart-report [data]="platformData "/>
       </div>
       <div class="flex w-full flex-col gap-2">
-        <p class="text-center font-semibold">Messages per region</p>
+        <p class="text-center font-semibold">Contacts per region</p>
         <app-chart-report [data]="regionData"  />
       </div>
       <div class="flex w-full flex-col gap-2">
-        <p class="text-center font-semibold">Messages per sex</p>
+        <p class="text-center font-semibold">Contacts per sex</p>
         <app-chart-report [data]="genderData" />
       </div>
     </div>
-    <div class="extra-info-box"></div>
+    <div class="flex w-full items-center justify-between rounded-2xl border border-base-6 px-4 py-3.5 text-left">
+      <h1 class="text-lg font-semibold">Batch size: {{ selectedBatchSize }} </h1>
+    </div>
   </div>
 </div>

@@ -26,6 +26,7 @@ import {ChartService} from "../../services/chart.service";
 export class ReportsComponent implements OnInit {
     public batchesService = inject(BatchesService);
     public selectedBatch = signal<string | null>(null);
+    public selectedBatchSize = 0;
     platformData: any;
     regionData: any;
     genderData: any;
@@ -33,10 +34,11 @@ export class ReportsComponent implements OnInit {
 
     constructor(private chartService: ChartService) {
     }
-
     onSelectBatch(id: string) {
-        console.log('selectedBatch', id);
         this.selectedBatch.set(id);
+
+        const selectedBatch = this.batchesWithGeneral().find(batch => batch.id === id);
+        this.selectedBatchSize = selectedBatch ? selectedBatch.contacts.length : 0;
 
         if (id === 'general') {
             id = '';
