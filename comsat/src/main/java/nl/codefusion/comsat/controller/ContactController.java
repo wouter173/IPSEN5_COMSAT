@@ -16,7 +16,7 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/contact")
+@RequestMapping("/api/v1/contacts")
 public class ContactController {
 
     private final ContactRepository contactRepository;
