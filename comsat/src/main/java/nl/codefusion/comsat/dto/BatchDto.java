@@ -4,8 +4,9 @@ import lombok.Data;
 import nl.codefusion.comsat.models.ContactModel;
 
 import java.util.List;
+
 @Data
-public class OmitIdBatchDto {
+public class BatchDto {
     private String name;
     private String state;
     private String lastModified;

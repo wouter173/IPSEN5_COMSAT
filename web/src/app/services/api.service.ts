@@ -3,8 +3,10 @@ import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
 import { LogoutService } from './logout.service';
+import { z, ZodError, ZodSchema } from 'zod';
 
-type Options = Partial<{
+type Options<T extends ZodSchema> = Partial<{
+  schema: T;
   authorized: boolean;
   body: Object;
   version: 'v1';
@@ -16,7 +18,11 @@ export class ApiService {
   private logoutService = inject(LogoutService);
   private toastr = inject(ToastrService);
 
-  public async request(method: 'GET' | 'POST' | 'PUT' | 'DELETE', endpoint: string, options?: Options): Promise<Response> {
+  public async request<T extends ZodSchema>(
+    method: 'GET' | 'POST' | 'PUT' | 'DELETE',
+    endpoint: string,
+    options?: Options<T>,
+  ): Promise<{ response: Response; data?: z.infer<T> }> {
     options = { authorized: true, version: 'v1', ...options };
 
     const baseUrl = '/api/' + options.version;
@@ -45,27 +51,37 @@ export class ApiService {
         this.logoutService.logout();
       }
 
-      return response;
+      if (options.schema) {
+        const json = await response.json();
+        const data = options.schema.parse(json);
+
+        return { response, data } as const;
+      }
+
+      return { response, data: undefined } as const;
     } catch (error) {
       this.toastr.error('An error occurred');
       console.error(error);
+      if (error instanceof ZodError) {
+        console.error(error.message);
+      }
       throw error;
     }
   }
 
-  public async get(endpoint: string, options?: Omit<Options, 'body'>) {
+  public async get<T extends ZodSchema>(endpoint: string, options?: Omit<Options<T>, 'body'>) {
     return this.request('GET', endpoint, options);
   }
 
-  public async post(endpoint: string, options?: Options) {
+  public async post<T extends ZodSchema>(endpoint: string, options?: Options<T>) {
     return this.request('POST', endpoint, options);
   }
 
-  public async put(endpoint: string, options?: Options) {
+  public async put<T extends ZodSchema>(endpoint: string, options?: Options<T>) {
     return this.request('PUT', endpoint, options);
   }
 
-  public async delete(endpoint: string, options?: Omit<Options, 'body'>) {
+  public async delete<T extends ZodSchema>(endpoint: string, options?: Omit<Options<T>, 'body'>) {
     return this.request('DELETE', endpoint, options);
   }
 }
