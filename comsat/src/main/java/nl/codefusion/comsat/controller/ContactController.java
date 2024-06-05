@@ -3,11 +3,13 @@ package nl.codefusion.comsat.controller;
 import lombok.RequiredArgsConstructor;
 import nl.codefusion.comsat.config.Permission;
 import nl.codefusion.comsat.dao.ContactDao;
+import nl.codefusion.comsat.dto.ContactDto;
 import nl.codefusion.comsat.models.ContactModel;
 import nl.codefusion.comsat.repository.ContactRepository;
 import nl.codefusion.comsat.service.ContactService;
 import nl.codefusion.comsat.service.PermissionService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.naming.NoPermissionException;
@@ -28,9 +30,10 @@ public class ContactController {
     private final ContactService contactService;
 
     @PostMapping()
-    public ContactModel createContact(@RequestBody ContactModel contact) throws NoPermissionException {
+    public ContactModel createContact(@Validated @RequestBody ContactDto contactDto) throws NoPermissionException {
         if (permissionService.hasPermission(permissionService.getPrincipalRoles(), Permission.CREATE_CONTACT)) {
-            return contactRepository.save(contact);
+            ContactModel contactModel = contactService.convertDtoToModel(contactDto);
+            return contactRepository.save(contactModel);
         }
         throw new NoPermissionException();
     }
@@ -46,9 +49,10 @@ public class ContactController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ContactModel> updateContact(@PathVariable UUID id, @RequestBody ContactModel contactDetails) throws NoPermissionException {
+    public ResponseEntity<ContactModel> updateContact(@PathVariable UUID id, @Validated @RequestBody ContactDto contactDto) throws NoPermissionException {
         if (permissionService.hasPermission(permissionService.getPrincipalRoles(), Permission.UPDATE_CONTACT)) {
-            return contactService.updateContact(id, contactDetails);
+            ContactModel contactModel = contactService.convertDtoToModel(contactDto);
+            return contactService.updateContact(id, contactModel);
         }
         throw new NoPermissionException();
     }
