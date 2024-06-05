@@ -35,22 +35,27 @@ export class BatchDetailComponent {
     }
 
     set batchName(value: string) {
-        if (this.selectedBatch()) {
-            // @ts-ignore
-            this.batchesService.updateBatchName(this.selectedBatch().id, value);
-        }
-    }
+    console.log('New batch name:', value);
+}
 
-    toggleBatchEditMode() {
-        this.batchEditmode = !this.batchEditmode;
-        if (!this.batchEditmode) {
-            this.onSaveBatchChanges();
-        }
+toggleBatchEditMode() {
+    this.batchEditmode = !this.batchEditmode;
+    if (!this.batchEditmode) {
+        this.onSaveBatchChanges();
     }
+}
 
-    onSaveBatchChanges() {
-
+onSaveBatchChanges() {
+    const selectedBatch = this.selectedBatch();
+    if (selectedBatch) {
+        this.batchesService.updateBatchName(selectedBatch.id, this.batchName)
+            .subscribe(() => {
+                this.batchEditmode = false;
+            }, error => {
+                console.error('Error updating batch name', error);
+            });
     }
+}
 
     async onSendClick() {
         const id = this.selectedBatchId();
