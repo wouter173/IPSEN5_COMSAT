@@ -22,10 +22,22 @@ export class BatchDetailComponent {
     public batchesService = inject(BatchesService);
     public selectedBatch = computed(() => this.batchesService.batches().find((batch) => batch.id === this.selectedBatchId()));
     public editingContact: Contact | null = null;
+    public batchEditmode = false;
     public platforms = platforms;
     selectedContacts: Contact[] = [];
 
     constructor(private contactService: ContactsService) {
+
+    }
+
+    toggleBatchEditMode() {
+        this.batchEditmode = !this.batchEditmode;
+        if (!this.batchEditmode) {
+            this.onSaveBatchChanges();
+        }
+    }
+
+    onSaveBatchChanges() {
 
     }
 

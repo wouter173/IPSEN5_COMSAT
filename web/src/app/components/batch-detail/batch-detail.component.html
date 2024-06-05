@@ -2,6 +2,13 @@
   @if (selectedBatch()) {
     <div class="flex justify-between">
       <h1 class="text-3xl font-semibold">{{ selectedBatch()?.name }}</h1>
+      <div class="flex gap-2">
+      <button
+        (click)="toggleBatchEditMode()"
+        class="flex items-center gap-1 rounded-lg bg-primary-blue-1 px-3 py-2 font-semibold text-white transition-all enabled:hover:bg-primary-blue-1/85 enabled:active:scale-[98%]"
+      >
+          <lucide-icon class="h-[16px]" [name]="batchEditmode ? 'save' : 'edit-icon'" />
+      </button>
       @if (selectedBatch()?.state !== "SENT") {
         <button
           (click)="onSendClick()"
@@ -24,6 +31,7 @@
           Sent!
         </button>
       }
+    </div>
     </div>
 
     <div class="grid grid-cols-2 gap-x-4 gap-y-6">

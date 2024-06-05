@@ -37,6 +37,21 @@ public class BatchController {
         return ResponseEntity.ok("Batch processed successfully");
     }
 
+    @PutMapping("/batch/{id}")
+    public ResponseEntity<BatchModel> updateBatchName(@PathVariable UUID id, @RequestBody Map<String, String> body) {
+    BatchModel batch = batchDao.findById(id);
+    if (batch == null) {
+        return ResponseEntity.notFound().build();
+    }
+    String newName = body.get("name");
+    if (newName == null || newName.trim().isEmpty()) {
+        return ResponseEntity.badRequest().body(null);
+    }
+    batch.setName(newName);
+    batchService.saveBatch(batch);
+    return ResponseEntity.ok(batch);
+}
+
     @GetMapping("/batches")
     public ResponseEntity<List<BatchModel>> getAllBatches() {
         List<BatchModel> batches = batchDao.getAllBatches();
