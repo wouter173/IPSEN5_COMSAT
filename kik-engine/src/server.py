@@ -15,7 +15,6 @@ app = Flask(__name__)
 load_dotenv()
 
 queue = Queue()
-userList = {}
 
 
 def create_queue():
@@ -27,6 +26,8 @@ def create_queue():
 
 
 def send_message_to_contact(contact: Contact):
+    bot.add_contact(contact)
+
     try:
         if bot.client.get_jid(contact.username) is None:
             bot.set_contact_error_status(contact, 'username not found')
@@ -58,9 +59,9 @@ def send_message_to_users():
     data = request.get_json()
     user_message = data["user_message"]
 
-    for key, value in user_message.items():
-        key = key.lower()
-        queue.enqueue(Contact(key, value))
+    for contactData in user_message:
+        contact = Contact(contactData["username"].lower(), contactData["message"], contactData["batchId"])
+        queue.enqueue(contact)
 
     return {"status": "success"}, 200
 

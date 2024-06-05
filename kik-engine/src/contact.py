@@ -5,3 +5,5 @@ from dataclasses import dataclass
 class Contact:
     username: str
     message: str
+    batch_id: str
+    status: str = 'queued'

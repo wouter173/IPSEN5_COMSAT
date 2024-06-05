@@ -12,7 +12,7 @@ def jid_to_username(jid):
 
 
 class EchoBot(KikClientCallback):
-    user_message_status = {}
+    user_message_status = []
 
     def __init__(self, creds: dict):
         username = creds["username"]
@@ -21,8 +21,17 @@ class EchoBot(KikClientCallback):
 
         self.client = KikClient(self, username, str(password), device_id, enable_console_logging=True)
 
+    def add_contact(self, contact: Contact):
+        self.user_message_status.append(contact)
+
+    def update_contact_status(self, username, status):
+        for entry in self.user_message_status:
+            if entry.username == username:
+                entry.status = status
+                break
+
     def set_contact_error_status(self, contact: Contact, error: str):
-        self.user_message_status[contact.username] = error
+        self.update_contact_status(contact.username, error)
 
     def on_connection_failed(self, response: ConnectionFailedResponse):
         self.client.log.error(f"Connection failed: {response.message}")
@@ -36,17 +45,16 @@ class EchoBot(KikClientCallback):
 
     def send_template_messages(self, username, message):
         self.client.send_chat_message(username, message)
-        self.user_message_status[username] = 'sent'
-        print(self.user_message_status)
+        self.update_contact_status(username, 'sent')
 
     def on_message_read(self, read: chatting.IncomingMessageReadEvent):
-        self.user_message_status[jid_to_username(read.from_jid)] = 'read'
-        print(self.user_message_status)
+        username = jid_to_username(read.from_jid)
+        self.update_contact_status(username, 'read')
 
     def on_message_delivered(self, delivered: chatting.IncomingMessageDeliveredEvent):
-        self.user_message_status[jid_to_username(delivered.from_jid)] = 'delivered'
-        print(self.user_message_status)
+        username = jid_to_username(delivered.from_jid)
+        self.update_contact_status(username, 'delivered')
 
     def on_chat_message_received(self, message: chatting.IncomingChatMessage):
-        self.user_message_status[jid_to_username(message.from_jid)] = 'answered'
-        print(self.user_message_status)
+        username = jid_to_username(message.from_jid)
+        self.update_contact_status(username, 'answered')
