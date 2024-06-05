@@ -1,7 +1,12 @@
 <div class="flex w-full flex-col gap-8 p-8">
   @if (selectedBatch()) {
     <div class="flex justify-between">
-      <h1 class="text-3xl font-semibold">{{ selectedBatch()?.name }}</h1>
+      <div *ngIf="!batchEditmode; else editMode">
+        <h1 class="text-3xl font-semibold">{{ batchName }}</h1>
+      </div>
+      <ng-template #editMode>
+        <input [(ngModel)]="batchName" class="text-3xl font-semibold"/>
+      </ng-template>
       <div class="flex gap-2">
       <button
         (click)="toggleBatchEditMode()"

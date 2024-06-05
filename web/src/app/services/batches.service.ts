@@ -1,15 +1,19 @@
-import { Injectable, signal, effect, computed } from '@angular/core';
+import {Injectable, signal, effect, computed, inject} from '@angular/core';
 import { Batch } from '../models/batch';
 import {HttpClient} from "@angular/common/http";
 import { v4 as uuidv4 } from 'uuid';
-import {catchError, tap, throwError} from "rxjs";
+import {catchError, Observable, tap, throwError} from "rxjs";
 import {environment} from "../../environments/environment";
 import {AuthService} from "./auth.service";
+import {Contact} from "../models/contact";
 
 @Injectable({
   providedIn: 'root',
 })
 export class BatchesService {
+  auth = inject(AuthService);
+  url = environment.apiUrl;
+  token = 'Bearer ' + this.auth.getToken();
 
   constructor(private http: HttpClient, private authService: AuthService) {
     this.wipeAllBatches()
@@ -58,5 +62,13 @@ public sendBatchData(batch: Batch) {
   public wipeAllBatches() {
     this._batches.set([]);
     localStorage.setItem('batches', JSON.stringify(this._batches()));
+  }
+
+  updateBatchName(id: string, value: String): Observable<void> {
+    const headers = {
+      Authorization: this.token,
+    };
+    const contactUrl = this.url + '/api/v1/batch/' + id;
+    return this.http.put<void>(contactUrl, value, { headers });
   }
 }

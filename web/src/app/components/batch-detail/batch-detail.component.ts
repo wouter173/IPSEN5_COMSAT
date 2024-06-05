@@ -30,6 +30,17 @@ export class BatchDetailComponent {
 
     }
 
+    get batchName(): string {
+        return this.selectedBatch()?.name ?? '';
+    }
+
+    set batchName(value: string) {
+        if (this.selectedBatch()) {
+            // @ts-ignore
+            this.batchesService.updateBatchName(this.selectedBatch().id, value);
+        }
+    }
+
     toggleBatchEditMode() {
         this.batchEditmode = !this.batchEditmode;
         if (!this.batchEditmode) {
