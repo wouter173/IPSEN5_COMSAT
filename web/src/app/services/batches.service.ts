@@ -1,32 +1,35 @@
-import { Injectable, signal, effect, computed } from '@angular/core';
-import { Batch } from '../models/batch';
-import {HttpClient} from "@angular/common/http";
+import { Injectable, signal, effect, computed, inject } from '@angular/core';
+import { Batch, batchSchema } from '../models/batch';
+import { HttpClient } from '@angular/common/http';
 import { v4 as uuidv4 } from 'uuid';
-import {catchError, tap, throwError} from "rxjs";
-import {environment} from "../../environments/environment";
-import {AuthService} from "./auth.service";
+import { catchError, defer, from, Observable, tap, throwError } from 'rxjs';
+import { environment } from '../../environments/environment';
+import { AuthService } from './auth.service';
+import { ApiService } from './api.service';
+import { z } from 'zod';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BatchesService {
+  private api = inject(ApiService);
+  private _batches = signal<Batch[]>([]);
 
-  constructor(private http: HttpClient, private authService: AuthService) {
-    this.wipeAllBatches()
-    this.getAllBatches().subscribe((batches) => { this._batches.set(batches) } );
+  constructor() {
+    this.getAllBatches().subscribe((batches) => {
+      this._batches.set(batches.data!);
+    });
   }
 
-  private _batches = signal<Batch[]>(JSON.parse(localStorage.getItem('batches')!) ?? []);
   public batches = computed(() => {
-    this._batches().map(console.log);
     return this._batches().sort((a, b) => new Date(b.lastModified).getTime() - new Date(a.lastModified).getTime());
   });
 
   public createBatch(batch: Batch) {
-
     if (batch.contacts) {
-      batch.contacts = batch.contacts.map(contact => ({ ...contact, id: uuidv4() }));
+      batch.contacts = batch.contacts.map((contact) => ({ ...contact, id: uuidv4() }));
     }
+
     this._batches.set([...this._batches(), batch]);
   }
 
@@ -34,29 +37,11 @@ export class BatchesService {
     this._batches.set(this._batches().map((b) => (b.id === batchId ? { ...b, ...batch } : b)));
   }
 
-public sendBatchData(batch: Batch) {
-  const url = environment.apiUrl + '/api/v1/batch';
-  return this.http.post(url, batch, {headers: {
-      "Authorization": "Bearer " + this.authService.getToken()
-    }}).pipe(
-    tap(() => {
-      this.updateBatch( batch.id, { state: 'SENT' });
-    }),
-    catchError((error) => {
-      return throwError(error);
-    })
-  );
-}
-
-  getAllBatches() {
-    const url = environment.apiUrl + '/api/v1/batches';
-    return this.http.get<Batch[]>(url, {headers: {
-       "Authorization": "Bearer " + this.authService.getToken(),
-      }})
+  public sendBatchData(batch: Batch) {
+    return from(this.api.post('/batches', { body: batch }));
   }
 
-  public wipeAllBatches() {
-    this._batches.set([]);
-    localStorage.setItem('batches', JSON.stringify(this._batches()));
+  public getAllBatches() {
+    return from(this.api.get('/batches', { schema: z.array(batchSchema) }));
   }
 }
