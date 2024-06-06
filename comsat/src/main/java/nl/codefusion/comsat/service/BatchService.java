@@ -1,5 +1,6 @@
 package nl.codefusion.comsat.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import nl.codefusion.comsat.models.BatchModel;
 import nl.codefusion.comsat.models.ContactModel;
@@ -30,6 +31,18 @@ public class BatchService {
             contact.setBatch(batch);
         }
     }
+
+    public BatchModel updateBatchName(UUID id, String newName) {
+    BatchModel batch = batchRepository.findById(id).orElse(null);
+    if (batch == null) {
+        throw new EntityNotFoundException("Batch not found");
+    }
+    if (newName == null || newName.trim().isEmpty()) {
+        throw new IllegalArgumentException("New name cannot be null or empty");
+    }
+    batch.setName(newName);
+    return batchRepository.save(batch);
+}
 
     public BatchModel saveBatch(BatchModel batch) {
         return batchRepository.save(batch);
