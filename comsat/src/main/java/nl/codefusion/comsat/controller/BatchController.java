@@ -133,6 +133,15 @@ public class BatchController {
         return ResponseEntity.ok(batchResponseDto);
     }
 
+    @DeleteMapping("/{batchId}/contacts/{contactId}")
+    public ResponseEntity<BatchContactEntryModel> deleteContactFromBatch(@PathVariable UUID batchId, @PathVariable UUID contactId) {
+        BatchContactEntryModel entryModel = batchContactEntryDao.findByBatchIdAndContactId(batchId, contactId);
+
+        BatchContactEntryModel deletedEntryModel = batchContactEntryDao.delete(entryModel.getId());
+
+        return ResponseEntity.ok(deletedEntryModel);
+    }
+
 
     @PutMapping("/{batchId}/contacts/{contactId}")
     public ResponseEntity<BatchResponseContactDto> updateContactStatus(@PathVariable UUID batchId, @PathVariable UUID contactId, @RequestBody BatchEntryRequestDto batchEntryRequestDto) {

@@ -16,10 +16,10 @@ export class ContactsService {
   }
 
   deleteContact(id: string): Observable<unknown> {
-    return from(this.api.delete(`contacts/${id}`));
+    return from(this.api.delete(`/contacts/${id}`));
   }
 
   updateContact(id: string, contact: Contact): Observable<unknown> {
-    return from(this.api.put(`contacts/${id}`, { body: contact }));
+    return from(this.api.put(`/contacts/${id}`, { body: contact }));
   }
 }

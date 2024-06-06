@@ -2,7 +2,7 @@
   @if (selectedBatch()) {
     <div class="flex justify-between">
       <div class="group flex gap-2">
-        <h1 *ngIf="!batchEditmode; else editMode" class="text-3xl font-semibold">{{ batchName }}</h1>
+        <h1 *ngIf="!batchEditmode; else editMode" class="max-w-96 truncate text-3xl font-semibold">{{ batchName }}</h1>
 
         <ng-template #editMode>
           <input autofocus [(ngModel)]="batchName" class="w-min rounded-md text-3xl font-semibold !outline !outline-2" />
@@ -52,13 +52,13 @@
             <div class="my-2 h-px w-full bg-black/5"></div>
           </div>
           <span class="">Contacts:</span>
-          <span class="opacity-60">37</span>
+          <span class="opacity-60">{{ selectedBatch()?.contacts?.length }}</span>
           <span class="">New contacts:</span>
           <span class="opacity-60">32</span>
           <span class="">Recurring contacts:</span>
           <span class="opacity-60">5</span>
           <span class="">Platforms:</span>
-          <span class="opacity-60">3</span>
+          <span class="opacity-60">{{ usedPlatforms()?.join(", ") }}</span>
           <span class="">Regions:</span>
           <span class="opacity-60">2</span>
           <div class="col-span-2">
@@ -85,10 +85,10 @@
           }
         </div>
       </div>
-      <div class="flex w-full flex-col gap-4 rounded-xl border border-black/[0.05] bg-secondary-light-2/50 p-5">
+      <div class="flex h-min w-full flex-col gap-4 rounded-xl border border-black/[0.05] bg-secondary-light-2/50 p-5">
         <h2 class="text-xl font-semibold">Templates</h2>
         <div class="grid grid-cols-1 gap-2">
-          @for (platform of platforms; track platform) {
+          @for (platform of usedPlatforms(); track platform) {
             <label for="" class="flex flex-row items-center gap-1">
               <span class="block w-32 text-sm font-medium capitalize opacity-65">{{ platform }}</span>
               @if (selectedBatch()?.state === "NOTSENT") {
@@ -115,21 +115,10 @@
               >
                 <div class="flex justify-between">
                   <div class="flex items-center gap-2">
-                    <img [src]="'/assets/platforms/' + contact.platform + '.png'" alt="" class="size-8" />
+                    <img [src]="'/assets/platforms/' + contact.platform.toLowerCase() + '.png'" alt="" class="size-8" />
                     <div class="flex flex-col">
-                      <span class="font-semibold" *ngIf="editingContact !== contact">{{ contact.firstName }}</span>
-                      <input
-                        [ngModel]="editingContact.firstName"
-                        (ngModelChange)="editingContact && (editingContact.firstName = $event)"
-                        *ngIf="editingContact === contact"
-                      />
-
-                      <span class="text-xs font-semibold text-[#676768]" *ngIf="editingContact !== contact">{{ contact.nickname }}</span>
-                      <input
-                        [ngModel]="editingContact.nickname"
-                        (ngModelChange)="editingContact && (editingContact.nickname = $event)"
-                        *ngIf="editingContact === contact"
-                      />
+                      <span class="font-semibold">{{ contact.firstName }}</span>
+                      <span class="text-xs font-semibold text-[#676768]">{{ contact.nickname }}</span>
                     </div>
                   </div>
                   <div class="flex cursor-pointer gap-3 opacity-30 transition-all hover:opacity-100">
@@ -153,20 +142,54 @@
                         }[contact.status]
                       : "-"
                   }}</span>
+
+                  <span class="text-[#676768]" *ngIf="editingContact === contact">Fullname</span>
+                  <input
+                    class="focusable mb-1 rounded-md bg-white px-1 py-0.5 text-base"
+                    *ngIf="editingContact === contact"
+                    [ngModel]="editingContact.firstName"
+                    (ngModelChange)="editingContact.firstName = $event"
+                  />
+
+                  <span class="text-[#676768]" *ngIf="editingContact === contact">Username</span>
+                  <input
+                    class="focusable mb-1 rounded-md bg-white px-1 py-0.5 text-base"
+                    *ngIf="editingContact === contact"
+                    [ngModel]="editingContact.nickname"
+                    (ngModelChange)="editingContact.nickname = $event"
+                  />
+
                   <span class="text-[#676768]">Audience</span>
                   <span class="font-semibold text-[#676768]" *ngIf="editingContact !== contact"> {{ contact.audience }}</span>
                   <input
+                    class="focusable mb-1 rounded-md bg-white px-1 py-0.5 text-base"
                     [ngModel]="editingContact.audience"
                     (ngModelChange)="editingContact && (editingContact.audience = $event)"
                     *ngIf="editingContact === contact"
                   />
 
-                  <span class="text-[#676768]">Locale</span>
-                  <span>{{ contact.language ? contact.region + " - " + contact.language : "-" }}</span>
+                  <span class="text-[#676768]">Region</span>
+                  <span class="font-semibold text-[#676768]" *ngIf="editingContact !== contact"> {{ contact.region }}</span>
+                  <input
+                    class="focusable mb-1 rounded-md bg-white px-1 py-0.5 text-base"
+                    *ngIf="editingContact === contact"
+                    [ngModel]="editingContact.region"
+                    (ngModelChange)="editingContact.region = $event"
+                  />
+
+                  <span class="text-[#676768]">Language</span>
+                  <span class="font-semibold text-[#676768]" *ngIf="editingContact !== contact"> {{ contact.language }}</span>
+                  <input
+                    class="focusable mb-1 rounded-md bg-white px-1 py-0.5 text-base"
+                    *ngIf="editingContact === contact"
+                    [ngModel]="editingContact.language"
+                    (ngModelChange)="editingContact.language = $event"
+                  />
 
                   <span class="text-[#676768]">Sex</span>
                   <span class="font-semibold text-[#676768]" *ngIf="editingContact !== contact"> {{ contact.sex }}</span>
                   <input
+                    class="focusable mb-1 rounded-md bg-white px-1 py-0.5 text-base"
                     [ngModel]="editingContact.sex"
                     (ngModelChange)="editingContact && (editingContact.sex = $event)"
                     *ngIf="editingContact === contact"
@@ -174,11 +197,16 @@
 
                   <span class="text-[#676768]">Platform</span>
                   <span class="font-semibold text-[#676768]" *ngIf="editingContact !== contact">{{ contact.platform }}</span>
-                  <input
+                  <select
+                    class="focusable mb-1 rounded-md bg-white px-1 py-0.5 text-base"
                     *ngIf="editingContact === contact"
                     [ngModel]="editingContact.platform"
                     (ngModelChange)="editingContact.platform = $event"
-                  />
+                  >
+                    @for (platform of platforms; track platform) {
+                      <option value="{{ platform }}">{{ platform }}</option>
+                    }
+                  </select>
                 </div>
               </div>
             </li>

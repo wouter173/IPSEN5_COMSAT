@@ -49,4 +49,10 @@ public class BatchContactEntryDao {
         return batchContactEntryRepository.findAllByBatchId(batchId);
     }
 
+    public BatchContactEntryModel delete(UUID id) {
+        BatchContactEntryModel contactToBatch = batchContactEntryRepository.findById(id).orElseThrow();
+        batchContactEntryRepository.delete(contactToBatch);
+        return contactToBatch;
+    }
+
 }

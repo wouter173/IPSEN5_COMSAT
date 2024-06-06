@@ -1,5 +1,5 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { from } from 'rxjs';
+import { from, tap } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 import { z } from 'zod';
 import { Batch, batchSchema } from '../models/batch';
@@ -13,9 +13,7 @@ export class BatchesService {
   private _batches = signal<Batch[]>([]);
 
   constructor() {
-    this.getAllBatches().subscribe((batches) => {
-      this._batches.set(batches.data);
-    });
+    this.getAllBatches().subscribe();
   }
 
   public batches = computed(() => {
@@ -53,11 +51,10 @@ export class BatchesService {
   }
 
   public getAllBatches() {
-    return from(this.api.get('/batches', { schema: z.array(batchSchema) }));
+    return from(this.api.get('/batches', { schema: z.array(batchSchema) })).pipe(tap(({ data }) => this._batches.set(data)));
   }
 
   public updateBatchName(id: string, value: string) {
-    console.log('Updating batch name to:', value);
     return from(this.api.put('/batches/' + id, { body: { name: value } }));
   }
 }

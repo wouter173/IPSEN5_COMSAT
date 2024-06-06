@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import nl.codefusion.comsat.dao.BatchContactEntryDao;
 import nl.codefusion.comsat.dao.BatchDao;
 import nl.codefusion.comsat.dao.ContactDao;
+import nl.codefusion.comsat.dto.BatchContactDto;
 import nl.codefusion.comsat.dto.BatchDto;
 import nl.codefusion.comsat.models.BatchContactEntryModel;
 import nl.codefusion.comsat.models.BatchModel;
@@ -35,10 +36,18 @@ public class BatchService {
 
         BatchModel newBatch = batchDao.create(batch);
 
-        for (ContactModel contactDto : batchDto.getContacts()) {
-            ContactModel contact = contactDao.findByNickname(contactDto.getNickname());
+        for (BatchContactDto batchContactDto : batchDto.getContacts()) {
+            ContactModel contact = contactDao.findByNickname(batchContactDto.getNickname());
             if (contact == null) {
-                contact = contactDao.create(contact);
+                contact = contactDao.create(ContactModel.builder()
+                        .audience(batchContactDto.getAudience())
+                        .firstName(batchContactDto.getFirstName())
+                        .nickname(batchContactDto.getNickname())
+                        .language(batchContactDto.getLanguage())
+                        .region(batchContactDto.getRegion())
+                        .platform(batchContactDto.getPlatform())
+                        .sex(batchContactDto.getSex())
+                        .build());
             }
 
             BatchContactEntryModel batchContactEntryModel = BatchContactEntryModel.builder()

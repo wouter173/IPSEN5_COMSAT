@@ -4,8 +4,8 @@
     (selected && 'bg-base-5')
   "
 >
-  <div class="flex flex-col gap-1">
-    <h3 class="font-semibold">{{ batch.name }}</h3>
+  <div class="flex w-11/12 flex-col gap-1">
+    <h3 class="w-full truncate font-semibold">{{ batch.name }}</h3>
     <div class="grid grid-cols-[min-content,1fr] gap-x-1 text-xs opacity-50">
       <span class="text-right font-medium">Status:</span>
       <span>{{ { NOTSENT: "Preparing", SENDING: "Sending...", SENT: "Sent" }[batch.state] }}</span>

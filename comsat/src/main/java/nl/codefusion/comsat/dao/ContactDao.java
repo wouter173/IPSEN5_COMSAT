@@ -36,6 +36,9 @@ public class ContactDao {
             Optional.ofNullable(contactDetails.getNickname()).ifPresent(contact::setNickname);
             Optional.ofNullable(contactDetails.getAudience()).ifPresent(contact::setAudience);
             Optional.ofNullable(contactDetails.getSex()).ifPresent(contact::setSex);
+            Optional.ofNullable(contactDetails.getLanguage()).ifPresent(contact::setLanguage);
+            Optional.ofNullable(contactDetails.getRegion()).ifPresent(contact::setRegion);
+            Optional.ofNullable(contactDetails.getPlatform()).ifPresent(contact::setPlatform);
             return contactRepository.save(contact);
         }).orElseThrow();
     }

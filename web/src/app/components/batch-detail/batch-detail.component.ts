@@ -1,14 +1,13 @@
-import { Component, computed, effect, inject, Inject, Input, signal, Signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, computed, inject, Input, Signal, effect } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { LucideAngularModule } from 'lucide-angular';
+import { Contact } from '../../models/contact';
+import { platforms } from '../../models/platform';
 import { BatchesService } from '../../services/batches.service';
 import { ContactsService } from '../../services/contacts.service';
-import { Batch } from '../../models/batch';
-import { LucideAngularModule } from 'lucide-angular';
-import { platforms } from '../../models/platform';
+import { sleep } from '../../utils/mindelay';
 import { SpinnerComponent } from '../spinner/spinner.component';
-import { minDelay, sleep } from '../../utils/mindelay';
-import { Contact } from '../../models/contact';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-batch-detail',
@@ -21,12 +20,22 @@ export class BatchDetailComponent {
   @Input() selectedBatchId!: Signal<string | null>;
 
   public batchesService = inject(BatchesService);
-  public selectedBatch = computed(() => this.batchesService.batches().find((batch) => batch.id === this.selectedBatchId()));
+  public contactService = inject(ContactsService);
+
   public editingContact: Contact | null = null;
   public batchEditmode = false;
   public platforms = platforms;
 
-  constructor(private contactService: ContactsService) {}
+  public selectedBatch = computed(() => this.batchesService.batches().find((batch) => batch.id === this.selectedBatchId()));
+  public usedPlatforms = computed(() => {
+    return this.selectedBatch()?.contacts.reduce<string[]>((acc, cur) => (acc.includes(cur.platform) ? acc : [...acc, cur.platform]), []);
+  });
+
+  constructor() {
+    effect(() => {
+      console.log(this.batchesService.batches());
+    });
+  }
 
   get batchName(): string {
     return this.selectedBatch()?.name || '';
@@ -113,11 +122,11 @@ export class BatchDetailComponent {
   }
 
   onSaveClick() {
-    //Click the save button in editing mode
-    console.log(this.editingContact?.nickname);
     if (this.editingContact) {
       this.contactService.updateContact(this.editingContact.id, this.editingContact).subscribe((updateContact) => {
         this.editingContact = null;
+
+        this.batchesService.getAllBatches().subscribe();
       });
     }
   }
