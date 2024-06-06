@@ -47,8 +47,6 @@ export class BatchesService {
 
   public updateBatchName(id: string, value: string) {
     console.log('Updating batch name to:', value);
-
-    const endpoint = '/batches/' + id;
-    return from(this.api.put(endpoint, {body: {value}}));
+    return from(this.api.put('/batches/' + id, { body: { value } }));
   }
 }
