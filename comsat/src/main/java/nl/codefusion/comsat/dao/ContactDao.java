@@ -20,6 +20,8 @@ public class ContactDao {
         return contactRepository.findContactByNickname(nickname);
     }
 
+
+
     public List<ContactModel> getAllContacts() {
         return contactRepository.findAll();
     }
