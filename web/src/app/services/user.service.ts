@@ -17,15 +17,14 @@ export class UserService {
   }
 
   public async updateMe() {
-    const result = await this.api.get('/users/me');
-    const data = z
-      .object({
-        username: z.string(),
-        role: z.string(),
-        mfaEnabled: z.boolean(),
-      })
-      .parse(await result.json());
+    const schema = z.object({
+      username: z.string(),
+      role: z.string(),
+      mfaEnabled: z.boolean(),
+    });
 
-    this._me.set(data);
+    const { data } = await this.api.get('/users/me', { schema });
+
+    this._me.set(data!);
   }
 }

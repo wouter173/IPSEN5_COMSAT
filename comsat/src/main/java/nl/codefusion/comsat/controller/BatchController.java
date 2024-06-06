@@ -1,41 +1,35 @@
 package nl.codefusion.comsat.controller;
 
+import lombok.RequiredArgsConstructor;
 import nl.codefusion.comsat.dao.BatchDao;
+import nl.codefusion.comsat.dao.ContactDao;
+import nl.codefusion.comsat.dto.BatchDto;
 import nl.codefusion.comsat.models.BatchModel;
-import nl.codefusion.comsat.models.ContactModel;
-import nl.codefusion.comsat.dto.OmitIdBatchDto;
-import nl.codefusion.comsat.service.BatchProcesses;
-import org.springframework.beans.factory.annotation.Autowired;
+import nl.codefusion.comsat.service.BatchService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 @RequestMapping(value = "/api/v1")
 @RestController
+@RequiredArgsConstructor
 public class BatchController {
 
-    @Autowired
-    private BatchProcesses batchProcesses;
+    private final BatchService batchService;
+    private final BatchDao batchDao;
+    private final ContactDao contactDao;
 
-    @Autowired
-    private BatchDao batchDao;
+    private final Set<BatchModel> sentBatches = new HashSet<>();
 
-    private Set<BatchModel> sentBatches = new HashSet<>();
     @PostMapping("/batch")
-    public ResponseEntity<String> handleBatch(@RequestBody OmitIdBatchDto batchModel) {
-        BatchModel batch = new BatchModel();
-        List<ContactModel> contacts = batchModel.getContacts();
-        for (ContactModel contact : contacts) {
-            contact.setId(UUID.randomUUID());
-        }
-        batch.setContacts(contacts);
-        batch.setName(batchModel.getName());
+    public ResponseEntity<String> handleBatch(@Validated @RequestBody BatchDto batchDto) {
 
-        batch.setState("NOTSENT");
-        batchModel.setState("NOTSENT");
-        batchProcesses.processBatch(batch);
-        batchProcesses.saveBatch(batch);
+        batchService.processBatch(batchDto);
 
         return ResponseEntity.ok("Batch processed successfully");
     }
