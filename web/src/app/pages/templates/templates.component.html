@@ -1,10 +1,10 @@
 <div class="flex min-h-full w-full">
   <div class="min-w-60">
     <div class="h-full min-w-96 border-r border-r-base-6">
-      <ul class="flex flex-col gap-2.5 p-2.5" *ngFor="let template of templates">
+      <ul class="flex flex-col gap-2.5 p-2.5" *ngFor="let template of templates()">
         <li>
           <app-template-list-item
-            [selected]="template.id == selectedTemplate?.id"
+            [selected]="template.id == selectedTemplate()?.id"
             (templateEmitter)="receiveTemplate($event)"
             [template]="template"
           />
@@ -35,7 +35,7 @@
     </div>
     <div class="flex flex-col gap-1">
       <label for="platform" class="text-sm font-semibold">Platform</label>
-      <select [value]="selectedTemplate?.platform" id="platform" class="rounded-md border-2 px-2 py-1">
+      <select [value]="selectedTemplate()?.platform" id="platform" class="rounded-md border-2 px-2 py-1">
         @for (platform of platforms; track platform) {
           <option [value]="platform">{{ platform }}</option>
         }
@@ -48,7 +48,7 @@
       <label for="editor" class="mb-1 text-sm font-semibold">Template</label>
 
       <mat-select id="language" [(value)]="selectedLanguage" (valueChange)="onDisplay()" class="rounded-md border-2 px-2 py-1">
-        @for (translation of selectedTemplate?.translations; track $index) {
+        @for (translation of selectedTemplate()?.translations; track $index) {
           <mat-option [value]="translation.language">{{ translation.language }}</mat-option>
         }
         <mat-option (click)="newLanguage()">new language</mat-option>

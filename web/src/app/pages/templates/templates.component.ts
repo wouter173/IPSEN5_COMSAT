@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { HttpClientModule } from '@angular/common/http';
 import { Editor, NgxEditorModule } from 'ngx-editor';
@@ -41,8 +41,10 @@ export class TemplatesComponent {
   selectedLanguage = 'english';
 
   sendedData: Template | undefined;
-  templates: Template[] = [];
-  selectedTemplate: Template | undefined;
+
+  selectedTemplateId = signal<string | null>(null);
+  templates = this.templateService.templates;
+  selectedTemplate = computed(() => (this.templates() ? this.templates().find((t) => t.id === this.selectedTemplateId()) : undefined));
 
   platforms = platforms;
 
@@ -55,32 +57,31 @@ export class TemplatesComponent {
   }
 
   async loadTemplates() {
-    this.templates = await this.templateService.getTemplates();
-    this.selectedTemplate = this.templates[0];
     this.onDisplay();
   }
 
   onTextChanged() {
-    this.selectedTemplate!.translations!.find((t) => t.language === this.selectedLanguage)!.body = this.templateBody;
+    this.selectedTemplate()!.translations!.find((t) => t.language === this.selectedLanguage)!.body = this.templateBody;
   }
 
   onDisplay() {
-    this.templateHeader = this.selectedTemplate!.header;
+    this.templateHeader = this.selectedTemplate()!.header;
     console.log(this.selectedTemplate!);
-    const translation = this.selectedTemplate!.translations!.find((t) => t.language === this.selectedLanguage);
+    const translation = this.selectedTemplate()!.translations!.find((t) => t.language === this.selectedLanguage);
     this.templateBody = translation!.body;
   }
 
   onSave() {
     if (this.selectedTemplate) {
-      this.selectedTemplate.header = this.templateHeader;
-      this.selectedTemplate.lastModified = new Date().toISOString();
-      this.templateService.updateTemplate(this.selectedTemplate);
+      this.selectedTemplate()!.header = this.templateHeader;
+      this.selectedTemplate()!.lastModified = new Date().toISOString();
+
+      this.templateService.updateTemplate(this.selectedTemplate()!);
     }
   }
 
   receiveTemplate(template: Template) {
-    this.selectedTemplate = template;
+    this.selectedTemplateId.set(template.id);
     this.onDisplay();
   }
 
@@ -94,7 +95,7 @@ export class TemplatesComponent {
         this.selectedLanguage = 'english';
         return;
       }
-      this.selectedTemplate!.translations!.push({
+      this.selectedTemplate()!.translations!.push({
         language: result,
         body: '',
       });
@@ -103,8 +104,9 @@ export class TemplatesComponent {
   }
 
   onNewTemplate() {
-    this.selectedTemplate = {
-      id: uuidv4(),
+    const id = uuidv4();
+    this.templates().push({
+      id,
       platform: 'kik' as 'snapchat' | 'kik' | 'whatsapp' | 'instagram' | 'telegram',
       header: '',
       body: '',
@@ -117,7 +119,8 @@ export class TemplatesComponent {
       metadata: '',
       lastModified: new Date().toISOString(),
       createdAt: new Date().toISOString(),
-    };
+    });
+    this.selectedTemplateId.set(id);
     this.onDisplay();
   }
 }

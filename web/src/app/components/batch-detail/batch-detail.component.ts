@@ -8,12 +8,13 @@ import { BatchesService } from '../../services/batches.service';
 import { ContactsService } from '../../services/contacts.service';
 import { sleep } from '../../utils/mindelay';
 import { SpinnerComponent } from '../spinner/spinner.component';
+import { TemplatesService } from '../../services/templates.service';
+import { Template } from '../../models/templates';
 
 @Component({
   selector: 'app-batch-detail',
   standalone: true,
   templateUrl: './batch-detail.component.html',
-  styleUrl: './batch-detail.component.scss',
   imports: [LucideAngularModule, SpinnerComponent, FormsModule, CommonModule],
 })
 export class BatchDetailComponent {
@@ -21,21 +22,26 @@ export class BatchDetailComponent {
 
   public batchesService = inject(BatchesService);
   public contactService = inject(ContactsService);
+  public templateService = inject(TemplatesService);
 
   public editingContact: Contact | null = null;
   public batchEditmode = false;
   public platforms = platforms;
 
+  public templates = this.templateService.templates;
   public selectedBatch = computed(() => this.batchesService.batches().find((batch) => batch.id === this.selectedBatchId()));
   public usedPlatforms = computed(() => {
     return this.selectedBatch()?.contacts.reduce<string[]>((acc, cur) => (acc.includes(cur.platform) ? acc : [...acc, cur.platform]), []);
   });
 
-  constructor() {
-    effect(() => {
-      console.log(this.batchesService.batches());
+  public platformTemplateMap = computed(() => {
+    const map = new Map<string, Template[]>();
+    this.usedPlatforms()?.forEach((platform) => {
+      const templates = this.templates()?.filter((template) => template.platform === platform);
+      map.set(platform, templates);
     });
-  }
+    return map;
+  });
 
   get batchName(): string {
     return this.selectedBatch()?.name || '';
