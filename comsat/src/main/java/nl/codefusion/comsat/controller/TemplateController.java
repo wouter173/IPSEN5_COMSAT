@@ -30,9 +30,7 @@ public class TemplateController {
         templateModel.setHeader(templateDto.getHeader());
         templateModel.setBody(templateDto.getBody());
         templateModel.setMetadata(templateDto.getMetadata());
-        templateModel.setUpdatedAt(templateDto.getUpdatedAt());
-        templateModel.setCreatedAt(templateDto.getCreatedAt());
-        templateDao.update(templateDto.getId() ,templateModel);
+        templateDao.update(templateDto.getId(), templateModel);
         return ResponseEntity.ok().body(templateDao.getById(templateModel.getId()));
     }
 

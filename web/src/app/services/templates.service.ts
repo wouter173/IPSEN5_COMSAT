@@ -24,7 +24,7 @@ export class TemplatesService {
       header: template.header,
       body: JSON.stringify(template.translations),
       metadata: template.metadata,
-      updatedAt: template.updatedAt,
+      lastModified: template.lastModified,
       createdAt: template.createdAt,
     };
 

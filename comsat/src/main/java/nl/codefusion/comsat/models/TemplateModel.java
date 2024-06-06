@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
 import java.util.UUID;
@@ -16,7 +18,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @Entity
 public class TemplateModel {
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -33,9 +34,11 @@ public class TemplateModel {
     @Column(name = "metadata")
     private String metadata;
 
-    @Column(name = "updated_at")
-    private Date updatedAt;
+    @UpdateTimestamp
+    @Column(name = "last_modified", nullable = false)
+    private Date lastModified;
 
-    @Column(name = "created_at")
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false)
     private Date createdAt;
 }

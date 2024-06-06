@@ -47,8 +47,6 @@ export class TemplatesComponent {
     this.loadTemplates();
   }
 
-
-
   ngOnDestroy() {
     this.editor.destroy();
   }
@@ -58,7 +56,6 @@ export class TemplatesComponent {
     this.selectedTemplate = this.templates[0];
     this.onDisplay();
   }
-
 
   onTextChanged() {
     this.selectedTemplate!.translations!.find((t) => t.language === this.selectedLanguage)!.body = this.templateBody;
@@ -73,7 +70,7 @@ export class TemplatesComponent {
   onSave() {
     if (this.selectedTemplate) {
       this.selectedTemplate.header = this.templateHeader;
-      this.selectedTemplate.updatedAt = new Date().toISOString();
+      this.selectedTemplate.lastModified = new Date().toISOString();
       this.templateService.updateTemplate(this.selectedTemplate);
     }
   }
@@ -114,7 +111,7 @@ export class TemplatesComponent {
         },
       ],
       metadata: '',
-      updatedAt: new Date().toISOString(),
+      lastModified: new Date().toISOString(),
       createdAt: new Date().toISOString(),
     };
     this.onDisplay();
