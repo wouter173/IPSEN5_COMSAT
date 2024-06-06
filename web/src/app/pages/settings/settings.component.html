@@ -1,0 +1,11 @@
+<div class="p-8">
+  <section class="flex w-fit flex-col gap-2">
+    @if (mfaEnabled()) {
+      <h1 class="text-lg font-semibold">2fa: Enabled</h1>
+      <app-settings-totp-disable-modal />
+    } @else {
+      <h1 class="text-lg font-semibold">2fa: Disabled</h1>
+      <app-settings-totp-enable-modal />
+    }
+  </section>
+</div>
