@@ -2,9 +2,13 @@ package nl.codefusion.comsat.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.util.List;
 import java.util.UUID;
 
 @Table(name = "contact")
@@ -15,15 +19,9 @@ import java.util.UUID;
 @Entity
 public class ContactModel {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
-
-
 
     @Column(name = "firstname")
     private String firstName;
@@ -40,18 +38,13 @@ public class ContactModel {
     @Column(name = "sex")
     private String sex;
 
-    @Column(name="language")
+    @Column(name = "language")
     private String language;
 
     @Column(name = "region")
     private String region;
 
-    @Column(name = "status")
-    private String status;
-
     @JsonBackReference
-    @ManyToOne
-    @JoinColumn(name = "batch_id", referencedColumnName = "id")
-    private BatchModel batch;
-
+    @OneToMany(mappedBy = "contact")
+    private List<BatchContactEntryModel> batchContacts;
 }

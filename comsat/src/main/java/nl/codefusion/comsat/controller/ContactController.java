@@ -24,7 +24,6 @@ public class ContactController {
     private final ContactRepository contactRepository;
 
     private final PermissionService permissionService;
-
     private final ContactDao contactDao;
 
     private final ContactService contactService;

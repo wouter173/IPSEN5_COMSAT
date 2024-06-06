@@ -26,6 +26,7 @@
     "clsx": "^2.1.0",
     "lucide-angular": "^0.379.0",
     "nanoid": "^5.0.7",
+    "ng-otp-input": "^1.9.3",
     "ngx-editor": "^17.0.2",
     "ngx-toastr": "^18.0.0",
     "primeng": "^17.13.0",

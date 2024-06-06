@@ -22,15 +22,14 @@ public class ContactService {
     }
 
     public ContactModel convertDtoToModel(ContactDto contactDto) {
-    return ContactModel.builder()
-            .firstName(contactDto.getFirstName())
-            .nickname(contactDto.getNickname())
-            .platform(contactDto.getPlatform())
-            .audience(contactDto.getAudience())
-            .sex(contactDto.getSex())
-            .language(contactDto.getLanguage())
-            .region(contactDto.getRegion())
-            .status(contactDto.getStatus())
-            .build();
-}
+        return ContactModel.builder()
+                .firstName(contactDto.getFirstName())
+                .nickname(contactDto.getNickname())
+                .platform(contactDto.getPlatform())
+                .audience(contactDto.getAudience())
+                .sex(contactDto.getSex())
+                .language(contactDto.getLanguage())
+                .region(contactDto.getRegion())
+                .build();
+    }
 }

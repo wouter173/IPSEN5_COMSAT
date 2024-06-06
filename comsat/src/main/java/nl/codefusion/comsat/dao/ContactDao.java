@@ -18,6 +18,10 @@ public class ContactDao {
         return contactRepository.save(contactModel);
     }
 
+    public ContactModel findByNickname(String nickname) {
+        return contactRepository.findContactByNickname(nickname);
+    }
+
     public List<ContactModel> getAllContacts() {
         return contactRepository.findAll();
     }

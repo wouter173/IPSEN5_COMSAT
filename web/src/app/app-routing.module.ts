@@ -8,6 +8,7 @@ import { BatchesComponent } from './pages/batches/batches.component';
 import { LoginComponent } from './pages/login/login.component';
 import { TemplatesComponent } from './pages/templates/templates.component';
 import { authGuard } from './guards/auth.guard';
+import { SettingsComponent } from './pages/settings/settings.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -16,6 +17,7 @@ export const routes: Routes = [
     path: '',
     component: DashboardComponent,
     children: [
+      { path: 'settings', component: SettingsComponent },
       { path: 'batches', component: BatchesComponent },
       { path: 'contacts', component: ContactsComponent },
       { path: 'templates', component: TemplatesComponent },
