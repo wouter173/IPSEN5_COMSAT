@@ -1,5 +1,6 @@
 package nl.codefusion.comsat.service;
 
+import nl.codefusion.comsat.engine.KikEngine;
 import nl.codefusion.comsat.models.BatchModel;
 import nl.codefusion.comsat.models.ContactModel;
 import nl.codefusion.comsat.repository.BatchRepository;
@@ -16,7 +17,7 @@ public class BatchProcesses {
     private final BatchRepository batchRepository;
 
     @Autowired
-    public BatchProcesses(BatchRepository batchRepository) {
+    public BatchProcesses(BatchRepository batchRepository, KikEngine kikEngine) {
         this.batchRepository = batchRepository;
     }
 
