@@ -13,6 +13,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class BatchContactEntryDao {
     private final ContactDao contactDao;
+
     private final BatchContactEntryRepository batchContactEntryRepository;
 
     public BatchContactEntryModel create(BatchContactEntryModel contactToBatchModel) {
@@ -22,6 +23,7 @@ public class BatchContactEntryDao {
     public BatchContactEntryModel updateBatchStatusByUsername(String nickName, String status) {
         ContactModel contact = contactDao.findByNickname(nickName);
 
+
         // TODO: Get Batch id and and don't use getFirst
         BatchContactEntryModel contactToBatch = contact.getBatchContacts().getFirst();
         contactToBatch.setStatus(status);
@@ -29,8 +31,10 @@ public class BatchContactEntryDao {
         return batchContactEntryRepository.save(contactToBatch);
     }
 
+
     public List<BatchContactEntryModel> findAllByBatchId(UUID batchId) {
 
         return batchContactEntryRepository.findAllByBatchId(batchId);
     }
+
 }
