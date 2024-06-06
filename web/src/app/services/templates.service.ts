@@ -13,12 +13,12 @@ export class TemplatesService {
   constructor() {}
 
   public async getTemplates() {
-    const results = await this.api.get('/templates');
-    const data = z.array(templateSchema).parse(await results.response.json());
-    data.forEach((template) => {
+    const {data} = await this.api.get('/templates', {schema: z.array(templateSchema)});
+  
+    return data!.map((template) => {
       template.translations = JSON.parse(template.body);
+      return template;
     });
-    return data;
   }
 
   public async updateTemplate(template: Template) {
@@ -32,5 +32,9 @@ export class TemplatesService {
       createdAt: template.createdAt,
     };
     await this.api.post(`/templates`, { body: template });
+  }
+
+  deleteTemplate(id: string) {
+    this.api.delete("/templates/" + id);
   }
 }

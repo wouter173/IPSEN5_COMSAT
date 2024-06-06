@@ -23,6 +23,7 @@
     <div class="buttons min-w-96">
       <button class="m-5 h-min w-20 rounded-xl border bg-green-200" (click)="onSave()">Save</button>
       <button class="m-5 h-min w-20 rounded-xl border bg-green-200" (click)="onNewTemplate()">New</button>
+      <button class="m-5 h-min w-20 rounded-xl border bg-red-200" (click)="onDelete()">Delete</button>
       <mat-select [(value)]="selectedLanguage" (valueChange)="onDisplay()">
         @for (translation of selectedTemplate?.translations; track $index) {
           <mat-option [value]="translation.language">{{ translation.language }}</mat-option>

@@ -9,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/api/v1/templates")
@@ -34,6 +35,12 @@ public class TemplateController {
         templateModel.setCreatedAt(templateDto.getCreatedAt());
         templateDao.update(templateDto.getId() ,templateModel);
         return ResponseEntity.ok().body(templateDao.getById(templateModel.getId()));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteTemplate(@PathVariable UUID id) {
+        templateDao.delete(id);
+        return ResponseEntity.ok().build();
     }
 
 

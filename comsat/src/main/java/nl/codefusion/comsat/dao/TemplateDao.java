@@ -41,4 +41,8 @@ public class TemplateDao {
         Optional<TemplateModel> template = templateRepository.findById(id);
         return template.orElse(null);
     }
+
+    public void delete(UUID id) {
+        templateRepository.deleteById(id);
+    }
 }

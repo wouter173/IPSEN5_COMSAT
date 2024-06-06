@@ -47,8 +47,6 @@ export class TemplatesComponent {
     this.loadTemplates();
   }
 
-
-
   ngOnDestroy() {
     this.editor.destroy();
   }
@@ -75,6 +73,14 @@ export class TemplatesComponent {
       this.selectedTemplate.header = this.templateHeader;
       this.selectedTemplate.updatedAt = new Date().toISOString();
       this.templateService.updateTemplate(this.selectedTemplate);
+    }
+  }
+
+  onDelete() {
+    if(confirm("Are you sure to delete " + this.selectedTemplate?.header + "?")) {
+      this.templateService.deleteTemplate(this.selectedTemplate!.id);
+      this.selectedTemplate = this.templates[0];
+      this.onDisplay();
     }
   }
 
