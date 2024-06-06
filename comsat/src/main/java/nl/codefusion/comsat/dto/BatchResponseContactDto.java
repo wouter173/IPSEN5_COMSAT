@@ -8,6 +8,8 @@ import java.util.UUID;
 @Data
 @Builder
 public class BatchResponseContactDto {
+
+    // Contact fields
     private UUID id;
     private String firstName;
     private String nickname;
@@ -16,5 +18,8 @@ public class BatchResponseContactDto {
     private String sex;
     private String language;
     private String region;
+
+    // BatchContactEntry fields
     private String status;
+    private Boolean hidden;
 }

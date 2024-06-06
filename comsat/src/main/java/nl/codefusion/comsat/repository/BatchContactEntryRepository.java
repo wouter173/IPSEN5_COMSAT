@@ -9,4 +9,6 @@ import java.util.UUID;
 
 public interface BatchContactEntryRepository extends JpaRepository<BatchContactEntryModel, UUID> {
     List<BatchContactEntryModel> findAllByBatchId(UUID batchId);
+
+    BatchContactEntryModel findByBatchIdAndContactId(UUID batchId, UUID contactId);
 }

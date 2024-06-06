@@ -3,9 +3,7 @@ package nl.codefusion.comsat.controller;
 import lombok.RequiredArgsConstructor;
 import nl.codefusion.comsat.dao.BatchContactEntryDao;
 import nl.codefusion.comsat.dao.BatchDao;
-import nl.codefusion.comsat.dto.BatchDto;
-import nl.codefusion.comsat.dto.BatchResponseContactDto;
-import nl.codefusion.comsat.dto.BatchResponseDto;
+import nl.codefusion.comsat.dto.*;
 import nl.codefusion.comsat.models.BatchContactEntryModel;
 import nl.codefusion.comsat.models.BatchModel;
 import nl.codefusion.comsat.models.ContactModel;
@@ -13,7 +11,6 @@ import nl.codefusion.comsat.service.BatchService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import jakarta.persistence.EntityNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,29 +33,35 @@ public class BatchController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BatchModel> updateBatchName(@PathVariable UUID id, @RequestBody String newName) {
-        try {
-            BatchModel updatedBatch = batchService.updateBatchName(id, newName);
-            return ResponseEntity.ok(updatedBatch);
-        } catch (EntityNotFoundException e) {
+    public ResponseEntity<BatchModel> updateBatchName(@PathVariable UUID id, @RequestBody BatchOptionsDto batchOptionsDto) {
+        BatchModel batch = batchDao.findById(id);
+        if (batch == null) {
             return ResponseEntity.notFound().build();
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(null);
         }
+
+        batch.setName(batchOptionsDto.getName());
+        BatchModel updatedBatch = batchDao.update(id, batch);
+
+        return ResponseEntity.ok(updatedBatch);
     }
 
     @GetMapping()
-    public ResponseEntity<List<BatchModel>> getAllBatches() {
+    public ResponseEntity<List<BatchResponseDto>> getAllBatches() {
         List<BatchModel> batches = batchDao.getAllBatches();
 
         List<BatchResponseDto> batchesResponse = new ArrayList<>();
         for (BatchModel batch : batches) {
+            List<BatchContactEntryModel> undeletedContacts = batchContactEntryDao.findAllByBatchId(batch.getId()).stream()
+                    .filter(entry -> !entry.getContact().isDeleted())
+                    .toList();
+
             List<BatchResponseContactDto> contacts = new ArrayList<>();
-            for (BatchContactEntryModel contactEntryModel : batchContactEntryDao.findAllByBatchId(batch.getId())) {
+            for (BatchContactEntryModel contactEntryModel : undeletedContacts) {
                 ContactModel contact = contactEntryModel.getContact();
 
                 contacts.add(BatchResponseContactDto.builder()
                         .status(contactEntryModel.getStatus())
+                        .hidden(contactEntryModel.isHidden())
                         .sex(contact.getSex())
                         .nickname(contact.getNickname())
                         .platform(contact.getPlatform())
@@ -87,11 +90,72 @@ public class BatchController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BatchModel> getBatch(UUID id) {
+    public ResponseEntity<BatchResponseDto> getBatch(UUID id) {
         BatchModel batch = batchDao.findById(id);
         if (batch == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(batch);
+
+
+        List<BatchContactEntryModel> undeletedContacts = batchContactEntryDao.findAllByBatchId(batch.getId()).stream()
+                .filter(entry -> !entry.getContact().isDeleted())
+                .toList();
+
+        List<BatchResponseContactDto> contacts = new ArrayList<>();
+        for (BatchContactEntryModel contactEntryModel : undeletedContacts) {
+            ContactModel contact = contactEntryModel.getContact();
+
+            contacts.add(BatchResponseContactDto.builder()
+                    .status(contactEntryModel.getStatus())
+                    .hidden(contactEntryModel.isHidden())
+                    .sex(contact.getSex())
+                    .nickname(contact.getNickname())
+                    .platform(contact.getPlatform())
+                    .region(contact.getRegion())
+                    .language(contact.getLanguage())
+                    .id(contact.getId())
+                    .firstName(contact.getFirstName())
+                    .audience(contact.getAudience())
+                    .build());
+        }
+
+
+        BatchResponseDto batchResponseDto = BatchResponseDto.builder()
+                .id(batch.getId())
+                .state(batch.getState())
+                .name(batch.getName())
+                .createdAt(batch.getCreatedAt().toString())
+                .lastModified(batch.getLastModified().toString())
+                .contacts(contacts)
+                .build();
+
+
+        return ResponseEntity.ok(batchResponseDto);
+    }
+
+
+    @PutMapping("/{batchId}/contacts/{contactId}")
+    public ResponseEntity<BatchResponseContactDto> updateContactStatus(@PathVariable UUID batchId, @PathVariable UUID contactId, @RequestBody BatchEntryRequestDto batchEntryRequestDto) {
+        BatchContactEntryModel entryModel = batchContactEntryDao.findByBatchIdAndContactId(batchId, contactId);
+
+        entryModel.setHidden(batchEntryRequestDto.getHidden());
+
+        BatchContactEntryModel contactEntryModel = batchContactEntryDao.update(entryModel.getId(), entryModel);
+        ContactModel contact = contactEntryModel.getContact();
+
+        BatchResponseContactDto batchResponseContactDto = BatchResponseContactDto.builder()
+                .status(contactEntryModel.getStatus())
+                .hidden(contactEntryModel.isHidden())
+                .sex(contact.getSex())
+                .nickname(contact.getNickname())
+                .platform(contact.getPlatform())
+                .region(contact.getRegion())
+                .language(contact.getLanguage())
+                .id(contact.getId())
+                .firstName(contact.getFirstName())
+                .audience(contact.getAudience())
+                .build();
+
+        return ResponseEntity.ok(batchResponseContactDto);
     }
 }

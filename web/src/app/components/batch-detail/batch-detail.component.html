@@ -1,42 +1,43 @@
 <div class="flex w-full flex-col gap-8 p-8">
   @if (selectedBatch()) {
     <div class="flex justify-between">
-      <div *ngIf="!batchEditmode; else editMode">
-        <h1 class="text-3xl font-semibold">{{ batchName }}</h1>
+      <div class="group flex gap-2">
+        <h1 *ngIf="!batchEditmode; else editMode" class="text-3xl font-semibold">{{ batchName }}</h1>
+
+        <ng-template #editMode>
+          <input autofocus [(ngModel)]="batchName" class="w-min rounded-md text-3xl font-semibold !outline !outline-2" />
+        </ng-template>
+        <button
+          (click)="toggleBatchEditMode()"
+          class="flex items-center gap-1 rounded-lg px-3 py-2 font-semibold text-black/40 transition-all group-hover:text-black"
+        >
+          <lucide-icon class="size-6" [name]="batchEditmode ? 'save' : 'edit-icon'" />
+        </button>
       </div>
-      <ng-template #editMode>
-        <input [(ngModel)]="batchName" class="text-3xl font-semibold"/>
-      </ng-template>
       <div class="flex gap-2">
-      <button
-        (click)="toggleBatchEditMode()"
-        class="flex items-center gap-1 rounded-lg bg-primary-blue-1 px-3 py-2 font-semibold text-white transition-all enabled:hover:bg-primary-blue-1/85 enabled:active:scale-[98%]"
-      >
-          <lucide-icon class="h-[16px]" [name]="batchEditmode ? 'save' : 'edit-icon'" />
-      </button>
-      @if (selectedBatch()?.state !== "SENT") {
-        <button
-          (click)="onSendClick()"
-          [disabled]="selectedBatch()?.state === 'SENDING'"
-          class="flex items-center justify-center gap-1 rounded-lg bg-primary-blue-1 px-3 py-2 font-semibold text-white transition-all enabled:hover:bg-primary-blue-1/85 enabled:active:scale-[98%]"
-        >
-          @if (selectedBatch()?.state === "NOTSENT") {
-            Send <lucide-icon class="h-[16px]" name="send-icon" />
-          } @else {
-            <div class="flex items-center justify-center gap-2">
-              Sending... <app-spinner class="h-5 w-5 animate-spin fill-white text-primary-blue-2" />
-            </div>
-          }
-        </button>
-      } @else {
-        <button
-          disabled
-          class="flex items-center justify-center gap-1 rounded-lg bg-green-600 px-3 py-2 font-semibold text-white transition-all"
-        >
-          Sent!
-        </button>
-      }
-    </div>
+        @if (selectedBatch()?.state !== "SENT") {
+          <button
+            (click)="onSendClick()"
+            [disabled]="selectedBatch()?.state === 'SENDING'"
+            class="flex items-center justify-center gap-1 rounded-lg bg-primary-blue-1 px-3 py-2 font-semibold text-white transition-all enabled:hover:bg-primary-blue-1/85 enabled:active:scale-[98%]"
+          >
+            @if (selectedBatch()?.state === "NOTSENT") {
+              Send <lucide-icon class="h-[16px]" name="send-icon" />
+            } @else {
+              <div class="flex items-center justify-center gap-2">
+                Sending... <app-spinner class="h-5 w-5 animate-spin fill-white text-primary-blue-2" />
+              </div>
+            }
+          </button>
+        } @else {
+          <button
+            disabled
+            class="flex items-center justify-center gap-1 rounded-lg bg-green-600 px-3 py-2 font-semibold text-white transition-all"
+          >
+            Sent!
+          </button>
+        }
+      </div>
     </div>
 
     <div class="grid grid-cols-2 gap-x-4 gap-y-6">
@@ -108,23 +109,34 @@
         <ul class="flex flex-col gap-2">
           @for (contact of selectedBatch()?.contacts; track contact.id) {
             <li>
-              <div class="flex flex-col gap-2.5 rounded-xl border border-black/5 bg-secondary-light-2/50 px-4 py-3.5" [class.gray-out]="selectedContacts.includes(contact)">
+              <div
+                class="flex flex-col gap-2.5 rounded-xl border border-black/5 bg-secondary-light-2/50 px-4 py-3.5 transition-all"
+                [class.gray-out]="contact.hidden"
+              >
                 <div class="flex justify-between">
                   <div class="flex items-center gap-2">
-                    <img src="/assets/telegram.png" alt="" class="size-8" />
+                    <img [src]="'/assets/platforms/' + contact.platform + '.png'" alt="" class="size-8" />
                     <div class="flex flex-col">
                       <span class="font-semibold" *ngIf="editingContact !== contact">{{ contact.firstName }}</span>
-                      <input [ngModel]="editingContact.firstName" (ngModelChange)="editingContact && (editingContact.firstName = $event)" *ngIf="editingContact === contact" />
+                      <input
+                        [ngModel]="editingContact.firstName"
+                        (ngModelChange)="editingContact && (editingContact.firstName = $event)"
+                        *ngIf="editingContact === contact"
+                      />
 
                       <span class="text-xs font-semibold text-[#676768]" *ngIf="editingContact !== contact">{{ contact.nickname }}</span>
-                      <input [ngModel]="editingContact.nickname" (ngModelChange)="editingContact && (editingContact.nickname = $event)" *ngIf="editingContact === contact" />
+                      <input
+                        [ngModel]="editingContact.nickname"
+                        (ngModelChange)="editingContact && (editingContact.nickname = $event)"
+                        *ngIf="editingContact === contact"
+                      />
                     </div>
                   </div>
                   <div class="flex cursor-pointer gap-3 opacity-30 transition-all hover:opacity-100">
-                    <lucide-icon *ngIf="editingContact !== contact" name="edit-icon" class="size-[16px]" (click)="onEditClick(contact)"/>
-                    <lucide-icon *ngIf="editingContact === contact" name="save" class="size-[16px]" (click)="onSaveClick()"/>
-                    <lucide-icon name="box-select" class="size-[16px]" (click)="grayOut(contact)"/>
-                    <lucide-icon name="trash-icon" class="size-[16px]" (click)="onDeleteClick(contact)"/>
+                    <lucide-icon *ngIf="editingContact !== contact" name="edit-icon" class="size-[16px]" (click)="onEditClick(contact)" />
+                    <lucide-icon *ngIf="editingContact === contact" name="save" class="size-[16px]" (click)="onSaveClick()" />
+                    <lucide-icon name="box-select" class="size-[16px]" (click)="grayOut(contact.id, contact.hidden)" />
+                    <lucide-icon name="trash-icon" class="size-[16px]" (click)="onDeleteClick(contact)" />
                   </div>
                 </div>
                 <div class="grid grid-cols-[120px,auto] text-sm font-medium">
@@ -143,14 +155,30 @@
                   }}</span>
                   <span class="text-[#676768]">Audience</span>
                   <span class="font-semibold text-[#676768]" *ngIf="editingContact !== contact"> {{ contact.audience }}</span>
-                  <input [ngModel]="editingContact.audience" (ngModelChange)="editingContact && (editingContact.audience = $event)" *ngIf="editingContact === contact" />
+                  <input
+                    [ngModel]="editingContact.audience"
+                    (ngModelChange)="editingContact && (editingContact.audience = $event)"
+                    *ngIf="editingContact === contact"
+                  />
 
                   <span class="text-[#676768]">Locale</span>
                   <span>{{ contact.language ? contact.region + " - " + contact.language : "-" }}</span>
 
                   <span class="text-[#676768]">Sex</span>
                   <span class="font-semibold text-[#676768]" *ngIf="editingContact !== contact"> {{ contact.sex }}</span>
-                  <input [ngModel]="editingContact?.sex" (ngModelChange)="editingContact && (editingContact.sex = $event)" *ngIf="editingContact === contact" />
+                  <input
+                    [ngModel]="editingContact.sex"
+                    (ngModelChange)="editingContact && (editingContact.sex = $event)"
+                    *ngIf="editingContact === contact"
+                  />
+
+                  <span class="text-[#676768]">Platform</span>
+                  <span class="font-semibold text-[#676768]" *ngIf="editingContact !== contact">{{ contact.platform }}</span>
+                  <input
+                    *ngIf="editingContact === contact"
+                    [ngModel]="editingContact.platform"
+                    (ngModelChange)="editingContact.platform = $event"
+                  />
                 </div>
               </div>
             </li>

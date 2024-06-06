@@ -12,6 +12,10 @@ type Options<T extends ZodSchema> = Partial<{
   version: 'v1';
 }>;
 
+type ApiResponse<T extends ZodSchema | undefined = undefined> = T extends ZodSchema
+  ? { response: Response; data: z.infer<T> }
+  : { response: Response };
+
 @Injectable({ providedIn: 'root' })
 export class ApiService {
   private auth = inject(AuthService);
@@ -22,7 +26,7 @@ export class ApiService {
     method: 'GET' | 'POST' | 'PUT' | 'DELETE',
     endpoint: string,
     options?: Options<T>,
-  ): Promise<{ response: Response; data?: z.infer<T> }> {
+  ): Promise<ApiResponse<T>> {
     options = { authorized: true, version: 'v1', ...options };
 
     const baseUrl = '/api/' + options.version;
@@ -55,10 +59,10 @@ export class ApiService {
         const json = await response.json();
         const data = options.schema.parse(json);
 
-        return { response, data } as const;
+        return { response, data } as ApiResponse<T>;
       }
 
-      return { response, data: undefined } as const;
+      return { response } as ApiResponse<T>;
     } catch (error) {
       this.toastr.error('An error occurred');
       console.error(error);

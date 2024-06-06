@@ -22,6 +22,10 @@ public class ContactDao {
         return contactRepository.findContactByNickname(nickname);
     }
 
+    public ContactModel findById(UUID id) {
+        return contactRepository.findById(id).orElse(null);
+    }
+
     public List<ContactModel> getAllContacts() {
         return contactRepository.findAll();
     }

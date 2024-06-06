@@ -1,52 +1,54 @@
 package nl.codefusion.comsat.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import nl.codefusion.comsat.dao.BatchContactEntryDao;
+import nl.codefusion.comsat.dao.BatchDao;
+import nl.codefusion.comsat.dao.ContactDao;
+import nl.codefusion.comsat.dto.BatchDto;
+import nl.codefusion.comsat.models.BatchContactEntryModel;
 import nl.codefusion.comsat.models.BatchModel;
 import nl.codefusion.comsat.models.ContactModel;
-import nl.codefusion.comsat.repository.BatchRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class BatchService {
 
-    private final BatchRepository batchRepository;
+    private final BatchDao batchDao;
+    private final BatchContactEntryDao batchContactEntryDao;
+    private final ContactDao contactDao;
 
-    public void processBatch(BatchModel batch) {
-        batch.setState("processed");
+    @Transactional
+    public void processBatch(BatchDto batchDto) {
+        BatchModel batch = new BatchModel();
 
-        UUID newId = UUID.randomUUID();
-        batch.setId(newId);
+        batch.setName(batchDto.getName());
+        batch.setState("NOTSENT");
         batch.setLastModified(new Date());
 
         if (batch.getCreatedAt() == null) {
             batch.setCreatedAt(new Date());
         }
-        for (ContactModel contact : batch.getContacts()) {
-            contact.setBatch(batch);
+
+        BatchModel newBatch = batchDao.create(batch);
+
+        for (ContactModel contactDto : batchDto.getContacts()) {
+            ContactModel contact = contactDao.findByNickname(contactDto.getNickname());
+            if (contact == null) {
+                contact = contactDao.create(contact);
+            }
+
+            BatchContactEntryModel batchContactEntryModel = BatchContactEntryModel.builder()
+                    .contact(contact)
+                    .batch(newBatch)
+                    .status("NOTSENT")
+                    .build();
+
+            batchContactEntryDao.create(batchContactEntryModel);
         }
-    }
 
-    public BatchModel updateBatchName(UUID id, String newName) {
-    BatchModel batch = batchRepository.findById(id).orElse(null);
-    if (batch == null) {
-        throw new EntityNotFoundException("Batch not found");
     }
-    if (newName == null || newName.trim().isEmpty()) {
-        throw new IllegalArgumentException("New name cannot be null or empty");
-    }
-    batch.setName(newName);
-    return batchRepository.save(batch);
-}
-
-    public BatchModel saveBatch(BatchModel batch) {
-        return batchRepository.save(batch);
-    }
-
-
 }

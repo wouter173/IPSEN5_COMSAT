@@ -25,6 +25,6 @@ export class UserService {
 
     const { data } = await this.api.get('/users/me', { schema });
 
-    this._me.set(data!);
+    this._me.set(data);
   }
 }

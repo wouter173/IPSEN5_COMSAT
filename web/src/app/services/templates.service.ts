@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { ApiService } from './api.service';
 import { z } from 'zod';
@@ -13,11 +12,8 @@ export class TemplatesService {
   constructor() {}
 
   public async getTemplates() {
-    const results = await this.api.get('/templates');
-    const data = z.array(templateSchema).parse(await results.response.json());
-    data.forEach((template) => {
-      template.translations = JSON.parse(template.body);
-    });
+    const { data } = await this.api.get('/templates', { schema: z.array(templateSchema) });
+
     return data;
   }
 
@@ -31,6 +27,7 @@ export class TemplatesService {
       updatedAt: template.updatedAt,
       createdAt: template.createdAt,
     };
+
     await this.api.post(`/templates`, { body: template });
   }
 }

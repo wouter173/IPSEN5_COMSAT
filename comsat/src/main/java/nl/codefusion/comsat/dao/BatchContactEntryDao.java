@@ -20,6 +20,18 @@ public class BatchContactEntryDao {
         return batchContactEntryRepository.save(contactToBatchModel);
     }
 
+    public BatchContactEntryModel findByBatchIdAndContactId(UUID batchId, UUID contactId) {
+        return batchContactEntryRepository.findByBatchIdAndContactId(batchId, contactId);
+    }
+
+    public BatchContactEntryModel update(UUID id, BatchContactEntryModel contactToBatchModel) {
+        return batchContactEntryRepository.findById(id).map(contactToBatch -> {
+            contactToBatch.setStatus(contactToBatchModel.getStatus());
+
+            return batchContactEntryRepository.save(contactToBatch);
+        }).orElseThrow();
+    }
+
     public BatchContactEntryModel updateBatchStatusByUsername(String nickName, String status) {
         ContactModel contact = contactDao.findByNickname(nickName);
 
