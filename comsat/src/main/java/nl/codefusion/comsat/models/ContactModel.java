@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.UUID;
 
+@Entity
 @Table(name = "contact")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
 public class ContactModel {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
