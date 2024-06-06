@@ -25,17 +25,8 @@ public class ContactSeeder {
 
         System.out.println(batch);
 
-        seedContact("John", "Johnny", "kik", "Public", "Male", "English", "North America", batch);
         seedContact("Roman", "romantest", "kik", "Public", "Male", "English", "North America", batch);
         seedContact("Wouter", "hutsmanhsleiden", "kik", "Private", "Female", "Spanish", "South America", batch);
-        seedContact("Bob", "Bobby", "kik", "Public", "Male", "French", "Europe", batch);
-        seedContact("Alice", "Ally", "kik", "Private", "Female", "German", "Europe", batch);
-        seedContact("Charlie", "Chuck", "kik", "Public", "Male", "Italian", "Europe", batch);
-        seedContact("Diana", "Di", "kik", "Private", "Female", "Portuguese", "South America", batch);
-        seedContact("Ethan", "E", "kik", "Public", "Male", "Russian", "Asia", batch);
-        seedContact("Fiona", "Fi", "kik", "Private", "Female", "Chinese", "Asia", batch);
-        seedContact("George", "Geo", "kik", "Public", "Male", "Japanese", "Asia", batch);
-        seedContact("Hannah", "Han", "kik", "Private", "Female", "Korean", "Asia", batch);
     }
 
     private ContactModel seedContact(String firstName, String nickname, String platform, String audience, String sex, String language, String region, BatchModel batch) {

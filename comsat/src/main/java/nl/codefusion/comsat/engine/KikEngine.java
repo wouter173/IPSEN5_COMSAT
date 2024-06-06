@@ -2,15 +2,17 @@ package nl.codefusion.comsat.engine;
 
 import lombok.RequiredArgsConstructor;
 import nl.codefusion.comsat.dao.BatchContactEntryDao;
+import nl.codefusion.comsat.dto.EngineContactDto;
 import nl.codefusion.comsat.models.ContactModel;
+import nl.codefusion.comsat.service.BatchService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -26,6 +28,7 @@ public class KikEngine implements EngineInterface {
 
     @Override
     public void updateContactChatStatuses() {
+        logger.info("LASDNAHS/kdjhkhgajhvhkjlhsvjghdklijhkvj");
         ResponseEntity<Map<String, String>> response = restTemplate.exchange(
                 engineUrl + "/get_chat_status",
                 HttpMethod.GET,
@@ -50,8 +53,18 @@ public class KikEngine implements EngineInterface {
     }
 
     @Override
-    public void sendTemplateToContacts(ContactModel contact) {
-        logger.error("Not implemented");
+    public void sendTemplateToContacts(List<EngineContactDto> contacts) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
+        HttpEntity<List<EngineContactDto>> request = new HttpEntity<>(contacts, headers);
+        System.out.println(request);
+
+        ResponseEntity<Map<String, String>> response = restTemplate.exchange(
+                engineUrl + "/send_message",
+                HttpMethod.POST,
+                request,
+                new ParameterizedTypeReference<Map<String, String>>() {}
+        );
     }
 }

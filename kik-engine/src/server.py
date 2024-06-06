@@ -56,12 +56,13 @@ def start_bot():
 @app.route('/send_message', methods=['POST'])
 def send_message_to_users():
     data = request.get_json()
-    user_message = data["user_message"]
+    print(data)
 
-    for key, value in user_message.items():
-        key = key.lower()
-        queue.enqueue(Contact(key, value))
-
+    for item in data:
+        username = item['username']
+        message = item['message']
+        # username = username.lower
+        queue.enqueue(Contact(username, message))
     return {"status": "success"}, 200
 
 

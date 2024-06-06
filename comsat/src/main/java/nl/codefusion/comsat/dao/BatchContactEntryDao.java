@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
+
 @Service
 @RequiredArgsConstructor
 public class BatchContactEntryDao {
@@ -31,10 +32,8 @@ public class BatchContactEntryDao {
         return batchContactEntryRepository.save(contactToBatch);
     }
 
-
-    public List<BatchContactEntryModel> findAllByBatchId(UUID batchId) {
-
-        return batchContactEntryRepository.findAllByBatchId(batchId);
+    public List<BatchContactEntryModel> findAllByBatchId(UUID batchId){
+        return this.batchContactEntryRepository.findAllByBatchId(batchId);
     }
 
 }
