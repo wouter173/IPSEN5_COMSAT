@@ -11,6 +11,7 @@ import { Template } from '../../models/templates';
 import { v4 as uuidv4 } from 'uuid';
 import { LanguageDialogComponent } from '../../components/language-dialog/language-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DeleteDialogComponent } from '../../components/delete-dialog/delete-dialog.component';
 
 @Component({
   selector: 'app-templates',
@@ -77,11 +78,16 @@ export class TemplatesComponent {
   }
 
   onDelete() {
-    if(confirm("Are you sure to delete " + this.selectedTemplate?.header + "?")) {
-      this.templateService.deleteTemplate(this.selectedTemplate!.id);
-      this.selectedTemplate = this.templates[0];
-      this.onDisplay();
-    }
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      data: false,
+    });
+    dialogRef.afterClosed().subscribe((result: boolean) => {
+      if (result) {
+        this.templateService.deleteTemplate(this.selectedTemplate!.id);
+        this.selectedTemplate = this.templates[0];
+        this.onDisplay();
+      }
+    });
   }
 
   receiveTemplate(template: Template) {
@@ -90,7 +96,6 @@ export class TemplatesComponent {
   }
 
   newLanguage() {
-    console.log('new language');
     const dialogRef = this.dialog.open(LanguageDialogComponent, {
       data: '',
     });
