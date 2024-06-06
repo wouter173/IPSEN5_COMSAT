@@ -4,6 +4,7 @@ import {BatchListItemComponent} from '../../components/batch-list-item/batch-lis
 import {ChipsFilterComponent} from '../../components/chips-filter/chips-filter.component';
 import {BatchListComponent} from '../../components/batch-list/batch-list.component';
 import {LucideAngularModule} from 'lucide-angular';
+import { CommonModule } from "@angular/common";
 import {BatchesService} from '../../services/batches.service';
 import {Batch} from '../../models/batch';
 import {ChartReportComponent} from "../../components/charts/chart-report/chart-report.component";
@@ -19,6 +20,7 @@ import {ChartService} from "../../services/chart.service";
         BatchListComponent,
         ChartReportComponent,
         LucideAngularModule,
+        CommonModule,
     ],
     templateUrl: './reports.component.html',
     styleUrl: './reports.component.scss',
@@ -100,9 +102,15 @@ export class ReportsComponent implements OnInit {
     };
     public batchesWithGeneral = computed(() => [this.generalBatch, ...this.batchesService.batches()]);
 
-getSelectedBatchName(): string {
-    const selectedBatchId = this.selectedBatch();
-    const selectedBatch = this.batchesWithGeneral().find(batch => batch.id === selectedBatchId);
-    return selectedBatch ? selectedBatch.name : 'General';
-}
+    getSelectedBatchName(): string {
+        const selectedBatchId = this.selectedBatch();
+        const selectedBatch = this.batchesWithGeneral().find(batch => batch.id === selectedBatchId);
+        return selectedBatch ? selectedBatch.name : 'General';
+    }
+
+    getBatchAmount(): number {
+      return this.batchesService.batches().length;
+    }
+
+
 }

@@ -18,7 +18,8 @@
       </div>
     </div>
     <div class="flex w-full items-center justify-between rounded-2xl border border-base-6 px-4 py-3.5 text-left">
-      <h1 class="text-lg font-semibold">Batch size: {{ selectedBatchSize }} </h1>
+      <h1 class="text-lg font-semibold" *ngIf="getSelectedBatchName() !== 'General'">Batch size: {{ selectedBatchSize }} </h1>
+      <h1 class="text-lg font-semibold" *ngIf="getSelectedBatchName() === 'General'">Batch amount: {{ getBatchAmount() }} </h1>
     </div>
   </div>
 </div>
