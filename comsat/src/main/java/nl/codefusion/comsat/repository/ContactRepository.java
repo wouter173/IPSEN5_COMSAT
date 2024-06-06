@@ -11,12 +11,12 @@ import java.util.UUID;
 public interface ContactRepository extends JpaRepository<ContactModel, UUID> {
     ContactModel findContactByNickname(String nickname);
 
-    @Query("SELECT c.platform, COUNT(c) FROM ContactModel c GROUP BY c.platform")
+    @Query("SELECT c.contact.platform, COUNT(c) FROM BatchContactEntryModel c WHERE (:batchId IS NULL OR c.batch.id = :batchId) GROUP BY c.contact.platform")
     List<Object[]> findPlatfromData(@Param("batchId") UUID batchId);
 
-    @Query("SELECT c.region, COUNT(c) FROM ContactModel c GROUP BY c.region")
+    @Query("SELECT c.contact.region, COUNT(c) FROM BatchContactEntryModel c WHERE (:batchId IS NULL OR c.batch.id = :batchId) GROUP BY c.contact.region")
     List<Object[]> findRegionData(@Param("batchId") UUID batchId);
 
-    @Query("SELECT c.sex, COUNT(c) FROM ContactModel c  GROUP BY c.sex")
+    @Query("SELECT c.contact.sex, COUNT(c) FROM BatchContactEntryModel c WHERE (:batchId IS NULL OR c.batch.id = :batchId) GROUP BY c.contact.sex")
     List<Object[]> findGenderData(@Param("batchId") UUID batchId);
 }
