@@ -44,14 +44,21 @@ export class TemplatesComponent {
   constructor(public dialog: MatDialog) {}
 
   async ngOnInit() {
+    this.loadTemplates();
+  }
+
+
+
+  ngOnDestroy() {
+    this.editor.destroy();
+  }
+
+  async loadTemplates() {
     this.templates = await this.templateService.getTemplates();
     this.selectedTemplate = this.templates[0];
     this.onDisplay();
   }
 
-  ngOnDestroy() {
-    this.editor.destroy();
-  }
 
   onTextChanged() {
     this.selectedTemplate!.translations!.find((t) => t.language === this.selectedLanguage)!.body = this.templateBody;
