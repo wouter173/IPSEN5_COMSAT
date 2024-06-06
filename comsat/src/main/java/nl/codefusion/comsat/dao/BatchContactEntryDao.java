@@ -1,6 +1,7 @@
 package nl.codefusion.comsat.dao;
 
 import lombok.RequiredArgsConstructor;
+import nl.codefusion.comsat.dto.EngineContactDto;
 import nl.codefusion.comsat.models.BatchContactEntryModel;
 import nl.codefusion.comsat.models.ContactModel;
 import nl.codefusion.comsat.repository.BatchContactEntryRepository;
@@ -21,15 +22,18 @@ public class BatchContactEntryDao {
         return batchContactEntryRepository.save(contactToBatchModel);
     }
 
-    public BatchContactEntryModel updateBatchStatusByUsername(String nickName, String status) {
-        ContactModel contact = contactDao.findByNickname(nickName);
+    public void updateBatchStatusByUsername(List<EngineContactDto> engineContactDto) {
 
+        for (EngineContactDto contactDto : engineContactDto) {
+            ContactModel contact = contactDao.findByNickname(contactDto.getUsername());
 
-        // TODO: Get Batch id and and don't use getFirst
-        BatchContactEntryModel contactToBatch = contact.getBatchContacts().getFirst();
-        contactToBatch.setStatus(status);
-
-        return batchContactEntryRepository.save(contactToBatch);
+            for (BatchContactEntryModel model : contact.getBatchContacts()) {
+                if (model.getBatch().getId().equals(UUID.fromString(contactDto.getBatchId()))) {
+                    model.setStatus(contactDto.getStatus());
+                    batchContactEntryRepository.save(model);
+                }
+            }
+        }
     }
 
     public List<BatchContactEntryModel> findAllByBatchId(UUID batchId){

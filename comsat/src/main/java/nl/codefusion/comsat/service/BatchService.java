@@ -69,7 +69,7 @@ public class BatchService {
             var msg = "test test";
 
             EngineContactDto engineContactDto = EngineContactDto.builder()
-                    .batchId(batchId)
+                    .batchId(batchId.toString())
                     .message(msg)
                     .username(contact.getContact().getNickname())
                     .build();

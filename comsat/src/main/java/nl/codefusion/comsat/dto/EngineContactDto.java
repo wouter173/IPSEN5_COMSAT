@@ -1,5 +1,6 @@
 package nl.codefusion.comsat.dto;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import lombok.Builder;
 import lombok.Data;
 
@@ -9,5 +10,7 @@ import java.util.UUID;
 public class EngineContactDto {
     private String username;
     private String message;
-    private UUID batchId;
+    private String status;
+    @JsonAlias("batch_id")
+    private String batchId;
 }
