@@ -1,21 +1,18 @@
 import os
 import threading
-import time
-from dataclasses import dataclass
 
 from dotenv import load_dotenv
 from flask import Flask, request
 from kik_unofficial.datatypes.exceptions import KikApiException
 
 from bot import EchoBot
-from src.contact import Contact
-from src.message_queue import Queue
+from contact import Contact
+from message_queue import Queue
 
 app = Flask(__name__)
 load_dotenv()
 
 queue = Queue()
-userList = {}
 
 
 def create_queue():
@@ -27,6 +24,8 @@ def create_queue():
 
 
 def send_message_to_contact(contact: Contact):
+    bot.add_contact(contact)
+
     try:
         if bot.client.get_jid(contact.username) is None:
             bot.set_contact_error_status(contact, 'username not found')
@@ -56,13 +55,12 @@ def start_bot():
 @app.route('/send_message', methods=['POST'])
 def send_message_to_users():
     data = request.get_json()
-    print(data)
+    user_message = data["user_message"]
 
-    for item in data:
-        username = item['username']
-        message = item['message']
-        # username = username.lower
-        queue.enqueue(Contact(username, message))
+    for contactData in user_message:
+        contact = Contact(contactData["username"].lower(), contactData["message"], contactData["batchId"])
+        queue.enqueue(contact)
+
     return {"status": "success"}, 200
 
 
