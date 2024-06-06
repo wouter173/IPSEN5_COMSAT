@@ -1,14 +1,19 @@
 package nl.codefusion.comsat.dto;
 
+import lombok.Builder;
 import lombok.Data;
-import nl.codefusion.comsat.models.ContactModel;
 
 import java.util.List;
+import java.util.UUID;
+
 @Data
-public class OmitIdBatchDto {
+@Builder
+public class BatchResponseDto {
+    private UUID id;
     private String name;
     private String state;
     private String lastModified;
     private String createdAt;
-    private List<ContactModel> contacts;
+    private List<BatchResponseContactDto> contacts;
+
 }

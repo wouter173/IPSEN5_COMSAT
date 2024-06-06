@@ -1,39 +1,25 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
-import { AuthService } from './auth.service';
-import { environment } from '../../environments/environment';
-import { ContactWithBatch, contactWithBatchSchema } from '../models/contactwithbatch';
+import { Observable, from, map } from 'rxjs';
 import { z } from 'zod';
+import { Contact } from '../models/contact';
+import { ContactWithBatch, contactWithBatchSchema } from '../models/contactwithbatch';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ContactsService {
-  auth = inject(AuthService);
-  url = environment.apiUrl;
-  token = 'Bearer ' + this.auth.getToken();
-
-  constructor(private http: HttpClient) {}
+  private api = inject(ApiService);
 
   getContacts(): Observable<ContactWithBatch[]> {
-    const headers = {
-      Authorization: this.token,
-    };
-    const contactUrl = this.url + '/api/v1/contacts';
+    return from(this.api.get('/contacts', { schema: z.array(contactWithBatchSchema) })).pipe(map((contacts) => contacts.data));
+  }
 
-    return this.http.get<unknown>(contactUrl, { headers }).pipe(
-      map(
-        (data) => {
-          const parsedData = z.array(contactWithBatchSchema).parse(data);
-          return parsedData
-            .map((item) => {
-              const contactAndBatch = contactWithBatchSchema.parse(item);
-              return contactAndBatch;
-            })
-            .filter((contactAndBatch) => contactAndBatch !== null);
-          }
-      ),
-    );
+  deleteContact(id: string): Observable<unknown> {
+    return from(this.api.delete(`/contacts/${id}`));
+  }
+
+  updateContact(id: string, contact: Contact): Observable<unknown> {
+    return from(this.api.put(`/contacts/${id}`, { body: contact }));
   }
 }
