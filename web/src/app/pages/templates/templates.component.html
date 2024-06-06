@@ -2,33 +2,68 @@
   <div class="min-w-60">
     <div class="h-full min-w-96 border-r border-r-base-6">
       <ul class="flex flex-col gap-2.5 p-2.5" *ngFor="let template of templates">
-        <li><app-template-list-item (templateEmitter)="receiveTemplate($event)" [template]="template"></app-template-list-item></li>
+        <li>
+          <app-template-list-item
+            [selected]="template.id == selectedTemplate?.id"
+            (templateEmitter)="receiveTemplate($event)"
+            [template]="template"
+          />
+        </li>
       </ul>
+
+      <button
+        (click)="onNewTemplate()"
+        class="fixed bottom-6 m-2.5 mx-5 grid size-12 place-items-center rounded-full bg-[#4d537b] text-white transition-all hover:bg-primary-blue-1 active:scale-[90%]"
+      >
+        <lucide-icon name="plus-icon"></lucide-icon>
+      </button>
     </div>
   </div>
-  <div class="mx-auto mt-5 flex h-screen flex-col">
-    <div class="title mb-2 h-9 min-w-96 rounded-md border-2">
-      <textarea class="font-xl h-full w-full" style="resize: none" [(ngModel)]="templateHeader"></textarea>
+  <div class="mx-auto mt-5 flex h-screen w-full max-w-2xl flex-col gap-2">
+    <div class="flex items-center justify-between">
+      <div>
+        <label for="header" class="mb-1 text-sm font-semibold">Title</label>
+        <input id="header" class="font-xl mb-2 w-full min-w-96 rounded-md border-2 px-2 py-1" [(ngModel)]="templateHeader" />
+      </div>
+      <button
+        class="flex h-min items-center justify-center gap-2 rounded-lg bg-primary-blue-1 px-3 py-2 font-semibold text-white transition-all enabled:hover:bg-primary-blue-1/85 enabled:active:scale-[98%]"
+        (click)="onSave()"
+      >
+        <lucide-icon name="save" class="h-4 w-4 text-white" />
+        Save
+      </button>
     </div>
-    <div class="NgxEditor__Wrapper">
-      <ngx-editor-menu [editor]="editor"> </ngx-editor-menu>
-      <ngx-editor
-        [editor]="editor"
-        [(ngModel)]="templateBody"
-        (ngModelChange)="onTextChanged()"
-        [disabled]="false"
-        [placeholder]="'Type here...'"
-      ></ngx-editor>
+    <div class="flex flex-col gap-1">
+      <label for="platform" class="text-sm font-semibold">Platform</label>
+      <select [value]="selectedTemplate?.platform" id="platform" class="rounded-md border-2 px-2 py-1">
+        @for (platform of platforms; track platform) {
+          <option [value]="platform">{{ platform }}</option>
+        }
+      </select>
     </div>
-    <div class="buttons min-w-96">
-      <button class="m-5 h-min w-20 rounded-xl border bg-green-200" (click)="onSave()">Save</button>
-      <button class="m-5 h-min w-20 rounded-xl border bg-green-200" (click)="onNewTemplate()">New</button>
-      <mat-select [(value)]="selectedLanguage" (valueChange)="onDisplay()">
+
+    <hr class="my-4 w-full border-b border-b-black/10" />
+
+    <div>
+      <label for="editor" class="mb-1 text-sm font-semibold">Template</label>
+
+      <mat-select id="language" [(value)]="selectedLanguage" (valueChange)="onDisplay()" class="rounded-md border-2 px-2 py-1">
         @for (translation of selectedTemplate?.translations; track $index) {
           <mat-option [value]="translation.language">{{ translation.language }}</mat-option>
         }
         <mat-option (click)="newLanguage()">new language</mat-option>
       </mat-select>
+
+      <!-- <ngx-editor-menu [editor]="editor"> </ngx-editor-menu> -->
+      <ngx-editor
+        id="editor"
+        [editor]="editor"
+        [(ngModel)]="templateBody"
+        (ngModelChange)="onTextChanged()"
+        [disabled]="false"
+        [placeholder]="'Type here...'"
+        class="rounded-md px-2"
+      />
     </div>
   </div>
 </div>

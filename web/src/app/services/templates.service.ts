@@ -13,8 +13,7 @@ export class TemplatesService {
 
   public async getTemplates() {
     const { data } = await this.api.get('/templates', { schema: z.array(templateSchema) });
-
-    return data;
+    return data.map((template) => ({ ...template, translations: JSON.parse(template.body) }));
   }
 
   public async updateTemplate(template: Template) {

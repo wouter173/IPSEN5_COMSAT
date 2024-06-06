@@ -11,6 +11,8 @@ import { Template } from '../../models/templates';
 import { v4 as uuidv4 } from 'uuid';
 import { LanguageDialogComponent } from '../../components/language-dialog/language-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { LucideAngularModule } from 'lucide-angular';
+import { platforms } from '../../models/platform';
 
 @Component({
   selector: 'app-templates',
@@ -24,13 +26,14 @@ import { MatDialog } from '@angular/material/dialog';
     ReactiveFormsModule,
     MatSelectModule,
     CommonModule,
+    LucideAngularModule,
   ],
   templateUrl: './templates.component.html',
-  styleUrl: './templates.component.scss',
 })
 export class TemplatesComponent {
   editor: Editor = new Editor();
   templateService = inject(TemplatesService);
+  dialog = inject(MatDialog);
 
   templateBody = '';
   templateHeader = '';
@@ -41,7 +44,7 @@ export class TemplatesComponent {
   templates: Template[] = [];
   selectedTemplate: Template | undefined;
 
-  constructor(public dialog: MatDialog) {}
+  platforms = platforms;
 
   async ngOnInit() {
     this.loadTemplates();
@@ -63,6 +66,7 @@ export class TemplatesComponent {
 
   onDisplay() {
     this.templateHeader = this.selectedTemplate!.header;
+    console.log(this.selectedTemplate!);
     const translation = this.selectedTemplate!.translations!.find((t) => t.language === this.selectedLanguage);
     this.templateBody = translation!.body;
   }
