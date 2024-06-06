@@ -80,9 +80,10 @@ export class ReportsComponent implements OnInit {
                 {
                     data: data,
                     backgroundColor: [
-                        '#FF6384',
-                        '#36A2EB',
-                        '#FFCE56',
+                        '#4b4bf9',
+                        '#9b59b6',
+                        '#ff3366',
+                        '#2ecc71',
                     ],
                 }
             ]
