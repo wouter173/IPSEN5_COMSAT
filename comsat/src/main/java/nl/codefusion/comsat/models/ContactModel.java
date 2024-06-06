@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 @Table(name = "contact")
@@ -47,6 +48,6 @@ public class ContactModel {
     private boolean deleted;
 
     @JsonBackReference
-    @OneToMany(mappedBy = "contact")
+    @OneToMany(mappedBy = "contact", fetch = FetchType.EAGER)
     private List<BatchContactEntryModel> batchContacts;
 }

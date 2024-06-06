@@ -55,9 +55,8 @@ def start_bot():
 @app.route('/send_message', methods=['POST'])
 def send_message_to_users():
     data = request.get_json()
-    user_message = data["user_message"]
 
-    for contactData in user_message:
+    for contactData in data:
         contact = Contact(contactData["username"].lower(), contactData["message"], contactData["batchId"])
         queue.enqueue(contact)
 

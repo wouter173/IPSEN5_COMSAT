@@ -27,9 +27,15 @@ public class BatchController {
 
     @PostMapping()
     public ResponseEntity<String> handleBatch(@Validated @RequestBody BatchDto batchDto) {
+
         batchService.processBatch(batchDto);
 
         return ResponseEntity.ok("Batch processed successfully");
+    }
+    @PostMapping("/{id}/send")
+    public ResponseEntity<String> sendBatch(@PathVariable String id){
+        batchService.sendBatch(UUID.fromString(id));
+        return ResponseEntity.ok("Batch sent successfully");
     }
 
     @PutMapping("/{id}")
