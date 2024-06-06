@@ -31,6 +31,6 @@ export class TemplatesService {
       updatedAt: template.updatedAt,
       createdAt: template.createdAt,
     };
-    await this.api.put(`/templates`, { body: template });
+    await this.api.post(`/templates`, { body: template });
   }
 }

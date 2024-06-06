@@ -22,7 +22,7 @@ public class TemplateController {
         return ResponseEntity.ok(templateDao.getAll());
     }
 
-    @PutMapping()
+    @PostMapping
     public ResponseEntity updateTemplate(@Validated @RequestBody TemplateDto templateDto) {
         TemplateModel templateModel = new TemplateModel();
         templateModel.setId(templateDto.getId());
