@@ -22,8 +22,19 @@ public class BatchContactEntryDao {
         return batchContactEntryRepository.save(contactToBatchModel);
     }
 
-    public void updateBatchStatusByUsername(List<EngineContactDto> engineContactDto) {
+    public BatchContactEntryModel findByBatchIdAndContactId(UUID batchId, UUID contactId) {
+        return batchContactEntryRepository.findByBatchIdAndContactId(batchId, contactId);
+    }
 
+    public BatchContactEntryModel update(UUID id, BatchContactEntryModel contactToBatchModel) {
+        return batchContactEntryRepository.findById(id).map(contactToBatch -> {
+            contactToBatch.setStatus(contactToBatchModel.getStatus());
+
+            return batchContactEntryRepository.save(contactToBatch);
+        }).orElseThrow();
+    }
+
+    public void updateBatchStatusByUsername(List<EngineContactDto> engineContactDto) {
         for (EngineContactDto contactDto : engineContactDto) {
             ContactModel contact = contactDao.findByNickname(contactDto.getUsername());
 
@@ -38,6 +49,12 @@ public class BatchContactEntryDao {
 
     public List<BatchContactEntryModel> findAllByBatchId(UUID batchId){
         return this.batchContactEntryRepository.findAllByBatchId(batchId);
+    }
+
+    public BatchContactEntryModel delete(UUID id) {
+        BatchContactEntryModel contactToBatch = batchContactEntryRepository.findById(id).orElseThrow();
+        batchContactEntryRepository.delete(contactToBatch);
+        return contactToBatch;
     }
 
 }

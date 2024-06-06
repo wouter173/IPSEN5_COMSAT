@@ -11,12 +11,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-@Entity
 @Table(name = "contact")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 public class ContactModel {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -43,6 +43,9 @@ public class ContactModel {
 
     @Column(name = "region")
     private String region;
+
+    @Column(name = "deleted")
+    private boolean deleted;
 
     @JsonBackReference
     @OneToMany(mappedBy = "contact", fetch = FetchType.EAGER)

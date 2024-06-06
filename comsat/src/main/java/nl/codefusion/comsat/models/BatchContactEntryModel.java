@@ -38,4 +38,7 @@ public class BatchContactEntryModel {
 
     @Column(name = "status")
     private String status;
+
+    @Column(name = "hidden")
+    private boolean hidden;
 }

@@ -32,6 +32,8 @@ import {
   UserCogIcon,
   UserRoundIcon,
   UsersIcon,
+  Save,
+  BoxSelect,
   XIcon,
 } from 'lucide-angular';
 import { AppRoutingModule } from './app-routing.module';
@@ -76,6 +78,8 @@ import { BrowserAnimationsModule, NoopAnimationsModule, provideAnimations } from
       UserCog2Icon,
       UserCogIcon,
       UserRoundIcon,
+      BoxSelect,
+      Save,
       UsersIcon,
       XIcon,
     }),

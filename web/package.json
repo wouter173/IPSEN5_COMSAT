@@ -24,7 +24,7 @@
     "@types/uuid": "^9.0.8",
     "chart.js": "^4.4.2",
     "clsx": "^2.1.0",
-    "lucide-angular": "^0.365.0",
+    "lucide-angular": "^0.379.0",
     "nanoid": "^5.0.7",
     "ng-otp-input": "^1.9.3",
     "ngx-editor": "^17.0.2",
