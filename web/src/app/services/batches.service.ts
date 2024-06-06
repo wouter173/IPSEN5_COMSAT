@@ -64,11 +64,13 @@ public sendBatchData(batch: Batch) {
     localStorage.setItem('batches', JSON.stringify(this._batches()));
   }
 
-  updateBatchName(id: string, value: String): Observable<void> {
+updateBatchName(id: string, value: string): Observable<void> {
+    console.log('Updating batch name to:', value);
     const headers = {
-      Authorization: this.token,
+      'Content-Type': 'text/plain',
+      'Authorization': this.token,
     };
     const contactUrl = this.url + '/api/v1/batch/' + id;
     return this.http.put<void>(contactUrl, value, { headers });
-  }
+}
 }

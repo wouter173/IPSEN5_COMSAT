@@ -9,6 +9,7 @@ import nl.codefusion.comsat.service.BatchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.util.*;
 
@@ -38,19 +39,16 @@ public class BatchController {
     }
 
     @PutMapping("/batch/{id}")
-    public ResponseEntity<BatchModel> updateBatchName(@PathVariable UUID id, @RequestBody Map<String, String> body) {
-    BatchModel batch = batchDao.findById(id);
-    if (batch == null) {
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<BatchModel> updateBatchName(@PathVariable UUID id, @RequestBody String newName) {
+        try {
+            BatchModel updatedBatch = batchService.updateBatchName(id, newName);
+            return ResponseEntity.ok(updatedBatch);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
-    String newName = body.get("name");
-    if (newName == null || newName.trim().isEmpty()) {
-        return ResponseEntity.badRequest().body(null);
-    }
-    batch.setName(newName);
-    batchService.saveBatch(batch);
-    return ResponseEntity.ok(batch);
-}
 
     @GetMapping("/batches")
     public ResponseEntity<List<BatchModel>> getAllBatches() {

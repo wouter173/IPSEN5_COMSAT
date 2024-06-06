@@ -18,6 +18,7 @@ import {CommonModule} from "@angular/common";
     imports: [LucideAngularModule, SpinnerComponent, FormsModule, CommonModule],
 })
 export class BatchDetailComponent {
+    private _batchName = '';
     @Input() selectedBatchId!: Signal<string | null>;
     public batchesService = inject(BatchesService);
     public selectedBatch = computed(() => this.batchesService.batches().find((batch) => batch.id === this.selectedBatchId()));
@@ -31,11 +32,16 @@ export class BatchDetailComponent {
     }
 
     get batchName(): string {
-        return this.selectedBatch()?.name ?? '';
+        return this.selectedBatch()?.name || '';
     }
 
     set batchName(value: string) {
-    console.log('New batch name:', value);
+      this._batchName = value;
+      console.log('New batch name:', value);
+      const selectedBatch = this.selectedBatch();
+      if (selectedBatch) {
+          selectedBatch.name = value;
+      }
 }
 
 toggleBatchEditMode() {
