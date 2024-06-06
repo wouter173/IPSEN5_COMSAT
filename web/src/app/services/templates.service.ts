@@ -14,7 +14,7 @@ export class TemplatesService {
 
   public async getTemplates() {
     const results = await this.api.get('/templates');
-    const data = z.array(templateSchema).parse(await results.json());
+    const data = z.array(templateSchema).parse(await results.response.json());
     data.forEach((template) => {
       template.translations = JSON.parse(template.body);
     });
