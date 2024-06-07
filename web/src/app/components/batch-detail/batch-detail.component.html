@@ -88,22 +88,25 @@
       <div class="flex h-min w-full flex-col gap-4 rounded-xl border border-black/[0.05] bg-secondary-light-2/50 p-5">
         <h2 class="text-xl font-semibold">Templates</h2>
         <div class="grid grid-cols-1 gap-2">
-          @for (platform of platformTemplateMap().entries(); track platform) {
-            <label for="" class="flex flex-row items-center gap-1">
-              <span class="block w-32 text-sm font-medium capitalize opacity-65">{{ platform[0] }}</span>
-              @if (selectedBatch()?.state === "NOTSENT") {
-                <select name="" id="" class="w-full rounded-md border border-black/5 px-2 py-1.5">
-                  @for (template of platform[1]; track template.id) {
-                    <option value="{{ template.id }}">{{ template.header }}</option>
-                  }
-                  @if (platform[1].length === 0) {
-                    <option value="NO_TEMPLATE" disabled selected>No template available</option>
-                  }
-                </select>
-              } @else {
-                <div class="w-full rounded-md border border-black/5 bg-white px-2 py-1.5">template 1</div>
-              }
-            </label>
+          @if (platformTemplateMap().size > 0) {
+            @for (platform of platformTemplateMap().entries(); track platform) {
+              <label for="" class="flex flex-row items-center gap-1">
+                <span class="block w-32 text-sm font-medium capitalize opacity-65">{{ platform[0] }}</span>
+                @if (selectedBatch()?.state === "NOTSENT") {
+                  <select name="" id="" class="w-full rounded-md border border-black/5 px-2 py-1.5">
+                    @for (template of platform[1]; track template.id) {
+                      <option value="{{ template.id }}">{{ template.header }}</option>
+                    }
+
+                    @if (platform[1].length === 0) {
+                      <option value="NO_TEMPLATE" disabled selected>No template available</option>
+                    }
+                  </select>
+                } @else {
+                  <div class="w-full rounded-md border border-black/5 bg-white px-2 py-1.5">template 1</div>
+                }
+              </label>
+            }
           }
         </div>
       </div>
