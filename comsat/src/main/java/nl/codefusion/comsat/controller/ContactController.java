@@ -5,6 +5,7 @@ import nl.codefusion.comsat.config.Permission;
 import nl.codefusion.comsat.dao.ContactDao;
 import nl.codefusion.comsat.dto.ContactDto;
 import nl.codefusion.comsat.models.ContactModel;
+import nl.codefusion.comsat.repository.ContactRepository;
 import nl.codefusion.comsat.service.ContactService;
 import nl.codefusion.comsat.service.PermissionService;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.naming.NoPermissionException;
 import java.util.List;
 import java.util.UUID;
+import java.util.Map;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
@@ -21,6 +24,7 @@ import java.util.UUID;
 public class ContactController {
 
 
+    private final ContactRepository contactRepository;
     private final PermissionService permissionService;
     private final ContactDao contactDao;
 
@@ -63,5 +67,24 @@ public class ContactController {
             return ResponseEntity.ok(contactDao.getAllContacts().stream().filter(contact -> !contact.isDeleted()).toList());
         }
         throw new NoPermissionException();
+    }
+
+
+    @GetMapping("/platform-data")
+    public List<Object[]> getPlatformData(@RequestParam(required = false) String batchId) {
+        UUID batchUUID = batchId != null ? UUID.fromString(batchId) : null;
+        return contactRepository.findPlatfromData(batchUUID);
+    }
+
+    @GetMapping("/region-data")
+    public List<Object[]> getRegionData(@RequestParam(required = false) String batchId) {
+        UUID batchUUID = batchId != null ? UUID.fromString(batchId) : null;
+        return contactRepository.findRegionData(batchUUID);
+    }
+
+    @GetMapping("/gender-data")
+    public List<Object[]> getGenderData(@RequestParam(required = false) String batchId) {
+        UUID batchUUID = batchId != null ? UUID.fromString(batchId) : null;
+        return contactRepository.findGenderData(batchUUID);
     }
 }
