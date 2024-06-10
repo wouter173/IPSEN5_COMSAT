@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, Input, Signal, effect } from '@angular/core';
+import { Component, computed, inject, Input, Signal, effect, OnInit, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { Contact } from '../../models/contact';
@@ -18,7 +18,7 @@ import { ApiService } from '../../services/api.service';
   templateUrl: './batch-detail.component.html',
   imports: [LucideAngularModule, SpinnerComponent, FormsModule, CommonModule],
 })
-export class BatchDetailComponent {
+export class BatchDetailComponent implements OnDestroy {
   @Input() selectedBatchId!: Signal<string | null>;
 
   public batchesService = inject(BatchesService);
@@ -29,21 +29,35 @@ export class BatchDetailComponent {
   public editingContact: Contact | null = null;
   public batchEditmode = false;
   public platforms = platforms;
+  public poller: number | null = null;
 
   public templates = this.templateService.templates;
   public selectedBatch = computed(() => this.batchesService.batches().find((batch) => batch.id === this.selectedBatchId()));
   public usedPlatforms = computed(() => {
     return this.selectedBatch()?.contacts.reduce<string[]>((acc, cur) => (acc.includes(cur.platform) ? acc : [...acc, cur.platform]), []);
   });
-
   public platformTemplateMap = computed(() => {
-    const map = new Map<string, Template[]>();
+    const map: Record<string, Template[]> = {};
     this.usedPlatforms()?.forEach((platform) => {
       const templates = this.templates()?.filter((template) => template.platform === platform);
-      map.set(platform, templates);
+      map[platform] = templates;
     });
-    return map;
+    return Object.entries(map);
   });
+
+  constructor() {
+    effect(() => {
+      if (this.poller) clearInterval(this.poller);
+      console.log(this.selectedBatch()?.state);
+      if (this.selectedBatch()?.state !== 'NOTSENT') {
+        this.startPoller();
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.poller) clearInterval(this.poller);
+  }
 
   get batchName(): string {
     return this.selectedBatch()?.name || '';
@@ -73,12 +87,14 @@ export class BatchDetailComponent {
     }
   }
 
+  startPoller() {
+    this.poller = setInterval(() => this.batchesService.getAllBatches().subscribe(), 1000) as unknown as number;
+  }
+
   async onSendClick() {
     const id = this.selectedBatchId();
     if (!id) return;
     this.batchesService.updateBatch(id, { state: 'SENDING' });
-
-    // const interval = setInterval(() => this.batchesService.getAllBatches().subscribe(), 1000);
 
     this.api.post(`/batches/${this.selectedBatchId()}/send`);
 

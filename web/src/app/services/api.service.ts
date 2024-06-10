@@ -65,7 +65,7 @@ export class ApiService {
       return { response } as ApiResponse<T>;
     } catch (error) {
       this.toastr.error('An error occurred');
-      console.error(error);
+      console.error(error, { method, endpoint, options });
       if (error instanceof ZodError) {
         console.error(error.message);
       }

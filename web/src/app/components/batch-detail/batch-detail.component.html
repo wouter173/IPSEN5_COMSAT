@@ -25,7 +25,7 @@
               Send <lucide-icon class="h-[16px]" name="send-icon" />
             } @else {
               <div class="flex items-center justify-center gap-2">
-                Sending... <app-spinner class="h-5 w-5 animate-spin fill-white text-primary-blue-2" />
+                Sending... <app-spinner class="grid h-5 w-5 fill-white text-primary-blue-2" />
               </div>
             }
           </button>
@@ -88,10 +88,10 @@
       <div class="flex h-min w-full flex-col gap-4 rounded-xl border border-black/[0.05] bg-secondary-light-2/50 p-5">
         <h2 class="text-xl font-semibold">Templates</h2>
         <div class="grid grid-cols-1 gap-2">
-          @if (platformTemplateMap().size > 0) {
-            @for (platform of platformTemplateMap().entries(); track platform) {
+          @if (platformTemplateMap().length > 0) {
+            @for (platform of platformTemplateMap(); track platform) {
               <label for="" class="flex flex-row items-center gap-1">
-                <span class="block w-32 text-sm font-medium capitalize opacity-65">{{ platform[0] }}</span>
+                <span class="block w-32 text-sm font-medium opacity-65">{{ platform[0] }}</span>
                 @if (selectedBatch()?.state === "NOTSENT") {
                   <select name="" id="" class="w-full rounded-md border border-black/5 px-2 py-1.5">
                     @for (template of platform[1]; track template.id) {
@@ -144,7 +144,10 @@
                           SENT: "Delivered",
                           ERROR: "Something went wrong sending your message",
                           READ: "Read",
-                          REPLIED: "Replied"
+                          REPLIED: "Replied",
+                          QUEUED: "Queued",
+                          DELIVERED: "Delivered",
+                          "USERNAME NOT FOUND": "User not found"
                         }[contact.status]
                       : "-"
                   }}</span>
