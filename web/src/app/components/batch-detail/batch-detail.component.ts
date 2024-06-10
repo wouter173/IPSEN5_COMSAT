@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, Input, Signal, effect } from '@angular/core';
+import { Component, computed, inject, Input, Signal, effect, OnInit, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { Contact } from '../../models/contact';
@@ -8,33 +8,55 @@ import { BatchesService } from '../../services/batches.service';
 import { ContactsService } from '../../services/contacts.service';
 import { sleep } from '../../utils/mindelay';
 import { SpinnerComponent } from '../spinner/spinner.component';
+import { TemplatesService } from '../../services/templates.service';
+import { Template } from '../../models/templates';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-batch-detail',
   standalone: true,
   templateUrl: './batch-detail.component.html',
-  styleUrl: './batch-detail.component.scss',
   imports: [LucideAngularModule, SpinnerComponent, FormsModule, CommonModule],
 })
-export class BatchDetailComponent {
+export class BatchDetailComponent implements OnDestroy {
   @Input() selectedBatchId!: Signal<string | null>;
 
   public batchesService = inject(BatchesService);
   public contactService = inject(ContactsService);
+  public templateService = inject(TemplatesService);
+  public api = inject(ApiService);
 
   public editingContact: Contact | null = null;
   public batchEditmode = false;
   public platforms = platforms;
+  public poller: number | null = null;
 
+  public templates = this.templateService.templates;
   public selectedBatch = computed(() => this.batchesService.batches().find((batch) => batch.id === this.selectedBatchId()));
   public usedPlatforms = computed(() => {
     return this.selectedBatch()?.contacts.reduce<string[]>((acc, cur) => (acc.includes(cur.platform) ? acc : [...acc, cur.platform]), []);
   });
+  public platformTemplateMap = computed(() => {
+    const map: Record<string, Template[]> = {};
+    this.usedPlatforms()?.forEach((platform) => {
+      const templates = this.templates()?.filter((template) => template.platform === platform);
+      map[platform] = templates;
+    });
+    return Object.entries(map);
+  });
 
   constructor() {
     effect(() => {
-      console.log(this.batchesService.batches());
+      if (this.poller) clearInterval(this.poller);
+      console.log(this.selectedBatch()?.state);
+      if (this.selectedBatch()?.state !== 'NOTSENT') {
+        this.startPoller();
+      }
     });
+  }
+
+  ngOnDestroy() {
+    if (this.poller) clearInterval(this.poller);
   }
 
   get batchName(): string {
@@ -65,39 +87,42 @@ export class BatchDetailComponent {
     }
   }
 
+  startPoller() {
+    this.poller = setInterval(() => this.batchesService.getAllBatches().subscribe(), 1000) as unknown as number;
+  }
+
   async onSendClick() {
     const id = this.selectedBatchId();
     if (!id) return;
     this.batchesService.updateBatch(id, { state: 'SENDING' });
-    await sleep(1000);
 
-    this.batchesService.updateBatch(id, {
-      contacts: this.selectedBatch()?.contacts.map((contact) => ({ ...contact, status: 'SENDING' })) ?? [],
-    });
+    this.api.post(`/batches/${this.selectedBatchId()}/send`);
 
-    await sleep(1000);
+    // this.batchesService.updateBatch(id, {
+    //   contacts: this.selectedBatch()?.contacts.map((contact) => ({ ...contact, status: 'SENDING' })) ?? [],
+    // });
 
-    const contactStatus = ['SENT', 'ERROR', 'READ', 'REPLIED'];
-    this.batchesService.updateBatch(id, {
-      contacts:
-        this.selectedBatch()?.contacts.map((contact) => ({
-          ...contact,
-          status: contactStatus[Math.round(Math.random() * contactStatus.length)] as 'NOTSENT',
-        })) ?? [],
-    });
-    await sleep(2000);
-    this.batchesService.updateBatch(id, { state: 'SENT' });
+    // const contactStatus = ['SENT', 'ERROR', 'READ', 'REPLIED'];
+    // this.batchesService.updateBatch(id, {
+    //   contacts:
+    //     this.selectedBatch()?.contacts.map((contact) => ({
+    //       ...contact,
+    //       status: contactStatus[Math.round(Math.random() * contactStatus.length)] as 'NOTSENT',
+    //     })) ?? [],
+    // });
 
-    const batch = this.selectedBatch();
-    if (!batch) {
-      console.error('Batch not found');
-      return;
-    }
+    // this.batchesService.updateBatch(id, { state: 'SENT' });
 
-    this.batchesService.sendBatchData(batch).subscribe(
-      (response) => console.log('Batch sent successfully', response),
-      (error) => console.error('Error sending batch', error),
-    );
+    // const batch = this.selectedBatch();
+    // if (!batch) {
+    //   console.error('Batch not found');
+    //   return;
+    // }
+
+    // this.batchesService.sendBatchData(batch).subscribe(
+    //   (response) => console.log('Batch sent successfully', response),
+    //   (error) => console.error('Error sending batch', error),
+    // );
   }
 
   onDeleteClick(contact: Contact) {

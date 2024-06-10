@@ -22,7 +22,7 @@ public class TemplateDao {
         return templateRepository.findAll();
     }
 
-    public void update(UUID id,TemplateModel template) {
+    public void update(UUID id, TemplateModel template) {
         Optional<TemplateModel> existingTemplateOpt = templateRepository.findById(template.getId());
         if (existingTemplateOpt.isPresent()) {
             TemplateModel existingTemplate = existingTemplateOpt.get();
@@ -30,7 +30,6 @@ public class TemplateDao {
             existingTemplate.setHeader(template.getHeader());
             existingTemplate.setBody(template.getBody());
             existingTemplate.setMetadata(template.getMetadata());
-            existingTemplate.setUpdatedAt(template.getUpdatedAt());
             templateRepository.save(existingTemplate);
         } else {
             templateRepository.save(template);

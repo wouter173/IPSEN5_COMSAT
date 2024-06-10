@@ -6,9 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 
 @Table(name = "contact")
@@ -50,4 +52,12 @@ public class ContactModel {
     @JsonBackReference
     @OneToMany(mappedBy = "contact", fetch = FetchType.EAGER)
     private List<BatchContactEntryModel> batchContacts;
+
+    @UpdateTimestamp
+    @Column(name = "last_modified", nullable = false)
+    private Date lastModified;
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false)
+    private Date createdAt;
 }

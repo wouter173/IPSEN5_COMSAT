@@ -14,19 +14,17 @@ import { Contact } from '../../models/contact';
 export class ContactsComponent {
   contacts: ContactWithBatch[] = [];
   contactService = inject(ContactsService);
-  public selectedContact!: ContactWithBatch;
+  // public selectedContact!: ContactWithBatch;
 
   ngOnInit() {
-    this.contactService.getContacts().subscribe((data) => {
-      console.log(data);
-      this.contacts = data.filter((item) => item !== null);
-      this.selectedContact = this.contacts[0];
-    });
+    // this.contactService.getContacts().subscribe((data) => {
+    //   console.log(data);
+    //   this.contacts = data.filter((item) => item !== null);
+    //   this.selectedContact = this.contacts[0];
+    // });
   }
 
-  selectContact(contact: ContactWithBatch) {
-    this.selectedContact = contact;
-  }
-
-
+  // selectContact(contact: ContactWithBatch) {
+  //   this.selectedContact = contact;
+  // }
 }

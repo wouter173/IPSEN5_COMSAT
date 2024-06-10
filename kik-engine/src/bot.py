@@ -19,7 +19,8 @@ class EchoBot(KikClientCallback):
         password = creds.get("password") or input("Enter your password: ")
         device_id = creds["device_id"]
 
-        self.client = KikClient(self, username, str(password), device_id, enable_console_logging=True)
+        self.client = KikClient(self, username, str(
+            password), device_id, enable_console_logging=True)
 
     def add_contact(self, contact: Contact):
         self.user_message_status.append(contact)

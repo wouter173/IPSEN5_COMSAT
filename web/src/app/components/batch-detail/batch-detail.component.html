@@ -25,7 +25,7 @@
               Send <lucide-icon class="h-[16px]" name="send-icon" />
             } @else {
               <div class="flex items-center justify-center gap-2">
-                Sending... <app-spinner class="h-5 w-5 animate-spin fill-white text-primary-blue-2" />
+                Sending... <app-spinner class="grid h-5 w-5 fill-white text-primary-blue-2" />
               </div>
             }
           </button>
@@ -54,9 +54,9 @@
           <span class="">Contacts:</span>
           <span class="opacity-60">{{ selectedBatch()?.contacts?.length }}</span>
           <span class="">New contacts:</span>
-          <span class="opacity-60">32</span>
+          <span class="opacity-60">-</span>
           <span class="">Recurring contacts:</span>
-          <span class="opacity-60">5</span>
+          <span class="opacity-60">-</span>
           <span class="">Platforms:</span>
           <span class="opacity-60">{{ usedPlatforms()?.join(", ") }}</span>
           <span class="">Regions:</span>
@@ -88,19 +88,25 @@
       <div class="flex h-min w-full flex-col gap-4 rounded-xl border border-black/[0.05] bg-secondary-light-2/50 p-5">
         <h2 class="text-xl font-semibold">Templates</h2>
         <div class="grid grid-cols-1 gap-2">
-          @for (platform of usedPlatforms(); track platform) {
-            <label for="" class="flex flex-row items-center gap-1">
-              <span class="block w-32 text-sm font-medium capitalize opacity-65">{{ platform }}</span>
-              @if (selectedBatch()?.state === "NOTSENT") {
-                <select name="" id="" class="w-full rounded-md border border-black/5 px-2 py-1.5">
-                  <option value="x">template 1</option>
-                  <option value="x">template 2</option>
-                  <option value="x">template 3</option>
-                </select>
-              } @else {
-                <div class="w-full rounded-md border border-black/5 bg-white px-2 py-1.5">template 1</div>
-              }
-            </label>
+          @if (platformTemplateMap().length > 0) {
+            @for (platform of platformTemplateMap(); track platform) {
+              <label for="" class="flex flex-row items-center gap-1">
+                <span class="block w-32 text-sm font-medium opacity-65">{{ platform[0] }}</span>
+                @if (selectedBatch()?.state === "NOTSENT") {
+                  <select name="" id="" class="w-full rounded-md border border-black/5 px-2 py-1.5">
+                    @for (template of platform[1]; track template.id) {
+                      <option value="{{ template.id }}">{{ template.header }}</option>
+                    }
+
+                    @if (platform[1].length === 0) {
+                      <option value="NO_TEMPLATE" disabled selected>No template available</option>
+                    }
+                  </select>
+                } @else {
+                  <div class="w-full rounded-md border border-black/5 bg-white px-2 py-1.5">template 1</div>
+                }
+              </label>
+            }
           }
         </div>
       </div>
@@ -111,7 +117,7 @@
             <li>
               <div
                 class="flex flex-col gap-2.5 rounded-xl border border-black/5 bg-secondary-light-2/50 px-4 py-3.5 transition-all"
-                [class.gray-out]="contact.hidden"
+                [class.opacity-30]="contact.hidden"
               >
                 <div class="flex justify-between">
                   <div class="flex items-center gap-2">
@@ -138,7 +144,10 @@
                           SENT: "Delivered",
                           ERROR: "Something went wrong sending your message",
                           READ: "Read",
-                          REPLIED: "Replied"
+                          REPLIED: "Replied",
+                          QUEUED: "Queued",
+                          DELIVERED: "Delivered",
+                          "USERNAME NOT FOUND": "User not found"
                         }[contact.status]
                       : "-"
                   }}</span>

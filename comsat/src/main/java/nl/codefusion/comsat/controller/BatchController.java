@@ -32,8 +32,9 @@ public class BatchController {
 
         return ResponseEntity.ok("Batch processed successfully");
     }
+
     @PostMapping("/{id}/send")
-    public ResponseEntity<String> sendBatch(@PathVariable String id){
+    public ResponseEntity<String> sendBatch(@PathVariable String id) {
         batchService.sendBatch(UUID.fromString(id));
         return ResponseEntity.ok("Batch sent successfully");
     }
@@ -79,10 +80,9 @@ public class BatchController {
                         .build());
             }
 
-
             BatchResponseDto batchResponseDto = BatchResponseDto.builder()
                     .id(batch.getId())
-                    .state(batch.getState())
+                    .state(batchService.getBatchState(undeletedContacts))
                     .name(batch.getName())
                     .createdAt(batch.getCreatedAt().toString())
                     .lastModified(batch.getLastModified().toString())
@@ -125,10 +125,9 @@ public class BatchController {
                     .build());
         }
 
-
         BatchResponseDto batchResponseDto = BatchResponseDto.builder()
                 .id(batch.getId())
-                .state(batch.getState())
+                .state(batchService.getBatchState(undeletedContacts))
                 .name(batch.getName())
                 .createdAt(batch.getCreatedAt().toString())
                 .lastModified(batch.getLastModified().toString())

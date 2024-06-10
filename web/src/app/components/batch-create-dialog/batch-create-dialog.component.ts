@@ -76,12 +76,14 @@ export class BatchCreateDialogComponent {
         })),
       };
 
-      this.batchesService.createBatch(newBatch);
+      // this.batchesService.createBatch(newBatch);
 
       this.batchesService.sendBatchData(newBatch).subscribe({
         next: () => console.log('Batch data sent successfully'),
         error: (error) => console.error('Error sending batch data:', error),
       });
+
+      this.batchesService.getAllBatches().subscribe();
 
       this.createForm.nativeElement.reset();
       this.closeDialog();

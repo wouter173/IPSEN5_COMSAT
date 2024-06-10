@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { ApiService } from './api.service';
 import { z } from 'zod';
 import { Template, templateSchema } from '../models/templates';
@@ -7,14 +7,20 @@ import { Template, templateSchema } from '../models/templates';
   providedIn: 'root',
 })
 export class TemplatesService {
-  api = inject(ApiService);
+  private _templates = signal<Template[]>([]);
+  public templates = this._templates.asReadonly();
 
-  constructor() {}
+  private api = inject(ApiService);
 
-  public async getTemplates() {
+  constructor() {
+    this.fetchTemplates();
+  }
+
+  public async fetchTemplates() {
     const { data } = await this.api.get('/templates', { schema: z.array(templateSchema) });
+    const templates = data.map((template) => ({ ...template, translations: JSON.parse(template.body) }));
 
-    return data;
+    this._templates.set(templates);
   }
 
   public async updateTemplate(template: Template) {
@@ -24,10 +30,11 @@ export class TemplatesService {
       header: template.header,
       body: JSON.stringify(template.translations),
       metadata: template.metadata,
-      updatedAt: template.updatedAt,
+      lastModified: template.lastModified,
       createdAt: template.createdAt,
     };
 
     await this.api.post(`/templates`, { body: template });
+    await this.fetchTemplates();
   }
 }

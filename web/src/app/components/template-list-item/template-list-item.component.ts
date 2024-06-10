@@ -10,7 +10,9 @@ import { Template } from '../../models/templates';
 })
 export class TemplateListItemComponent {
   @Input() template!: Template;
+  @Input() selected!: boolean;
   @Output() templateEmitter = new EventEmitter<Template>();
+
   displayCurrentTemplate(template: Template) {
     this.templateEmitter.emit(template);
   }

@@ -14,10 +14,8 @@ import nl.codefusion.comsat.models.ContactModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +25,17 @@ public class BatchService {
     private final BatchContactEntryDao batchContactEntryDao;
     private final ContactDao contactDao;
     private final KikEngine kikEngine;
+
+
+    public String getBatchState(List<BatchContactEntryModel> contacts) {
+        Set<String> statusSet = contacts.stream().filter(x -> !x.isHidden()).map(x -> x.getStatus()).collect(Collectors.toSet());
+
+        String batchStatus = "NOTSENT";
+        if (!statusSet.contains("NOTSENT") || statusSet.size() > 1) batchStatus = "SENDING";
+        if (statusSet.contains("SENT")) batchStatus = "SENT";
+
+        return batchStatus;
+    }
 
     @Transactional
     public void processBatch(BatchDto batchDto) {
@@ -67,11 +76,13 @@ public class BatchService {
 
     }
 
-    public void sendBatch(UUID batchId){
+    public void sendBatch(UUID batchId) {
         List<BatchContactEntryModel> batchContacts = batchContactEntryDao.findAllByBatchId(batchId);
 
         List<EngineContactDto> contacts = new ArrayList<>();
-        for (BatchContactEntryModel contact : batchContacts ) {
+        for (BatchContactEntryModel contact : batchContacts) {
+            if (contact.isHidden()) continue;
+
             //TODO Template generation
 
             var msg = "test test";

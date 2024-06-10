@@ -8,7 +8,7 @@ export const templateSchema = z.object({
   header: z.string(),
   body: z.string(),
   metadata: z.string(),
-  updatedAt: z.string(),
+  lastModified: z.string(),
   createdAt: z.string(),
   translations: z
     .array(

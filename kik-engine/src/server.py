@@ -57,7 +57,8 @@ def send_message_to_users():
     data = request.get_json()
 
     for contactData in data:
-        contact = Contact(contactData["username"].lower(), contactData["message"], contactData["batchId"])
+        contact = Contact(
+            contactData["username"], contactData["message"], contactData["batchId"])
         queue.enqueue(contact)
 
     return {"status": "success"}, 200
