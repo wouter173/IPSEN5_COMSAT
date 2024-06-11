@@ -1,30 +1,28 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { ContactsListItemComponent } from '../../components/contacts-list-item/contacts-list-item.component';
 import { CommonModule } from '@angular/common';
 import { ContactsService } from '../../services/contacts.service';
-import { ContactWithBatch } from '../../models/contactwithbatch';
-import { Contact } from '../../models/contact';
+import { ActivatedRoute } from '@angular/router';
+import { LucideAngularModule } from 'lucide-angular';
+import { SpinnerComponent } from '../../components/spinner/spinner.component';
 
 @Component({
   selector: 'app-contacts',
   standalone: true,
-  imports: [ContactsListItemComponent, CommonModule],
   templateUrl: './contacts.component.html',
+  imports: [ContactsListItemComponent, CommonModule, LucideAngularModule, SpinnerComponent],
 })
 export class ContactsComponent {
-  contacts: ContactWithBatch[] = [];
-  contactService = inject(ContactsService);
-  // public selectedContact!: ContactWithBatch;
+  private contactService = inject(ContactsService);
+  private activatedRoute = inject(ActivatedRoute);
+
+  public contacts = this.contactService.contacts;
+  public contactId = signal<string | null>(null);
+  public selectedContact = computed(() => this.contacts().find((contact) => contact.id === this.contactId()));
 
   ngOnInit() {
-    // this.contactService.getContacts().subscribe((data) => {
-    //   console.log(data);
-    //   this.contacts = data.filter((item) => item !== null);
-    //   this.selectedContact = this.contacts[0];
-    // });
+    this.activatedRoute.paramMap.subscribe((data) => {
+      this.contactId.set(data.get('id'));
+    });
   }
-
-  // selectContact(contact: ContactWithBatch) {
-  //   this.selectedContact = contact;
-  // }
 }

@@ -1,8 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { Observable, from, map, tap } from 'rxjs';
+import { Observable, from, map, take, tap } from 'rxjs';
 import { z } from 'zod';
-import { Contact } from '../models/contact';
-import { ContactWithBatch, contactWithBatchSchema } from '../models/contactwithbatch';
+import { Contact, contactSchema } from '../models/contact';
 import { ApiService } from './api.service';
 
 @Injectable({
@@ -10,17 +9,18 @@ import { ApiService } from './api.service';
 })
 export class ContactsService {
   private api = inject(ApiService);
-  private _contacts = signal<ContactWithBatch[]>([]);
+  private _contacts = signal<Contact[]>([]);
   public contacts = this._contacts.asReadonly();
 
   constructor() {
     this.getContacts().subscribe();
   }
 
-  public getContacts(): Observable<ContactWithBatch[]> {
-    return from(this.api.get('/contacts', { schema: z.array(contactWithBatchSchema) })).pipe(
+  public getContacts(): Observable<Contact[]> {
+    return from(this.api.get('/contacts', { schema: z.array(contactSchema) })).pipe(
       map((contacts) => contacts.data),
       tap(this._contacts.set),
+      take(1),
     );
   }
 
