@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import nl.codefusion.comsat.config.Permission;
 import nl.codefusion.comsat.dao.ContactDao;
 import nl.codefusion.comsat.dto.ContactDto;
+import nl.codefusion.comsat.dto.ContactWithEntryResponseDto;
 import nl.codefusion.comsat.models.ContactModel;
 import nl.codefusion.comsat.repository.ContactRepository;
 import nl.codefusion.comsat.service.ContactService;
@@ -14,8 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.naming.NoPermissionException;
 import java.util.List;
-import java.util.UUID;
-import java.util.Map;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -62,9 +61,18 @@ public class ContactController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ContactModel>> getContacts() throws NoPermissionException {
+    public ResponseEntity<List<ContactWithEntryResponseDto>> getContacts() throws NoPermissionException {
         if (permissionService.hasPermission(permissionService.getPrincipalRoles(), Permission.READ_CONTACT_DETAILS)) {
-            return ResponseEntity.ok(contactDao.getAllContacts().stream().filter(contact -> !contact.isDeleted()).toList());
+            List<ContactModel> contacts = contactDao.getAllContacts().stream()
+                    .filter(contact -> !contact.isDeleted())
+                    .toList();
+
+            List<ContactWithEntryResponseDto> contactWithEntryResponseDtos = contacts.stream()
+                    .map(contact -> contactService.convertModelToDto(contact))
+                    .toList();
+
+
+            return ResponseEntity.ok(contactWithEntryResponseDtos);
         }
         throw new NoPermissionException();
     }
