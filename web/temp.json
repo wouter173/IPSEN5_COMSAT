@@ -1,29 +1,9 @@
 [
   {
-    "id": "2",
-    "firstName": "Jack",
-    "nickname": "@BlackJack22",
-    "platform": "instagram",
-    "audience": "working-class",
-    "sex": "Male",
-    "language": "German",
-    "region": "Noordrijn-Westfalen"
-  },
-  {
-    "id": "3",
-    "firstName": "Jane Doe",
-    "nickname": "@Jane",
-    "platform": "instagram",
-    "audience": "working-class",
-    "sex": "Male",
-    "language": "German",
-    "region": "Noordrijn-Westfalen"
-  },
-  {
-    "id": "4",
+    "id": "1",
     "firstName": "John Doe",
-    "nickname": "@DoeJohn",
-    "platform": "instagram",
+    "nickname": "hsltest",
+    "platform": "kik",
     "audience": "working-class",
     "sex": "Male",
     "language": "German",
