@@ -74,6 +74,7 @@ export class TemplatesComponent {
   onSave() {
     if (this.selectedTemplate) {
       this.selectedTemplate()!.header = this.templateHeader;
+      this.selectedTemplate()!.platform = this.selectedTemplate()!.platform;
       this.selectedTemplate()!.lastModified = new Date().toISOString();
 
       this.templateService.updateTemplate(this.selectedTemplate()!);
@@ -105,9 +106,10 @@ export class TemplatesComponent {
 
   onNewTemplate() {
     const id = uuidv4();
+    const selectedPlatform = this.selectedTemplate()?.platform;
     this.templates().push({
       id,
-      platform: 'kik' as 'snapchat' | 'kik' | 'whatsapp' | 'instagram' | 'telegram',
+      platform: selectedPlatform as 'snapchat' | 'kik' | 'whatsapp' | 'instagram' | 'telegram',
       header: '',
       body: '',
       translations: [
