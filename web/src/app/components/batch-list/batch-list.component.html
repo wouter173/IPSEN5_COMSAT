@@ -3,9 +3,8 @@
     @if (createBatch) {
       <app-chips-filter />
     }
-
     <ul class="flex h-[calc(100vh-80px-60px)] max-w-96 flex-col gap-2.5 overflow-y-auto pt-2.5">
-      @for (batch of batches(); track batch.name) {
+      @for (batch of filteredBatches(); track batch.name) {
         <li>
           <app-batch-list-item [selected]="batch.id == selectedBatch()" (click)="clickItem(batch.id)" [batch]="batch" />
         </li>

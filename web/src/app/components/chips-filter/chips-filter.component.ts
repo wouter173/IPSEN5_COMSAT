@@ -31,7 +31,7 @@ export class ChipsFilterComponent {
   fruitCtrl = new FormControl('');
   filteredFruits: Observable<string[]>;
   fruits: string[] = [];
-  allFruits: string[] = ['Snapchat', 'Kik', 'Whatsapp', 'Instagram', 'Telegram', 'Germany', 'France'];
+  allFruits: string[] = ['snapchat', 'kik', 'whatsapp', 'instagram', 'telegram', 'germany', 'france'];
 
   @ViewChild('fruitInput') fruitInput!: ElementRef<HTMLInputElement>;
 
@@ -40,7 +40,7 @@ export class ChipsFilterComponent {
   constructor() {
     this.filteredFruits = this.fruitCtrl.valueChanges.pipe(
       startWith(null),
-      map((fruit: string | null) => (fruit ? this._filter(fruit) : this.allFruits.slice())),
+      map((fruit: string | null) => (fruit ? this._filter(fruit) : [])),
     );
   }
 
