@@ -2,7 +2,10 @@ import { z } from 'zod';
 import { contactSchema } from './contact';
 
 export const batchContactSchema = contactSchema.merge(
-  z.object({ status: z.enum(['NOTSENT', 'SENDING', 'SENT', 'ERROR', 'READ', 'REPLIED']) }),
+  z.object({
+    hidden: z.boolean(),
+    status: z.enum(['NOTSENT', 'SENDING', 'SENT', 'ERROR', 'READ', 'REPLIED', 'QUEUED', 'DELIVERED', 'USERNAME NOT FOUND']),
+  }),
 );
 
 export const batchSchema = z.object({

@@ -17,6 +17,6 @@ export class ContactsListItemComponent {
   @Input() public selected!: boolean;
 
   selectContact(selectcontact: ContactWithBatch) {
-      this.contactComponent.selectContact(selectcontact);
+    // this.contactComponent.selectContact(selectcontact);
   }
 }

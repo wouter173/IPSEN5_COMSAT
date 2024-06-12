@@ -6,17 +6,20 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-@Entity
 @Table(name = "contact")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 public class ContactModel {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -44,7 +47,18 @@ public class ContactModel {
     @Column(name = "region")
     private String region;
 
+    @Column(name = "deleted")
+    private boolean deleted;
+
     @JsonBackReference
     @OneToMany(mappedBy = "contact", fetch = FetchType.EAGER)
     private List<BatchContactEntryModel> batchContacts;
+
+    @UpdateTimestamp
+    @Column(name = "last_modified", nullable = false)
+    private Date lastModified;
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false)
+    private Date createdAt;
 }

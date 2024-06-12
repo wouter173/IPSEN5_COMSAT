@@ -15,4 +15,5 @@ public class BatchResponseDto {
     private String lastModified;
     private String createdAt;
     private List<BatchResponseContactDto> contacts;
+
 }

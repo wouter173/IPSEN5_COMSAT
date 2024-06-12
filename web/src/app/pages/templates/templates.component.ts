@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { HttpClientModule } from '@angular/common/http';
 import { Editor, NgxEditorModule } from 'ngx-editor';
@@ -11,6 +11,8 @@ import { Template } from '../../models/templates';
 import { v4 as uuidv4 } from 'uuid';
 import { LanguageDialogComponent } from '../../components/language-dialog/language-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { LucideAngularModule } from 'lucide-angular';
+import { platforms } from '../../models/platform';
 
 @Component({
   selector: 'app-templates',
@@ -24,13 +26,14 @@ import { MatDialog } from '@angular/material/dialog';
     ReactiveFormsModule,
     MatSelectModule,
     CommonModule,
+    LucideAngularModule,
   ],
   templateUrl: './templates.component.html',
-  styleUrl: './templates.component.scss',
 })
 export class TemplatesComponent {
   editor: Editor = new Editor();
   templateService = inject(TemplatesService);
+  dialog = inject(MatDialog);
 
   templateBody = '';
   templateHeader = '';
@@ -38,48 +41,47 @@ export class TemplatesComponent {
   selectedLanguage = 'english';
 
   sendedData: Template | undefined;
-  templates: Template[] = [];
-  selectedTemplate: Template | undefined;
 
-  constructor(public dialog: MatDialog) {}
+  selectedTemplateId = signal<string | null>(null);
+  templates = this.templateService.templates;
+  selectedTemplate = computed(() => (this.templates() ? this.templates().find((t) => t.id === this.selectedTemplateId()) : undefined));
+
+  platforms = platforms;
 
   async ngOnInit() {
     this.loadTemplates();
   }
-
-
 
   ngOnDestroy() {
     this.editor.destroy();
   }
 
   async loadTemplates() {
-    this.templates = await this.templateService.getTemplates();
-    this.selectedTemplate = this.templates[0];
     this.onDisplay();
   }
 
-
   onTextChanged() {
-    this.selectedTemplate!.translations!.find((t) => t.language === this.selectedLanguage)!.body = this.templateBody;
+    this.selectedTemplate()!.translations!.find((t) => t.language === this.selectedLanguage)!.body = this.templateBody;
   }
 
   onDisplay() {
-    this.templateHeader = this.selectedTemplate!.header;
-    const translation = this.selectedTemplate!.translations!.find((t) => t.language === this.selectedLanguage);
+    this.templateHeader = this.selectedTemplate()!.header;
+    console.log(this.selectedTemplate!);
+    const translation = this.selectedTemplate()!.translations!.find((t) => t.language === this.selectedLanguage);
     this.templateBody = translation!.body;
   }
 
   onSave() {
     if (this.selectedTemplate) {
-      this.selectedTemplate.header = this.templateHeader;
-      this.selectedTemplate.updatedAt = new Date().toISOString();
-      this.templateService.updateTemplate(this.selectedTemplate);
+      this.selectedTemplate()!.header = this.templateHeader;
+      this.selectedTemplate()!.lastModified = new Date().toISOString();
+
+      this.templateService.updateTemplate(this.selectedTemplate()!);
     }
   }
 
   receiveTemplate(template: Template) {
-    this.selectedTemplate = template;
+    this.selectedTemplateId.set(template.id);
     this.onDisplay();
   }
 
@@ -93,7 +95,7 @@ export class TemplatesComponent {
         this.selectedLanguage = 'english';
         return;
       }
-      this.selectedTemplate!.translations!.push({
+      this.selectedTemplate()!.translations!.push({
         language: result,
         body: '',
       });
@@ -102,8 +104,9 @@ export class TemplatesComponent {
   }
 
   onNewTemplate() {
-    this.selectedTemplate = {
-      id: uuidv4(),
+    const id = uuidv4();
+    this.templates().push({
+      id,
       platform: 'kik' as 'snapchat' | 'kik' | 'whatsapp' | 'instagram' | 'telegram',
       header: '',
       body: '',
@@ -114,9 +117,10 @@ export class TemplatesComponent {
         },
       ],
       metadata: '',
-      updatedAt: new Date().toISOString(),
+      lastModified: new Date().toISOString(),
       createdAt: new Date().toISOString(),
-    };
+    });
+    this.selectedTemplateId.set(id);
     this.onDisplay();
   }
 }

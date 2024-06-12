@@ -63,14 +63,27 @@ export class BatchCreateDialogComponent {
     const name = this.name();
 
     if (this.fileState().state === 'success') {
-      this.batchesService.createBatch({
+      const newBatch = {
         id: nanoid(),
-        state: 'NOTSENT',
+        state: 'NOTSENT' as 'NOTSENT' | 'SENDING' | 'SENT',
         createdAt: new Date(),
         lastModified: new Date(),
         name,
-        contacts: contacts.map((contact) => ({ ...contact, status: 'NOTSENT' })),
+        contacts: contacts.map((contact) => ({
+          ...contact,
+          hidden: false,
+          status: 'NOTSENT' as 'NOTSENT' | 'SENDING' | 'SENT' | 'ERROR' | 'READ' | 'REPLIED',
+        })),
+      };
+
+      // this.batchesService.createBatch(newBatch);
+
+      this.batchesService.sendBatchData(newBatch).subscribe({
+        next: () => console.log('Batch data sent successfully'),
+        error: (error) => console.error('Error sending batch data:', error),
       });
+
+      this.batchesService.getAllBatches().subscribe();
 
       this.createForm.nativeElement.reset();
       this.closeDialog();
