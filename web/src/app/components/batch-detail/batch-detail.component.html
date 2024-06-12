@@ -136,22 +136,7 @@
                 </div>
                 <div class="grid grid-cols-[120px,auto] text-sm font-medium">
                   <span class="text-[#676768]">Status</span>
-                  <span>{{
-                    contact.status
-                      ? {
-                          NOTSENT: "Not sent yet.",
-                          SENDING: "Sending...",
-                          SENT: "Delivered",
-                          ERROR: "Something went wrong sending your message",
-                          READ: "Read",
-                          REPLIED: "Replied",
-                          ANSWERED: "Answered",
-                          QUEUED: "Queued",
-                          DELIVERED: "Delivered",
-                          "USERNAME NOT FOUND": "User not found",
-                        }[contact.status]
-                      : "-"
-                  }}</span>
+                  <span>{{ statusService.renderStatus(contact.status) }}</span>
 
                   <span class="text-[#676768]" *ngIf="editingContact === contact">Fullname</span>
                   <input
