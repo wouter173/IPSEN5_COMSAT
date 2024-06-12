@@ -12,7 +12,7 @@
       </div>
     </div>
   </div>
-  <div class="w-full p-8">
+  <div class="flex w-full flex-col gap-y-6 p-8">
     @if (selectedContact(); as contact) {
       <div class="flex flex-col gap-2.5">
         <div class="flex justify-between">
@@ -43,6 +43,39 @@
             <span class="font-semibold text-[#676768]">{{ contact.platform }}</span>
           </div>
         </div>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <h2 class="mb-2 text-2xl font-semibold">Messages</h2>
+        @for (entry of contact.entries; track $index) {
+          <div class="flex flex-col gap-1">
+            <span class="text-xs font-semibold">Spine - {{ entry.batchName }}</span>
+            <div class="flex w-fit max-w-[60%] flex-col gap-1 whitespace-pre-wrap rounded-2xl rounded-tl-none bg-base-5 p-3">
+              {{ entry.message }}
+
+              <div class="text-xs font-semibold" [title]="entry.createdAt | date: 'hh:mm:ss d MMM y'">
+                @if (["NOTSENT", "SENDING", "QUEUED"].includes(entry.status)) {
+                  {{ statusService.renderStatus(entry.status) }}
+                } @else {
+                  {{ entry.createdAt | date: "d MMM y" }}
+                }
+              </div>
+            </div>
+          </div>
+
+          @if (!["NOTSENT", "SENDING", "QUEUED"].includes(entry.status)) {
+            <div class="flex flex-col items-end gap-1">
+              <span class="text-xs font-semibold">{{ contact.firstName }}</span>
+
+              <div class="max-w-[60%] whitespace-pre-wrap rounded-2xl rounded-tr-none bg-primary-blue-1 p-3 text-white/80">
+                {{ statusService.renderStatus(entry.status) }}
+                <div class="text-xs font-semibold" [title]="entry.lastModified | date: 'hh:mm:ss d MMM y'">
+                  {{ entry.lastModified | date: "d MMM y" }}
+                </div>
+              </div>
+            </div>
+          }
+        }
       </div>
     } @else if (contacts().length === 0) {
       <div class="flex h-full flex-col items-center justify-center">

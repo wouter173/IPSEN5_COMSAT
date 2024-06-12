@@ -1,15 +1,16 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { Observable, from, map, take, tap } from 'rxjs';
 import { z } from 'zod';
-import { Contact, contactSchema } from '../models/contact';
+import { Contact } from '../models/contact';
 import { ApiService } from './api.service';
+import { ContactWithEntries, contactWithEntriesSchema } from '../models/contact-with-entries';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ContactsService {
   private api = inject(ApiService);
-  private _contacts = signal<Contact[]>([]);
+  private _contacts = signal<ContactWithEntries[]>([]);
   public contacts = this._contacts.asReadonly();
 
   constructor() {
@@ -17,7 +18,7 @@ export class ContactsService {
   }
 
   public getContacts(): Observable<Contact[]> {
-    return from(this.api.get('/contacts', { schema: z.array(contactSchema) })).pipe(
+    return from(this.api.get('/contacts', { schema: z.array(contactWithEntriesSchema) })).pipe(
       map((contacts) => contacts.data),
       tap(this._contacts.set),
       take(1),
