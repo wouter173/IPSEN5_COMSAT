@@ -11,6 +11,7 @@ export class LogoutService {
 
   async logout() {
     this.auth.removeToken();
-    this.router.navigate(['login']);
+    //@ts-expect-error
+    window.location = '/login';
   }
 }
