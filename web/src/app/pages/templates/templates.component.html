@@ -13,8 +13,9 @@
 
       <button
         (click)="onNewTemplate()"
-        class="fixed bottom-6 m-2.5 mx-5 grid size-12 place-items-center rounded-full bg-[#4d537b] text-white transition-all hover:bg-primary-blue-1 active:scale-[90%]"
-      >
+        class="fixed bottom-6 m-2.5 mx-5 grid size-12 place-items-center rounded-full bg-[#4d537b] text-white transition-all hover:bg-primary-blue-1 active:scale-[90%] disabled:bg-gray-500 "
+        [disabled]="!roleService.isAdmin()"
+        >
         <lucide-icon name="plus-icon"></lucide-icon>
       </button>
     </div>
@@ -23,11 +24,13 @@
     <div class="flex items-center justify-between">
       <div>
         <label for="header" class="mb-1 text-sm font-semibold">Title</label>
-        <input id="header" class="font-xl mb-2 w-full min-w-96 rounded-md border-2 px-2 py-1" [(ngModel)]="templateHeader" />
+        <input id="header" class="font-xl mb-2 w-full min-w-96 rounded-md border-2 px-2 py-1" [(ngModel)]="templateHeader" [disabled]="!roleService.isAdmin()" />
       </div>
       <button
-        class="flex h-min items-center justify-center gap-2 rounded-lg bg-primary-blue-1 px-3 py-2 font-semibold text-white transition-all enabled:hover:bg-primary-blue-1/85 enabled:active:scale-[98%]"
+        class="flex h-min items-center justify-center gap-2 rounded-lg bg-primary-blue-1 px-3 py-2 font-semibold text-white transition-all enabled:hover:bg-primary-blue-1/85 enabled:active:scale-[98%] disabled:bg-gray-500 "
         (click)="onSave()"
+        [disabled]="!roleService.isAdmin()"
+        
       >
         <lucide-icon name="save" class="h-4 w-4 text-white" />
         Save
@@ -35,7 +38,7 @@
     </div>
     <div class="flex flex-col gap-1">
       <label for="platform" class="text-sm font-semibold">Platform</label>
-      <select [(ngModel)]="selectedPlatform" id="platform" class="rounded-md border-2 px-2 py-1">
+      <select [(ngModel)]="selectedPlatform" id="platform" class="rounded-md border-2 px-2 py-1" [disabled]="!roleService.isAdmin()">
         <option *ngFor="let platform of platforms" [value]="platform">{{ platform }}</option>
       </select>
     </div>
@@ -49,7 +52,9 @@
         @for (translation of selectedTemplate()?.translations; track $index) {
         <mat-option [value]="translation.language">{{ translation.language }}</mat-option>
         }
-        <mat-option (click)="newLanguage()">new language</mat-option>
+        @if (roleService.isAdmin()) {
+          <mat-option (click)="newLanguage()">new language</mat-option>
+        }
       </mat-select>
 
       <!-- <ngx-editor-menu [editor]="editor"> </ngx-editor-menu> -->
@@ -61,6 +66,7 @@
         [disabled]="false"
         [placeholder]="'Type here...'"
         class="rounded-md px-2"
+        [disabled]="!roleService.isAdmin()"
       />
     </div>
   </div>

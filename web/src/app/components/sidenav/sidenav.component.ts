@@ -4,6 +4,7 @@ import { NavlinkComponent } from '../navlink/navlink.component';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { LogoutService } from '../../services/logout.service';
+import { RoleService } from '../../services/role.service';
 
 @Component({
   selector: 'app-sidenav',
@@ -12,6 +13,7 @@ import { LogoutService } from '../../services/logout.service';
   imports: [NavlinkComponent, CommonModule, LucideAngularModule],
 })
 export class SidenavComponent {
+  roleService = inject(RoleService);
   isProfileDropdownOpen: boolean = false;
 
   logoutService = inject(LogoutService);

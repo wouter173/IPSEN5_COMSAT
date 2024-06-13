@@ -13,7 +13,6 @@ import { SettingsComponent } from './pages/settings/settings.component';
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   {
-    canActivate: [authGuard],
     path: '',
     component: DashboardComponent,
     children: [
@@ -22,7 +21,7 @@ export const routes: Routes = [
       { path: 'contacts', component: ContactsComponent },
       { path: 'contacts/:id', component: ContactsComponent },
       { path: 'templates', component: TemplatesComponent },
-      { path: 'users', component: UsersComponent },
+      { path: 'users', component: UsersComponent},
       { path: '', component: ReportsComponent },
     ],
   },

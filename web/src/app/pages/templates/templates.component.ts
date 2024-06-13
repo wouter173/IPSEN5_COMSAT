@@ -13,6 +13,7 @@ import { LanguageDialogComponent } from '../../components/language-dialog/langua
 import { MatDialog } from '@angular/material/dialog';
 import { LucideAngularModule } from 'lucide-angular';
 import { platforms } from '../../models/platform';
+import { RoleService } from '../../services/role.service';
 
 @Component({
   selector: 'app-templates',
@@ -31,6 +32,7 @@ import { platforms } from '../../models/platform';
   templateUrl: './templates.component.html',
 })
 export class TemplatesComponent {
+  roleService = inject(RoleService);
   editor: Editor = new Editor();
   templateService = inject(TemplatesService);
   dialog = inject(MatDialog);

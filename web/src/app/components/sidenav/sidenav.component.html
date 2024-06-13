@@ -21,9 +21,11 @@
       <li>
         <app-navlink key="navlink-templates" pathname="/templates" icon="clipboard-icon">Templates</app-navlink>
       </li>
-      <li>
-        <app-navlink key="navlink-users" pathname="/users" icon="users-icon">Users</app-navlink>
-      </li>
+      @if (roleService.isAdmin()) {
+        <li>
+          <app-navlink key="navlink-users" pathname="/users" icon="users-icon">Users</app-navlink>
+        </li>
+      }
     </ul>
     <div
       class="relative bottom-0 w-full outline-transparent focus:outline-transparent focus-visible:outline-transparent active:outline-transparent"
