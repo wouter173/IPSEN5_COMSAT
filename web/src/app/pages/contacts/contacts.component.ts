@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { SpinnerComponent } from '../../components/spinner/spinner.component';
 import { StatusService } from '../../services/status.service';
+import { Contact } from "../../models/contact";
 
 @Component({
   selector: 'app-contacts',
@@ -28,5 +29,17 @@ export class ContactsComponent {
     });
 
     this.contactService.getContacts().subscribe();
+  }
+
+
+  deleteContact(contactId: string) {
+    if (window.confirm('Are you sure you want to delete this contact?')) {
+      this.contactService.deleteContact(contactId).subscribe(() => {
+        const index = this.contacts().findIndex(contact => contact.id === contactId);
+        if (index !== -1) {
+          this.contacts().splice(index, 1);
+        }
+      });
+    }
   }
 }
