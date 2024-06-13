@@ -38,12 +38,6 @@ public class BatchController {
         return ResponseEntity.ok("Batch sent successfully");
     }
 
-    @PostMapping("/{id}/send")
-    public ResponseEntity<String> sendBatch(@PathVariable String id) {
-        batchService.sendBatch(UUID.fromString(id));
-        return ResponseEntity.ok("Batch sent successfully");
-    }
-
     @PutMapping("/{id}")
     public ResponseEntity<BatchModel> updateBatchName(@PathVariable UUID id, @RequestBody BatchOptionsDto batchOptionsDto) {
         BatchModel batch = batchDao.findById(id);
@@ -57,6 +51,7 @@ public class BatchController {
         return ResponseEntity.ok(updatedBatch);
     }
 
+//    I hate this code
     @GetMapping()
     public ResponseEntity<List<BatchResponseDto>> getAllBatches() {
         List<BatchModel> batches = batchDao.getAllBatches();
