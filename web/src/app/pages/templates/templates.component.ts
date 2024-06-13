@@ -89,7 +89,7 @@ export class TemplatesComponent {
   }
 
   onDisplay() {
-    if (!this.selectedTemplate()) {
+    if (this.selectedTemplate()) {
       this.templateHeader = this.selectedTemplate()!.header;
       const translation = this.selectedTemplate()!.translations!.find((t) => t.language === this.selectedLanguage);
       this.templateBody = translation!.body;
@@ -105,6 +105,7 @@ export class TemplatesComponent {
       this.templateService.updateTemplate(this.selectedTemplate()!);
     }
   }
+
 
   receiveTemplate(template: Template) {
     this.selectedTemplateId.set(template.id);

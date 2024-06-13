@@ -47,7 +47,7 @@
 
       <mat-select id="language" [(value)]="selectedLanguage" (valueChange)="onDisplay()" class="rounded-md border-2 px-2 py-1">
         @for (translation of selectedTemplate()?.translations; track $index) {
-          <mat-option [value]="translation.language">{{ translation.language }}</mat-option>
+        <mat-option [value]="translation.language">{{ translation.language }}</mat-option>
         }
         <mat-option (click)="newLanguage()">new language</mat-option>
       </mat-select>
