@@ -68,8 +68,21 @@ public class ContactController {
                     .toList();
 
             List<ContactWithEntryResponseDto> contactWithEntryResponseDtos = contacts.stream()
-                    .map(contact -> contactService.convertModelToDto(contact))
+                    .map(contact -> contactService.convertModelToDto(contact, true))
                     .toList();
+
+
+            return ResponseEntity.ok(contactWithEntryResponseDtos);
+        }
+        else if (permissionService.hasPermission(permissionService.getPrincipalRoles(), Permission.READ_CONTACT)) {
+            List<ContactModel> contacts = contactDao.getAllContacts().stream()
+                    .filter(contact -> !contact.isDeleted())
+                    .toList();
+
+            List<ContactWithEntryResponseDto> contactWithEntryResponseDtos = contacts.stream()
+                    .map(contact -> contactService.convertModelToDto(contact, false))
+                    .toList();
+
 
 
             return ResponseEntity.ok(contactWithEntryResponseDtos);
