@@ -11,6 +11,7 @@ import { SpinnerComponent } from '../spinner/spinner.component';
 import { TemplatesService } from '../../services/templates.service';
 import { Template } from '../../models/templates';
 import { ApiService } from '../../services/api.service';
+import { StatusService } from '../../services/status.service';
 
 @Component({
   selector: 'app-batch-detail',
@@ -24,6 +25,7 @@ export class BatchDetailComponent implements OnDestroy {
   public batchesService = inject(BatchesService);
   public contactService = inject(ContactsService);
   public templateService = inject(TemplatesService);
+  public statusService = inject(StatusService);
   public api = inject(ApiService);
 
   public editingContact: Contact | null = null;
@@ -97,32 +99,6 @@ export class BatchDetailComponent implements OnDestroy {
     this.batchesService.updateBatch(id, { state: 'SENDING' });
 
     this.api.post(`/batches/${this.selectedBatchId()}/send`);
-
-    // this.batchesService.updateBatch(id, {
-    //   contacts: this.selectedBatch()?.contacts.map((contact) => ({ ...contact, status: 'SENDING' })) ?? [],
-    // });
-
-    // const contactStatus = ['SENT', 'ERROR', 'READ', 'REPLIED'];
-    // this.batchesService.updateBatch(id, {
-    //   contacts:
-    //     this.selectedBatch()?.contacts.map((contact) => ({
-    //       ...contact,
-    //       status: contactStatus[Math.round(Math.random() * contactStatus.length)] as 'NOTSENT',
-    //     })) ?? [],
-    // });
-
-    // this.batchesService.updateBatch(id, { state: 'SENT' });
-
-    // const batch = this.selectedBatch();
-    // if (!batch) {
-    //   console.error('Batch not found');
-    //   return;
-    // }
-
-    // this.batchesService.sendBatchData(batch).subscribe(
-    //   (response) => console.log('Batch sent successfully', response),
-    //   (error) => console.error('Error sending batch', error),
-    // );
   }
 
   onDeleteClick(contact: Contact) {

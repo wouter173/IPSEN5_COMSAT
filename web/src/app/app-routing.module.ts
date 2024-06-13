@@ -20,6 +20,7 @@ export const routes: Routes = [
       { path: 'settings', component: SettingsComponent },
       { path: 'batches', component: BatchesComponent },
       { path: 'contacts', component: ContactsComponent },
+      { path: 'contacts/:id', component: ContactsComponent },
       { path: 'templates', component: TemplatesComponent },
       { path: 'users', component: UsersComponent },
       { path: '', component: ReportsComponent },

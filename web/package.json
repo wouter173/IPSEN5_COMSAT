@@ -11,20 +11,20 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^17.0.0",
-    "@angular/common": "^17.0.0",
-    "@angular/compiler": "^17.0.0",
-    "@angular/core": "^17.0.0",
-    "@angular/forms": "^17.0.0",
-    "@angular/material": "^17.3.4",
-    "@angular/material-experimental": "^17.3.4",
-    "@angular/platform-browser": "^17.0.0",
-    "@angular/platform-browser-dynamic": "^17.0.0",
-    "@angular/router": "^17.0.0",
+    "@angular/animations": "^18.0.2",
+    "@angular/common": "^18.0.2",
+    "@angular/compiler": "^18.0.2",
+    "@angular/core": "^18.0.2",
+    "@angular/forms": "^18.0.2",
+    "@angular/material": "^18.0.2",
+    "@angular/material-experimental": "^18.0.2",
+    "@angular/platform-browser": "^18.0.2",
+    "@angular/platform-browser-dynamic": "^18.0.2",
+    "@angular/router": "^18.0.2",
     "@types/uuid": "^9.0.8",
     "chart.js": "^4.4.2",
     "clsx": "^2.1.0",
-    "lucide-angular": "^0.379.0",
+    "lucide-angular": "^0.394.0",
     "nanoid": "^5.0.7",
     "ng-otp-input": "^1.9.3",
     "ngx-editor": "^17.0.2",
@@ -39,9 +39,9 @@
     "zone.js": "~0.14.2"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^17.0.1",
-    "@angular/cli": "^17.0.1",
-    "@angular/compiler-cli": "^17.0.0",
+    "@angular-devkit/build-angular": "^18.0.2",
+    "@angular/cli": "^18.0.2",
+    "@angular/compiler-cli": "^18.0.2",
     "@types/jasmine": "~5.1.0",
     "autoprefixer": "^10.4.19",
     "cypress": "^13.8.1",
@@ -56,6 +56,6 @@
     "prettier-plugin-tailwindcss": "^0.5.14",
     "tailwindcss": "^3.4.3",
     "tailwindcss-animate": "^1.0.7",
-    "typescript": "~5.2.2"
+    "typescript": "5.4.5"
   }
 }

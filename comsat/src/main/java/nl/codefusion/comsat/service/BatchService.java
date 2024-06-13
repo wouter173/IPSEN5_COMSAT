@@ -77,20 +77,22 @@ public class BatchService {
     }
 
     public void sendBatch(UUID batchId) {
-        List<BatchContactEntryModel> batchContacts = batchContactEntryDao.findAllByBatchId(batchId);
+        List<BatchContactEntryModel> batchContactEntries = batchContactEntryDao.findAllByBatchId(batchId);
 
         List<EngineContactDto> contacts = new ArrayList<>();
-        for (BatchContactEntryModel contact : batchContacts) {
-            if (contact.isHidden()) continue;
+        for (BatchContactEntryModel contactEntry : batchContactEntries) {
+            if (contactEntry.isHidden()) continue;
 
             //TODO Template generation
-
-            var msg = "test test";
+            String msg = "test test";
+            
+            contactEntry.setMessage(msg);
+            batchContactEntryDao.update(contactEntry.getId(), contactEntry);
 
             EngineContactDto engineContactDto = EngineContactDto.builder()
                     .batchId(batchId.toString())
                     .message(msg)
-                    .username(contact.getContact().getNickname())
+                    .username(contactEntry.getContact().getNickname())
                     .build();
 
             contacts.add(engineContactDto);

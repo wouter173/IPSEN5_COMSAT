@@ -65,14 +65,14 @@ export class BatchCreateDialogComponent {
     if (this.fileState().state === 'success') {
       const newBatch = {
         id: nanoid(),
-        state: 'NOTSENT' as 'NOTSENT' | 'SENDING' | 'SENT',
+        state: 'NOTSENT',
         createdAt: new Date(),
         lastModified: new Date(),
         name,
         contacts: contacts.map((contact) => ({
           ...contact,
           hidden: false,
-          status: 'NOTSENT' as 'NOTSENT' | 'SENDING' | 'SENT' | 'ERROR' | 'READ' | 'REPLIED',
+          status: 'NOTSENT',
         })),
       };
 
