@@ -109,6 +109,7 @@ export class TemplatesComponent {
 
   receiveTemplate(template: Template) {
     this.selectedTemplateId.set(template.id);
+    this.selectedPlatform = template.platform;
     this.onDisplay();
   }
 
