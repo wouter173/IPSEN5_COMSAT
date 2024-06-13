@@ -72,7 +72,7 @@ def get_chat_status():
 def main():
     start_bot()
     threading.Thread(target=create_queue).start()
-    app.run(use_reloader=False, debug=True)
+    app.run(use_reloader=False, debug=True, port=os.getenv("PORT"))
 
 
 if __name__ == '__main__':

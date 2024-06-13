@@ -30,6 +30,9 @@ public class BatchContactEntryModel {
     @Column(name = "hidden")
     private boolean hidden;
 
+    @Column(name = "message", columnDefinition = "TEXT")
+    private String message;
+
     @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "contact_id")

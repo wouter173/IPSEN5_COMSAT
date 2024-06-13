@@ -3,8 +3,6 @@ package nl.codefusion.comsat.engine;
 import lombok.RequiredArgsConstructor;
 import nl.codefusion.comsat.dao.BatchContactEntryDao;
 import nl.codefusion.comsat.dto.EngineContactDto;
-import nl.codefusion.comsat.models.ContactModel;
-import nl.codefusion.comsat.service.BatchService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -28,25 +26,28 @@ public class KikEngine implements EngineInterface {
 
     @Override
     public void updateContactChatStatuses() {
-       HttpHeaders headers = new HttpHeaders();
-       headers.setContentType(MediaType.APPLICATION_JSON);
-
-        ResponseEntity<List<EngineContactDto>> response = restTemplate.exchange(
-                engineUrl + "/get_chat_status",
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<>() {
-                }
-        );
-
-        List<EngineContactDto> engineContactDtos = (List<EngineContactDto>) response.getBody();
+        logger.debug("[Poller] running poller");
         try {
-            batchContactEntryDao.updateBatchStatusByUsername(engineContactDtos);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+
+            ResponseEntity<List<EngineContactDto>> response = restTemplate.exchange(
+                    engineUrl + "/get_chat_status",
+                    HttpMethod.GET,
+                    null,
+                    new ParameterizedTypeReference<>() {
+                    }
+            );
+
+            List<EngineContactDto> engineContactDtos = response.getBody();
+            try {
+                batchContactEntryDao.updateBatchStatusByUsername(engineContactDtos);
+            } catch (Exception e) {
+                logger.error("Error updating contact chat statuses", e);
+            }
         } catch (Exception e) {
-            logger.error("Error updating contact chat statuses", e);
+            logger.error("Error getting chat statuses, is the kik engine available?", e);
         }
-
-
     }
 
     @Override

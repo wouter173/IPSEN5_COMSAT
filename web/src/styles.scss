@@ -18,18 +18,18 @@
   animation-duration: 0ms;
 }
 
-$theme: matx.define-theme(
+$theme: mat.define-theme(
   (
     color: (
       theme-type: light,
-      primary: matx.$m3-azure-palette,
-      tertiary: matx.$m3-blue-palette,
+      // primary: matx.$m3-azure-palette,
+      // tertiary: matx.$m3-blue-palette,
     ),
   )
 );
 
 @include mat.core();
-@include matx.color-variants-back-compat($theme);
+// @include matx.color-variants-back-compat($theme);
 
 :root {
   @include mat.all-component-themes($theme);

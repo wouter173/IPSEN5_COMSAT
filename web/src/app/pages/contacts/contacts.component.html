@@ -1,25 +1,89 @@
 <div class="flex min-h-full w-full">
-  <div class="relative h-full min-w-96 border-r border-r-base-6">
-    <div class="sticky top-[44px] z-10 bg-white p-2.5">
-      <ul class="flex h-[calc(100vh-80px-76px)] flex-col gap-2.5 overflow-y-auto p-2.5">
-        @for (contact of contacts; track contacts.concat.name) {
-          <li>
-            <app-contacts-list-item [contact]="contact"></app-contacts-list-item>
-          </li>
-        }
-      </ul>
+  <div class="min-w-60 shrink-0">
+    <div class="relative h-full min-w-96 border-r border-r-base-6">
+      <div class="sticky top-[44px] z-10 bg-white p-2.5">
+        <ul class="flex h-[calc(100vh-80px-60px)] max-w-96 flex-col gap-2.5 overflow-y-auto pt-2.5">
+          @for (contact of contacts(); track contact.id) {
+            <li>
+              <app-contacts-list-item [contact]="contact"></app-contacts-list-item>
+            </li>
+          }
+        </ul>
+      </div>
     </div>
   </div>
+  <div class="flex w-full flex-col gap-y-6 p-8">
+    @if (selectedContact(); as contact) {
+      <div class="flex flex-col gap-2.5">
+        <div class="flex justify-between">
+          <div class="flex items-center gap-2">
+            <img [src]="'/assets/platforms/' + contact.platform.toLowerCase() + '.png'" alt="" class="size-16" />
+            <div class="flex flex-col">
+              <span class="text-2xl font-semibold">{{ contact.firstName }}</span>
+              <span class="text font-semibold text-[#676768]">{{ contact.nickname }}</span>
+            </div>
+          </div>
+          <div class="flex cursor-pointer gap-3 opacity-30 transition-all hover:opacity-100">
+            <lucide-icon name="edit-icon" class="size-[16px]" />
+            <lucide-icon name="trash-icon" class="size-[16px]" (click)="deleteContact(contact.id)" />
+          </div>
+        </div>
+        <div class="flex flex-col gap-2.5 rounded-xl border border-black/5 bg-secondary-light-2/50 px-4 py-3.5 transition-all">
+          <div class="grid grid-cols-[120px,auto] text-sm font-medium">
+            <span class="text-[#676768]">Audience</span>
+            <span class="font-semibold text-[#676768]"> {{ contact.audience }}</span>
+            <span class="text-[#676768]">Region</span>
+            <span class="font-semibold text-[#676768]"> {{ contact.region }}</span>
+            <span class="text-[#676768]">Language</span>
+            <span class="font-semibold text-[#676768]"> {{ contact.language }}</span>
+            <span class="text-[#676768]">Sex</span>
+            <span class="font-semibold text-[#676768]"> {{ contact.sex }}</span>
+            <span class="text-[#676768]">Platform</span>
+            <span class="font-semibold text-[#676768]">{{ contact.platform }}</span>
+          </div>
+        </div>
+      </div>
 
-  <div class="mx-auto mt-5 flex h-screen flex-col">
-    <div class="border">
-      <img class="h-8 w-8" src="../../../assets/platforms/instagram.png" alt="Platform" />
-      <!-- <h2>nickname: {{ selectedContact.nickname }}</h2>
-      <h2>audience: {{ selectedContact.audience }}</h2>
-      <h2>language: {{ selectedContact.language }}</h2>
-      <h2>region: {{ selectedContact.region }}</h2>
-      <h2>firstName: {{ selectedContact.firstName }}</h2>
-      <h2>sex: {{ selectedContact.sex }}</h2> -->
-    </div>
+      <div class="flex flex-col gap-2">
+        <h2 class="mb-2 text-2xl font-semibold">Messages</h2>
+        @for (entry of contact.entries; track $index) {
+          <div class="flex flex-col gap-1">
+            <span class="text-xs font-semibold">Spine - {{ entry.batchName }}</span>
+            <div class="flex w-fit max-w-[60%] flex-col gap-1 whitespace-pre-wrap rounded-2xl rounded-tl-none bg-base-5 p-3">
+              {{ entry.message }}
+
+              <div class="text-xs font-semibold" [title]="entry.createdAt | date: 'hh:mm:ss d MMM y'">
+                @if (["NOTSENT", "SENDING", "QUEUED"].includes(entry.status)) {
+                  {{ statusService.renderStatus(entry.status) }}
+                } @else {
+                  {{ entry.createdAt | date: "d MMM y" }}
+                }
+              </div>
+            </div>
+          </div>
+
+          @if (!["NOTSENT", "SENDING", "QUEUED"].includes(entry.status)) {
+            <div class="flex flex-col items-end gap-1">
+              <span class="text-xs font-semibold">{{ contact.firstName }}</span>
+
+              <div class="max-w-[60%] whitespace-pre-wrap rounded-2xl rounded-tr-none bg-primary-blue-1 p-3 text-white/80">
+                {{ statusService.renderStatus(entry.status) }}
+                <div class="text-xs font-semibold" [title]="entry.lastModified | date: 'hh:mm:ss d MMM y'">
+                  {{ entry.lastModified | date: "d MMM y" }}
+                </div>
+              </div>
+            </div>
+          }
+        }
+      </div>
+    } @else if (contacts().length === 0) {
+      <div class="flex h-full flex-col items-center justify-center">
+        <div class="text-center">
+          <app-spinner class="fill-primary-red-1 text-white" />
+        </div>
+      </div>
+    } @else {
+      <div class="grid place-items-center"><h1 class="mt-96 text-3xl font-bold opacity-40">Please select a contact</h1></div>
+    }
   </div>
 </div>

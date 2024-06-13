@@ -28,8 +28,8 @@ public class ContactModel {
 
     @Column(name = "firstname")
     private String firstName;
-
-    @Column(name = "nickname")
+    
+    @Column(name = "nickname", unique = true)
     private String nickname;
 
     @Column(name = "platform")
