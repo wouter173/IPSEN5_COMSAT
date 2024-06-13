@@ -27,7 +27,7 @@ export class BatchListComponent {
     .filter((batch) => {
       return this.filters().every((filter) => {
         return this.filters().length === 0 || batch.contacts.some((contact) => {
-          return this.filters().includes(contact.platform as string);
+          return this.filters().includes(contact.platform);
         });
       });
     });
