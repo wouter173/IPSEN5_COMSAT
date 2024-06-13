@@ -14,5 +14,19 @@ export class RoleService {
     }
     return this.userService.me()!.role === 'admin';
   }
+
+  isFict() {
+    if (!this.userService.me()) {
+      return false;
+    }
+    return this.userService.me()!.role === 'fict';
+  }
+
+  isResearcher() {
+    if (!this.userService.me()) {
+      return false;
+    }
+    return this.userService.me()!.role === 'researcher';
+  }
   
 }

@@ -18,9 +18,11 @@
       <li>
         <app-navlink key="navlink-contacts" pathname="/contacts" icon="contact-round-icon">Contacts</app-navlink>
       </li>
-      <li>
-        <app-navlink key="navlink-templates" pathname="/templates" icon="clipboard-icon">Templates</app-navlink>
-      </li>
+      @if (!roleService.isResearcher()) {
+        <li>
+          <app-navlink key="navlink-templates" pathname="/templates" icon="clipboard-icon">Templates</app-navlink>
+        </li>
+      }
       @if (roleService.isAdmin()) {
         <li>
           <app-navlink key="navlink-users" pathname="/users" icon="users-icon">Users</app-navlink>

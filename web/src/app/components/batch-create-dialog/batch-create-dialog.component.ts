@@ -8,6 +8,7 @@ import { Contact, contactSchema } from '../../models/contact';
 import { FormsModule } from '@angular/forms';
 import { BatchesService } from '../../services/batches.service';
 import { nanoid } from 'nanoid';
+import { RoleService } from '../../services/role.service';
 
 @Component({
   selector: 'app-batch-create-dialog',
@@ -17,6 +18,7 @@ import { nanoid } from 'nanoid';
   imports: [CommonModule, LucideAngularModule, SpinnerComponent, FormsModule],
 })
 export class BatchCreateDialogComponent {
+  roleService = inject(RoleService);
   @ViewChild('createModal') createModal!: ElementRef<HTMLDialogElement>;
   @ViewChild('createForm') createForm!: ElementRef<HTMLFormElement>;
   public batchesService = inject(BatchesService);
