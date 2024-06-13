@@ -1,5 +1,5 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { Component, ElementRef, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, Signal, ViewChild, inject } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteSelectedEvent, MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
@@ -27,11 +27,14 @@ import { LucideAngularModule } from 'lucide-angular';
   ],
 })
 export class ChipsFilterComponent {
+  @Input() options!:string[];
+  @Output() onRemove = new EventEmitter<string>();
+  @Output() onAdd = new EventEmitter<string>();
+
   separatorKeysCodes: number[] = [ENTER, COMMA];
   fruitCtrl = new FormControl('');
   filteredFruits: Observable<string[]>;
   fruits: string[] = [];
-  allFruits: string[] = ['snapchat', 'kik', 'whatsapp', 'instagram', 'telegram', 'germany', 'france'];
 
   @ViewChild('fruitInput') fruitInput!: ElementRef<HTMLInputElement>;
 
@@ -40,15 +43,18 @@ export class ChipsFilterComponent {
   constructor() {
     this.filteredFruits = this.fruitCtrl.valueChanges.pipe(
       startWith(null),
-      map((fruit: string | null) => (fruit ? this._filter(fruit) : [])),
+      map((fruit: string | null) => (fruit ? this._filter(fruit) : this.options.slice())),
     );
   }
 
   add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
 
-    if (this.allFruits.includes(value)) {
+    console.log(value, this.options)
+
+    if (this.options.includes(value)) {
       this.fruits.push(value);
+      this.onAdd.emit(value);
       this.fruitCtrl.setValue(null);
       event.chipInput!.clear();
     }
@@ -59,19 +65,20 @@ export class ChipsFilterComponent {
 
     if (index >= 0) {
       this.fruits.splice(index, 1);
+      this.onRemove.emit(fruit);
       this.announcer.announce(`Removed ${fruit}`);
     }
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {
     this.fruits.push(event.option.viewValue);
+    this.onAdd.emit(event.option.viewValue);
     this.fruitInput.nativeElement.value = '';
     this.fruitCtrl.setValue(null);
   }
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
-
-    return this.allFruits.filter((fruit) => fruit.toLowerCase().includes(filterValue));
+    return this.options.filter((fruit) => fruit.toLowerCase().includes(filterValue));
   }
 }
