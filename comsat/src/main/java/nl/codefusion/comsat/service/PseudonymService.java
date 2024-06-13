@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PseudonymService {
 
-    private String[] planets = {"Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"};
+    private String[] planets = {"Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Neptune"};
 
-    String  generatePseudonym() {
+    public String  generatePseudonym() {
         String pseudonym;
         pseudonym = planets[(int) (Math.random() * planets.length)];
         pseudonym = pseudonym + (int) (Math.random() * 1000);
