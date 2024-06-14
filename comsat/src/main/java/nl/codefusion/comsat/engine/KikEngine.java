@@ -21,7 +21,7 @@ public class KikEngine implements EngineInterface {
     private final Logger logger;
     private final RestTemplate restTemplate = new RestTemplate();
 
-    @Value("${kik.engine}")
+    @Value("${kik.engine_url}")
     private String engineUrl;
 
     @Override
