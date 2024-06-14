@@ -49,11 +49,35 @@ export class TemplatesComponent {
   selectedTemplateId = signal<string | null>(null);
   templates = this.templateService.templates;
   selectedTemplate = computed(() => (this.templates() ? this.templates().find((t) => t.id === this.selectedTemplateId()) : undefined));
+  private _selectedPlatform: 'snapchat' | 'kik' | 'whatsapp' | 'instagram' | 'telegram' = 'snapchat';
+
 
   platforms = platforms;
 
+  constructor() {
+    this.selectedPlatform = 'snapchat';
+  }
+  get selectedPlatform(): 'snapchat' | 'kik' | 'whatsapp' | 'instagram' | 'telegram' {
+    return this._selectedPlatform;
+  }
+
+  set selectedPlatform(value: 'snapchat' | 'kik' | 'whatsapp' | 'instagram' | 'telegram') {
+    this._selectedPlatform = value;
+    if (this.selectedTemplate()) {
+      this.selectedTemplate()!.platform = value;
+    }
+  }
+
+
+
   async ngOnInit() {
     this.onDisplay();
+  }
+
+  ngOnChanges() {
+    if (this.selectedTemplate()) {
+      this.selectedTemplate()!.platform = this.selectedPlatform;
+    }
   }
 
   ngOnDestroy() {
@@ -71,22 +95,27 @@ export class TemplatesComponent {
   }
 
   onDisplay() {
-    this.templateHeader = this.selectedTemplate()!.header;
-    const translation = this.selectedTemplate()!.translations!.find((t) => t.language === this.selectedLanguage);
-    this.templateBody = translation!.body;
+    if (this.selectedTemplate()) {
+      this.templateHeader = this.selectedTemplate()!.header;
+      const translation = this.selectedTemplate()!.translations!.find((t) => t.language === this.selectedLanguage);
+      this.templateBody = translation!.body;
+    }
   }
 
   onSave() {
     if (this.selectedTemplate) {
       this.selectedTemplate()!.header = this.templateHeader;
+      this.selectedTemplate()!.platform = this.selectedTemplate()!.platform;
       this.selectedTemplate()!.lastModified = new Date().toISOString();
 
       this.templateService.updateTemplate(this.selectedTemplate()!);
     }
   }
 
+
   receiveTemplate(template: Template) {
     this.selectedTemplateId.set(template.id);
+    this.selectedPlatform = template.platform;
     this.onDisplay();
   }
 
@@ -110,22 +139,27 @@ export class TemplatesComponent {
 
   onNewTemplate() {
     const id = uuidv4();
-    this.templates().push({
-      id,
-      platform: 'kik' as 'snapchat' | 'kik' | 'whatsapp' | 'instagram' | 'telegram',
-      header: '',
-      body: '',
-      translations: [
-        {
-          language: 'english',
-          body: '',
-        },
-      ],
-      metadata: '',
-      lastModified: new Date().toISOString(),
-      createdAt: new Date().toISOString(),
-    });
-    this.selectedTemplateId.set(id);
-    this.onDisplay();
+    const selectedPlatform = this.selectedTemplate()?.platform;
+    if (!selectedPlatform) {
+      return;
+    } else {
+      this.templates().push({
+        id,
+        platform: selectedPlatform as 'snapchat' | 'kik' | 'whatsapp' | 'instagram' | 'telegram',
+        header: '',
+        body: '',
+        translations: [
+          {
+            language: 'english',
+            body: '',
+          },
+        ],
+        metadata: '',
+        lastModified: new Date().toISOString(),
+        createdAt: new Date().toISOString(),
+      });
+      this.selectedTemplateId.set(id);
+      this.onDisplay();
+    }
   }
 }

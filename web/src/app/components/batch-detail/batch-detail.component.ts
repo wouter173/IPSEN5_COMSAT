@@ -50,7 +50,6 @@ export class BatchDetailComponent implements OnDestroy {
   constructor() {
     effect(() => {
       if (this.poller) clearInterval(this.poller);
-      console.log(this.selectedBatch()?.state);
       if (this.selectedBatch()?.state !== 'NOTSENT') {
         this.startPoller();
       }

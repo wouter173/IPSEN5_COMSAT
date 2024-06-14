@@ -35,10 +35,8 @@
     </div>
     <div class="flex flex-col gap-1">
       <label for="platform" class="text-sm font-semibold">Platform</label>
-      <select [value]="selectedTemplate()?.platform" id="platform" class="rounded-md border-2 px-2 py-1">
-        @for (platform of platforms; track platform) {
-          <option [value]="platform">{{ platform }}</option>
-        }
+      <select [(ngModel)]="selectedPlatform" id="platform" class="rounded-md border-2 px-2 py-1">
+        <option *ngFor="let platform of platforms" [value]="platform">{{ platform }}</option>
       </select>
     </div>
 
@@ -49,7 +47,7 @@
 
       <mat-select id="language" [(value)]="selectedLanguage" (valueChange)="onDisplay()" class="rounded-md border-2 px-2 py-1">
         @for (translation of selectedTemplate()?.translations; track $index) {
-          <mat-option [value]="translation.language">{{ translation.language }}</mat-option>
+        <mat-option [value]="translation.language">{{ translation.language }}</mat-option>
         }
         <mat-option (click)="newLanguage()">new language</mat-option>
       </mat-select>
