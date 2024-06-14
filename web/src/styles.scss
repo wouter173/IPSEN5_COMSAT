@@ -81,3 +81,17 @@ $theme: mat.define-theme(
 .pressable:active {
   transform: scale(0.95);
 }
+
+.placeholder {
+  @apply inline-block rounded-md bg-primary-red-3/30 px-1 py-0.5 text-sm font-semibold text-primary-red-1;
+}
+
+.placeholder.ProseMirror-selectednode {
+  @apply outline outline-primary-red-1;
+}
+
+img.ProseMirror-separator {
+  display: inline !important;
+  border: none !important;
+  margin: 0 !important;
+}
