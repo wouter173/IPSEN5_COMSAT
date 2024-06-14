@@ -25,10 +25,25 @@ class EchoBot(KikClientCallback):
     def add_contact(self, contact: Contact):
         self.user_message_status.append(contact)
 
-    def update_contact_status(self, username, status):
+    def update_contact_status(self, username, message_id, status):
         for entry in self.user_message_status:
             if entry.username == username:
-                entry.status = status
+                print(entry.message_id, message_id, entry.message_id == message_id);
+                if entry.message_id == message_id:
+                    print("Updating status", entry.status, status)
+                    entry.status = status
+                    print(entry)
+                    break
+
+    def update_contact_message_id(self, username, batch_id, message_id):
+        for entry in self.user_message_status:
+            if entry.username == username and entry.batch_id == batch_id:
+                entry.message_id = message_id
+
+    def update_contact_to_replied(self, username):
+        for entry in self.user_message_status:
+            if entry.username == username and entry.status == 'read':
+                entry.status = 'replied'
                 break
 
     def set_contact_error_status(self, contact: Contact, error: str):
@@ -44,18 +59,20 @@ class EchoBot(KikClientCallback):
     def on_register_error(self, response: SignUpError):
         self.client.log.error(f"Register error: {response.message}")
 
-    def send_template_messages(self, username, message):
-        self.client.send_chat_message(username, message)
-        self.update_contact_status(username, 'sent')
+    def send_template_messages(self, username, batch_id, message):
+        message_id = self.client.send_chat_message(username, message)
+        self.update_contact_message_id(username, batch_id, message_id)
+        self.update_contact_status(username, message_id, 'sent')
 
-    def on_message_read(self, read: chatting.IncomingMessageReadEvent):
-        username = jid_to_username(read.from_jid)
-        self.update_contact_status(username, 'read')
+    def on_message_read(self, read_message: chatting.IncomingMessageReadEvent):
+        username = jid_to_username(read_message.from_jid)
+        self.update_contact_status(username, read_message.receipt_message_id, 'read')
 
-    def on_message_delivered(self, delivered: chatting.IncomingMessageDeliveredEvent):
-        username = jid_to_username(delivered.from_jid)
-        self.update_contact_status(username, 'delivered')
+    def on_message_delivered(self, delivered_message: chatting.IncomingMessageDeliveredEvent):
+        username = jid_to_username(delivered_message.from_jid)
+        self.update_contact_status(username, delivered_message.receipt_message_id, 'delivered')
 
     def on_chat_message_received(self, message: chatting.IncomingChatMessage):
         username = jid_to_username(message.from_jid)
-        self.update_contact_status(username, 'answered')
+        self.update_contact_to_replied(username)
+

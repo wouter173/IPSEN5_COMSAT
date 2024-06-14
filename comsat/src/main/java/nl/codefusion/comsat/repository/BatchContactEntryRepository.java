@@ -11,4 +11,6 @@ public interface BatchContactEntryRepository extends JpaRepository<BatchContactE
     List<BatchContactEntryModel> findAllByBatchId(UUID batchId);
 
     BatchContactEntryModel findByBatchIdAndContactId(UUID batchId, UUID contactId);
+
+
 }

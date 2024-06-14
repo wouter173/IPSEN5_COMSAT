@@ -30,7 +30,8 @@ def send_message_to_contact(contact: Contact):
         if bot.client.get_jid(contact.username) is None:
             bot.set_contact_error_status(contact, 'username not found')
         else:
-            bot.send_template_messages(contact.username, contact.message)
+            bot.send_template_messages(contact.username, contact.batch_id, contact.message)
+            print(contact)
 
     except KikApiException:
         bot.set_contact_error_status(contact,

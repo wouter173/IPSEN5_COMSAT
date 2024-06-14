@@ -40,10 +40,8 @@ public class BatchController {
         }
         throw new NoPermissionException();
     }
-
     @PostMapping("/{id}/send")
     public ResponseEntity<String> sendBatch(@PathVariable String id) {
-
         batchService.sendBatch(UUID.fromString(id));
         return ResponseEntity.ok("Batch sent successfully");
     }
@@ -64,6 +62,7 @@ public class BatchController {
         throw new NoPermissionException();
     }
 
+//    I hate this code
     @GetMapping()
     public ResponseEntity<List<BatchResponseDto>> getAllBatches() throws NoPermissionException {
         if (permissionService.hasPermission(permissionService.getPrincipalRoles(), READ_BATCH)) {
