@@ -1,7 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { HttpClientModule } from '@angular/common/http';
-import { Editor, NgxEditorModule } from 'ngx-editor';
+import { Editor, NgxEditorModule, schema, Toolbar, ToolbarItem } from 'ngx-editor';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { TemplateListItemComponent } from '../../components/template-list-item/template-list-item.component';
@@ -13,6 +13,8 @@ import { LanguageDialogComponent } from '../../components/language-dialog/langua
 import { MatDialog } from '@angular/material/dialog';
 import { LucideAngularModule } from 'lucide-angular';
 import { platforms } from '../../models/platform';
+import customSchema from './custom-schem-extension';
+import { insertPlaceholder } from './custom-commands';
 
 @Component({
   selector: 'app-templates',
@@ -31,7 +33,9 @@ import { platforms } from '../../models/platform';
   templateUrl: './templates.component.html',
 })
 export class TemplatesComponent {
-  editor: Editor = new Editor();
+  editor = new Editor({
+    schema: customSchema,
+  });
   templateService = inject(TemplatesService);
   dialog = inject(MatDialog);
 
@@ -49,15 +53,17 @@ export class TemplatesComponent {
   platforms = platforms;
 
   async ngOnInit() {
-    this.loadTemplates();
+    this.onDisplay();
   }
 
   ngOnDestroy() {
     this.editor.destroy();
   }
 
-  async loadTemplates() {
-    this.onDisplay();
+  insertIntoBody(type: 'username' | 'fullname'): void {
+    const { schema, view } = this.editor;
+    const command = insertPlaceholder(schema.nodes['placeholder'], type);
+    command(view.state, view.dispatch, view);
   }
 
   onTextChanged() {
@@ -66,7 +72,6 @@ export class TemplatesComponent {
 
   onDisplay() {
     this.templateHeader = this.selectedTemplate()!.header;
-    console.log(this.selectedTemplate!);
     const translation = this.selectedTemplate()!.translations!.find((t) => t.language === this.selectedLanguage);
     this.templateBody = translation!.body;
   }
