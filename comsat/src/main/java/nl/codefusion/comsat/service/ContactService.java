@@ -57,7 +57,7 @@ public class ContactService {
             firstName = contactModel.getFirstName();
             nickname = contactModel.getNickname();
         } else {
-            firstName = pseudonymService.generatePseudonym();
+            firstName = pseudonymService.generatePseudonym(contactModel.getNickname(), contactModel.getFirstName(), contactModel.getPlatform());
             nickname = "";
         }
 

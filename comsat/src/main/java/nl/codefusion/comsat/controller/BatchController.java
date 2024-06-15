@@ -84,7 +84,7 @@ public class BatchController {
                     firstName = contact.getFirstName();
                     nickname = contact.getNickname();
                 } else {
-                    firstName = pseudonymService.generatePseudonym();
+                    firstName = pseudonymService.generatePseudonym(contact.getNickname(), contact.getFirstName(), contact.getPlatform());
                     nickname = "";
                 }
 
@@ -143,7 +143,7 @@ public class BatchController {
                     firstName = contact.getFirstName();
                     nickname = contact.getNickname();
                 } else {
-                    firstName = pseudonymService.generatePseudonym();
+                    firstName = pseudonymService.generatePseudonym(contact.getNickname(), contact.getFirstName(), contact.getPlatform());
                     nickname = "";
                 }
 
