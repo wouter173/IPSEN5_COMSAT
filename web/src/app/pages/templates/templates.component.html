@@ -13,9 +13,9 @@
 
       <button
         (click)="onNewTemplate()"
-        class="fixed bottom-6 m-2.5 mx-5 grid size-12 place-items-center rounded-full bg-[#4d537b] text-white transition-all hover:bg-primary-blue-1 active:scale-[90%] disabled:bg-gray-500 "
+        class="fixed bottom-6 m-2.5 mx-5 grid size-12 place-items-center rounded-full bg-[#4d537b] text-white transition-all hover:bg-primary-blue-1 active:scale-[90%] disabled:bg-gray-500"
         [disabled]="!roleService.isAdmin()"
-        >
+      >
         <lucide-icon name="plus-icon"></lucide-icon>
       </button>
     </div>
@@ -24,13 +24,17 @@
     <div class="flex items-center justify-between">
       <div>
         <label for="header" class="mb-1 text-sm font-semibold">Title</label>
-        <input id="header" class="font-xl mb-2 w-full min-w-96 rounded-md border-2 px-2 py-1" [(ngModel)]="templateHeader" [disabled]="!roleService.isAdmin()" />
+        <input
+          id="header"
+          class="font-xl mb-2 w-full min-w-96 rounded-md border-2 px-2 py-1"
+          [(ngModel)]="templateHeader"
+          [disabled]="!roleService.isAdmin()"
+        />
       </div>
       <button
-        class="flex h-min items-center justify-center gap-2 rounded-lg bg-primary-blue-1 px-3 py-2 font-semibold text-white transition-all enabled:hover:bg-primary-blue-1/85 enabled:active:scale-[98%] disabled:bg-gray-500 "
+        class="flex h-min items-center justify-center gap-2 rounded-lg bg-primary-blue-1 px-3 py-2 font-semibold text-white transition-all enabled:hover:bg-primary-blue-1/85 enabled:active:scale-[98%] disabled:bg-gray-500"
         (click)="onSave()"
         [disabled]="!roleService.isAdmin()"
-        
       >
         <lucide-icon name="save" class="h-4 w-4 text-white" />
         Save
@@ -50,7 +54,7 @@
 
       <mat-select id="language" [(value)]="selectedLanguage" (valueChange)="onDisplay()" class="rounded-md border-2 px-2 py-1">
         @for (translation of selectedTemplate()?.translations; track $index) {
-        <mat-option [value]="translation.language">{{ translation.language }}</mat-option>
+          <mat-option [value]="translation.language">{{ translation.language }}</mat-option>
         }
         @if (roleService.isAdmin()) {
           <mat-option (click)="newLanguage()">new language</mat-option>
@@ -61,12 +65,14 @@
           <button
             (click)="insertIntoBody('username')"
             class="pressable rounded-md bg-primary-red-3/30 px-1 py-0.5 text-sm font-semibold text-primary-red-1"
+            [disabled]="!roleService.isAdmin()"
           >
             username
           </button>
           <button
             (click)="insertIntoBody('fullname')"
             class="pressable rounded-md bg-primary-red-3/30 px-1 py-0.5 text-sm font-semibold text-primary-red-1"
+            [disabled]="!roleService.isAdmin()"
           >
             fullname
           </button>
@@ -80,7 +86,7 @@
           [disabled]="false"
           [placeholder]="'Type here...'"
           style="--ngx-editor-border-color: white"
-		  [disabled]="!roleService.isAdmin()"
+          [disabled]="!roleService.isAdmin()"
         />
       </div>
     </div>
