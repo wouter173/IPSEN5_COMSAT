@@ -62,7 +62,9 @@ export class LoginComponent {
       return;
     }
 
-    if (result.success) this.router.navigate(['/']);
+    if (result.success){
+      this.router.navigate(['/']);
+    }
   }
 
   toggleShowPassword(): void {

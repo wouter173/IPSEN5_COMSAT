@@ -6,6 +6,7 @@ import nl.codefusion.comsat.dao.BatchDao;
 import nl.codefusion.comsat.dao.ContactDao;
 import nl.codefusion.comsat.dto.BatchContactDto;
 import nl.codefusion.comsat.dto.BatchDto;
+import nl.codefusion.comsat.dto.BatchResponseContactDto;
 import nl.codefusion.comsat.dto.EngineContactDto;
 import nl.codefusion.comsat.engine.KikEngine;
 import nl.codefusion.comsat.models.BatchContactEntryModel;

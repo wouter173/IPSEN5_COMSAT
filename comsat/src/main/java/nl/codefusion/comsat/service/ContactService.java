@@ -17,6 +17,7 @@ import java.util.UUID;
 public class ContactService {
 
     private final ContactDao contactDao;
+    private final PseudonymService pseudonymService;
 
     public ResponseEntity<ContactModel> updateContact(UUID id, ContactModel contactDetails) {
         ContactModel updatedContact = contactDao.updateContact(id, contactDetails);
@@ -35,7 +36,10 @@ public class ContactService {
                 .build();
     }
 
-    public ContactWithEntryResponseDto convertModelToDto(ContactModel contactModel) {
+    public ContactWithEntryResponseDto convertModelToDto(ContactModel contactModel, boolean hasDetails) {
+        String firstName;
+        String nickname;
+
         List<EntryResponseDto> entries = contactModel.getBatchContacts().stream()
                 .map(entry -> EntryResponseDto.builder()
                         .id(entry.getId())
@@ -49,10 +53,18 @@ public class ContactService {
                         .build())
                 .toList();
 
+        if (hasDetails) {
+            firstName = contactModel.getFirstName();
+            nickname = contactModel.getNickname();
+        } else {
+            firstName = pseudonymService.generatePseudonym(contactModel.getNickname(), contactModel.getFirstName(), contactModel.getPlatform());
+            nickname = "";
+        }
+
         return ContactWithEntryResponseDto.builder()
                 .id(contactModel.getId())
-                .firstName(contactModel.getFirstName())
-                .nickname(contactModel.getNickname())
+                .firstName(firstName)
+                .nickname(nickname)
                 .platform(contactModel.getPlatform())
                 .audience(contactModel.getAudience())
                 .sex(contactModel.getSex())
@@ -61,4 +73,5 @@ public class ContactService {
                 .entries(entries)
                 .build();
     }
+
 }

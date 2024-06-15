@@ -12,6 +12,7 @@ import { TemplatesService } from '../../services/templates.service';
 import { Template } from '../../models/templates';
 import { ApiService } from '../../services/api.service';
 import { StatusService } from '../../services/status.service';
+import { RoleService } from '../../services/role.service';
 
 @Component({
   selector: 'app-batch-detail',
@@ -20,6 +21,7 @@ import { StatusService } from '../../services/status.service';
   imports: [LucideAngularModule, SpinnerComponent, FormsModule, CommonModule],
 })
 export class BatchDetailComponent implements OnDestroy {
+  roleService = inject(RoleService);
   @Input() selectedBatchId!: Signal<string | null>;
 
   public batchesService = inject(BatchesService);
