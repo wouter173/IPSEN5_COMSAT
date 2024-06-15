@@ -56,18 +56,33 @@
           <mat-option (click)="newLanguage()">new language</mat-option>
         }
       </mat-select>
-
-      <!-- <ngx-editor-menu [editor]="editor"> </ngx-editor-menu> -->
-      <ngx-editor
-        id="editor"
-        [editor]="editor"
-        [(ngModel)]="templateBody"
-        (ngModelChange)="onTextChanged()"
-        [disabled]="false"
-        [placeholder]="'Type here...'"
-        class="rounded-md px-2"
-        [disabled]="!roleService.isAdmin()"
-      />
+      <div class="mt-3 overflow-hidden rounded-md border border-gray-300">
+        <div class="flex gap-1.5 p-1.5">
+          <button
+            (click)="insertIntoBody('username')"
+            class="pressable rounded-md bg-primary-red-3/30 px-1 py-0.5 text-sm font-semibold text-primary-red-1"
+          >
+            username
+          </button>
+          <button
+            (click)="insertIntoBody('fullname')"
+            class="pressable rounded-md bg-primary-red-3/30 px-1 py-0.5 text-sm font-semibold text-primary-red-1"
+          >
+            fullname
+          </button>
+        </div>
+        <hr />
+        <ngx-editor
+          id="editor"
+          [editor]="editor"
+          [(ngModel)]="templateBody"
+          (ngModelChange)="onTextChanged()"
+          [disabled]="false"
+          [placeholder]="'Type here...'"
+          style="--ngx-editor-border-color: white"
+		  [disabled]="!roleService.isAdmin()"
+        />
+      </div>
     </div>
   </div>
 </div>

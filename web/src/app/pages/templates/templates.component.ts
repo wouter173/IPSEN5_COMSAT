@@ -1,7 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { HttpClientModule } from '@angular/common/http';
-import { Editor, NgxEditorModule } from 'ngx-editor';
+import { Editor, NgxEditorModule, schema, Toolbar, ToolbarItem } from 'ngx-editor';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { TemplateListItemComponent } from '../../components/template-list-item/template-list-item.component';
@@ -14,6 +14,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { LucideAngularModule } from 'lucide-angular';
 import { platforms } from '../../models/platform';
 import { RoleService } from '../../services/role.service';
+import customSchema from './custom-schem-extension';
+import { insertPlaceholder } from './custom-commands';
 
 @Component({
   selector: 'app-templates',
@@ -33,7 +35,9 @@ import { RoleService } from '../../services/role.service';
 })
 export class TemplatesComponent {
   roleService = inject(RoleService);
-  editor: Editor = new Editor();
+  editor = new Editor({
+    schema: customSchema,
+  });
   templateService = inject(TemplatesService);
   dialog = inject(MatDialog);
 
@@ -69,7 +73,7 @@ export class TemplatesComponent {
 
 
   async ngOnInit() {
-    this.loadTemplates();
+    this.onDisplay();
   }
 
   ngOnChanges() {
@@ -82,8 +86,10 @@ export class TemplatesComponent {
     this.editor.destroy();
   }
 
-  async loadTemplates() {
-    this.onDisplay();
+  insertIntoBody(type: 'username' | 'fullname'): void {
+    const { schema, view } = this.editor;
+    const command = insertPlaceholder(schema.nodes['placeholder'], type);
+    command(view.state, view.dispatch, view);
   }
 
   onTextChanged() {
