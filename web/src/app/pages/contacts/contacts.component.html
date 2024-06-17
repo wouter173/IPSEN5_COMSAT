@@ -40,9 +40,10 @@
                 </div>
               </div>
               <div class="grid grid-cols-[120px,auto] text-sm font-medium">
+              @if(selectedBatch(); as batch){
                 <span class="text-[#676768]">Status</span>
-<!--                <span>{{ statusService.renderStatus(contact.status) }}</span>-->
-
+                <span>{{ statusService.renderStatus(batch.state) }}</span>
+                }
                 <span class="text-[#676768]" *ngIf="editingContact === contact">Fullname</span>
                 <input
                   class="focusable mb-1 rounded-md bg-white px-1 py-0.5 text-base"
