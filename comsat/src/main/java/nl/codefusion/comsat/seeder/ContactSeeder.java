@@ -23,8 +23,6 @@ public class ContactSeeder {
     public void seedContacts() {
         BatchModel batch = seedBatch();
 
-        System.out.println(batch);
-
         seedContact("Roman", "romantest", "kik", "Public", "Male", "English", "North America", batch);
         seedContact("Wouter", "hutsmanhsleiden", "kik", "Private", "Female", "Spanish", "South America", batch);
     }

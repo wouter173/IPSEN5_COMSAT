@@ -29,7 +29,9 @@ public enum Permission {
     DELETE_USER(262144),
 
     READ_REPORT(524288),
-    EXPORT_REPORT(1048576);
+    EXPORT_REPORT(1048576),
+
+    MANAGE_ENGINES(2097152);
 
     private final int value;
 

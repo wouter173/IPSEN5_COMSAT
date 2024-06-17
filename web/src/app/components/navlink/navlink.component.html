@@ -1,7 +1,7 @@
 <a [routerLink]="pathname" routerLinkActive="active" ariaCurrentWhenActive="page" class="relative">
-  <div class="px-2.5 py-2 relative flex gap-2 text-sm font-semibold z-50" [style]="'view-transition-name: ' + key">
-    <lucide-icon [name]="icon" class="h-[18px] stroke-[2.6]" />
+  <div class="relative z-50 flex gap-2 px-2.5 py-2 text-sm font-semibold" [style]="'view-transition-name: ' + key">
+    <lucide-icon [name]="icon" class="h-[18px] stroke-[2.4]" />
     <ng-content />
   </div>
-  <div *ngIf="isActive" class="absolute inset-0 rounded-lg bg-white -z-10" style="view-transition-name: active-blob"></div>
+  <div *ngIf="isActive" class="absolute inset-0 -z-10 rounded-lg bg-white" style="view-transition-name: active-blob"></div>
 </a>
