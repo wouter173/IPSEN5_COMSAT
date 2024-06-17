@@ -108,7 +108,12 @@ def send_captcha():
 def main():
     start_bot()
     threading.Thread(target=create_queue).start()
-    app.run(use_reloader=False, debug=True, port=os.getenv("PORT"))
+    app.run(
+        use_reloader=False,
+        debug=os.getenv("DEBUG", True),
+        port=os.getenv("PORT"),
+        host=os.getenv("HOST", "0.0.0.0")
+    )
 
 
 if __name__ == '__main__':

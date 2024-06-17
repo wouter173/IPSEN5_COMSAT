@@ -58,7 +58,6 @@ public class KikEngine implements EngineInterface {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<List<EngineContactDto>> request = new HttpEntity<>(contacts, headers);
-        System.out.println(request);
 
         ResponseEntity<Map<String, String>> response = restTemplate.exchange(
                 engineUrl + "/send_message",

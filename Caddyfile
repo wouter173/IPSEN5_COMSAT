@@ -1,0 +1,9 @@
+:80 {
+	handle /api/* {
+		reverse_proxy http://comsat_backend:8080
+	}
+
+	handle {
+		reverse_proxy http://comsat_web:80
+	}
+}
