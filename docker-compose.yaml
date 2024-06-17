@@ -1,6 +1,16 @@
 version: "3.8"
 
 services:
+  comsat_kik_engine:
+    build: ./kik-engine
+    container_name: comsat_kik_engine
+    restart: unless-stopped
+    environment:
+      KIK_USERNAME: ${KIK_ENGINE_USERNAME}
+      KIK_PASSWORD: ${KIK_ENGINE_PASSWORD}
+      KIK_DEVICE_ID: ${KIK_ENGINE_DEVICE_ID}
+      PORT: ${KIK_ENGINE_PORT}
+
   comsat_web:
     build: ./web
     container_name: comsat_frontend
@@ -13,11 +23,12 @@ services:
     depends_on:
       - comsat_db
     environment:
+      KIK_ENGINE_URL: http://comsat_kik_engine:${KIK_ENGINE_PORT}
       JWT_SECRET: ${JWT_SECRET}
       DATABASE_URL: jdbc:postgresql://comsat_db/${DATABASE_NAME}
       DATABASE_USERNAME: ${DATABASE_USERNAME}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
-      PORT: ${PORT}
+      PORT: ${BACKEND_PORT}
       spring_profiles_active: ${spring_profiles_active}
 
   comsat_db:
