@@ -9,7 +9,8 @@
         </ng-template>
         <button
           (click)="toggleBatchEditMode()"
-          class="flex items-center gap-1 rounded-lg px-3 py-2 font-semibold text-black/40 transition-all group-hover:text-black"
+          class="flex items-center gap-1 rounded-lg px-3 py-2 font-semibold text-black/40 transition-all group-hover:text-black disabled:text-gray-100 group-hover:disabled:text-gray-100"
+          [disabled]="roleService.isResearcher()"
         >
           <lucide-icon class="size-6" [name]="batchEditmode ? 'save' : 'edit-icon'" />
         </button>
@@ -18,8 +19,8 @@
         @if (selectedBatch()?.state !== "SENT") {
           <button
             (click)="onSendClick()"
-            [disabled]="selectedBatch()?.state === 'SENDING'"
-            class="flex items-center justify-center gap-1 rounded-lg bg-primary-blue-1 px-3 py-2 font-semibold text-white transition-all enabled:hover:bg-primary-blue-1/85 enabled:active:scale-[98%]"
+            [disabled]="selectedBatch()?.state === 'SENDING' || roleService.isResearcher()"
+            class="flex items-center justify-center gap-1 rounded-lg bg-primary-blue-1 px-3 py-2 font-semibold text-white transition-all enabled:hover:bg-primary-blue-1/85 enabled:active:scale-[98%] disabled:bg-gray-600"
           >
             @if (selectedBatch()?.state === "NOTSENT") {
               Send <lucide-icon class="h-[16px]" name="send-icon" />

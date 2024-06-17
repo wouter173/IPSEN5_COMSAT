@@ -13,6 +13,7 @@ import { LanguageDialogComponent } from '../../components/language-dialog/langua
 import { MatDialog } from '@angular/material/dialog';
 import { LucideAngularModule } from 'lucide-angular';
 import { platforms } from '../../models/platform';
+import { RoleService } from '../../services/role.service';
 import customSchema from './custom-schem-extension';
 import { insertPlaceholder } from './custom-commands';
 
@@ -33,6 +34,7 @@ import { insertPlaceholder } from './custom-commands';
   templateUrl: './templates.component.html',
 })
 export class TemplatesComponent {
+  roleService = inject(RoleService);
   editor = new Editor({
     schema: customSchema,
   });
