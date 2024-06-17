@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.naming.NoPermissionException;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/api/v1/templates")
@@ -28,15 +29,16 @@ public class TemplateController {
         throw new NoPermissionException();
     }
 
-    @PostMapping
-    public ResponseEntity updateTemplate(@Validated @RequestBody TemplateDto templateDto) throws NoPermissionException {
+    @PutMapping("/{id}")
+    public ResponseEntity updateTemplate(@PathVariable String id, @Validated @RequestBody TemplateDto templateDto) throws NoPermissionException {
         if (permissionService.hasPermission(permissionService.getPrincipalRoles(), Permission.UPDATE_TEMPLATE)) {
             TemplateModel templateModel = new TemplateModel();
+            templateModel.setId(UUID.fromString(id)); // Set the id from the URL
             templateModel.setPlatform(templateDto.getPlatform());
             templateModel.setHeader(templateDto.getHeader());
             templateModel.setBody(templateDto.getBody());
             templateModel.setMetadata(templateDto.getMetadata());
-            templateDao.create(templateModel);
+            templateDao.update(UUID.fromString(id), templateModel); // Update the template
             return ResponseEntity.ok().body(templateDao.getById(templateModel.getId()));
         }
         throw new NoPermissionException();
