@@ -110,7 +110,7 @@ def main():
     threading.Thread(target=create_queue).start()
     app.run(
         use_reloader=False,
-        debug=os.getenv("DEBUG", True),
+        debug=os.getenv("DEBUG", False),
         port=os.getenv("PORT"),
         host=os.getenv("HOST", "0.0.0.0")
     )
