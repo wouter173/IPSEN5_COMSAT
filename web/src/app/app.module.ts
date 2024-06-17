@@ -35,6 +35,9 @@ import {
   Save,
   BoxSelect,
   XIcon,
+  CableIcon,
+  PlugZapIcon,
+  WorkflowIcon,
 } from 'lucide-angular';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -52,6 +55,7 @@ import { BrowserAnimationsModule, NoopAnimationsModule, provideAnimations } from
     NoopAnimationsModule,
     ToastrModule.forRoot(),
     LucideAngularModule.pick({
+      WorkflowIcon,
       CheckIcon,
       ChevronLeftIcon,
       ChevronRightIcon,

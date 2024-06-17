@@ -1,0 +1,50 @@
+<div class="grid h-auto w-full grid-cols-4 p-8">
+  @for (engine of enginesService.engines(); track engine.platform) {
+    <article class="flex h-full min-h-24 w-full flex-col gap-4 rounded-lg bg-secondary-light-2 p-4">
+      <div class="flex items-center gap-2">
+        <img [src]="'/assets/platforms/' + engine.platform + '.png'" class="size-12" alt="" />
+        <h1 class="text-xl font-semibold capitalize">{{ engine.platform }}</h1>
+      </div>
+
+      <div class="grid grid-cols-[min-content,1fr] gap-x-2">
+        <span class="text-sm font-semibold">Platform</span>
+        <span class="text-sm capitalize">{{ engine.platform }}</span>
+        <span class="text-sm font-semibold">Status</span>
+        @if (engine.status === "Unavailable") {
+          <span class="flex items-center gap-1 text-sm text-red-500">
+            <div class="grid">
+              <div class="col-start-1 row-start-1 size-2 rounded-full bg-current"></div>
+              <div class="col-start-1 row-start-1 size-2 rounded-full bg-current blur-sm"></div>
+            </div>
+            Offline
+          </span>
+        } @else if (engine.status === "RequiresCaptcha") {
+          <span class="flex items-center gap-1 text-sm text-yellow-500">
+            <div class="grid">
+              <div class="col-start-1 row-start-1 size-2 rounded-full bg-current"></div>
+              <div class="col-start-1 row-start-1 size-2 rounded-full bg-current blur-sm"></div>
+            </div>
+            Requires captcha
+          </span>
+        } @else {
+          <span class="flex items-center gap-1 text-sm text-green-500">
+            <div class="grid">
+              <div class="col-start-3 row-start-1 size-2 rounded-full bg-current"></div>
+              <div class="col-start-3 row-start-1 size-2 rounded-full bg-current blur-sm"></div>
+            </div>
+            Online
+          </span>
+        }
+      </div>
+
+      @if (engine.captchaUrl) {
+        <a
+          href="{{ enginesService.captchaWithUrlRedirect(engine.captchaUrl) }}"
+          class="w-full rounded-md bg-primary-red-1 py-2 text-center font-medium text-white transition-all hover:bg-primary-red-1/80 active:scale-[98%] disabled:bg-primary-red-3"
+        >
+          Solve captcha
+        </a>
+      }
+    </article>
+  }
+</div>
