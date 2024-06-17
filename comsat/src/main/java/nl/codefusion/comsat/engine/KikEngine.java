@@ -3,11 +3,14 @@ package nl.codefusion.comsat.engine;
 import lombok.RequiredArgsConstructor;
 import nl.codefusion.comsat.dao.BatchContactEntryDao;
 import nl.codefusion.comsat.dto.EngineContactDto;
+import nl.codefusion.comsat.engine.response.EngineGenericResponse;
+import nl.codefusion.comsat.engine.response.EngineStatusResponse;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -24,13 +27,9 @@ public class KikEngine implements EngineInterface {
     @Value("${kik.engine_url}")
     private String engineUrl;
 
-    @Override
     public void updateContactChatStatuses() {
         logger.debug("[Poller] running poller");
         try {
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-
             ResponseEntity<List<EngineContactDto>> response = restTemplate.exchange(
                     engineUrl + "/get_chat_status",
                     HttpMethod.GET,
@@ -46,11 +45,14 @@ public class KikEngine implements EngineInterface {
                 logger.error("Error updating contact chat statuses", e);
             }
         } catch (Exception e) {
-            logger.error("Error getting chat statuses, is the kik engine available?", e);
+            if (e instanceof ResourceAccessException) {
+                logger.error("I/O Error getting chat statuses, is the kik engine available on {}?", engineUrl);
+            } else {
+                logger.error("Error getting chat statuses", e);
+            }
         }
     }
 
-    @Override
     public void sendTemplateToContacts(List<EngineContactDto> contacts) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -65,5 +67,27 @@ public class KikEngine implements EngineInterface {
                 new ParameterizedTypeReference<Map<String, String>>() {
                 }
         );
+    }
+
+    public EngineStatusResponse getStatus() {
+        String url = engineUrl + "/status";
+        ResponseEntity<EngineStatusResponse> response = restTemplate.getForEntity(url, EngineStatusResponse.class);
+
+        return response.getBody();
+    }
+
+
+    public void solveCaptcha(String token) {
+        String url = engineUrl + "/captcha";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<Map<String, String>> request = new HttpEntity<>(Map.of("token", token), headers);
+
+        ResponseEntity<EngineGenericResponse> response = restTemplate.postForEntity(url, request, EngineGenericResponse.class);
+
+        if (!response.getBody().getStatus().equals("success")) {
+            throw new RuntimeException("Failed to solve captcha");
+        }
     }
 }
