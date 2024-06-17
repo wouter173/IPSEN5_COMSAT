@@ -2,18 +2,21 @@ import { inject, Injectable, signal } from '@angular/core';
 import { ApiService } from './api.service';
 import { z } from 'zod';
 import { Engine, engineSchema } from '../models/engine';
+import { RevalidateService } from './revalidate.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EnginesService {
   private api = inject(ApiService);
-  private _engines = signal<Engine[]>([]);
+  private revalidateService = inject(RevalidateService);
 
+  private _engines = signal<Engine[]>([]);
   public engines = this._engines.asReadonly();
 
   constructor() {
     this.getEngines();
+    this.revalidateService.revalidator.subscribe(() => this.getEngines());
   }
 
   public async getEngines() {

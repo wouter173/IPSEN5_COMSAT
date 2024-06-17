@@ -26,18 +26,22 @@ public class EngineController {
             throw new NoPermissionException();
         }
 
-        this.kikEngine.getStatus();
-
         List<EnginesResponseDto> enginesResponseDtos = new ArrayList<>();
 
         String kikStatus = "Unavailable";
-        if (kikEngine.getStatus().getConnected()) kikStatus = "RequiresCaptcha";
-        if (kikEngine.getStatus().getAuthenticated()) kikStatus = "Available";
+        String captchaUrl = null;
+        try {
+            if (kikEngine.getStatus().getConnected()) kikStatus = "RequiresCaptcha";
+            if (kikEngine.getStatus().getAuthenticated()) kikStatus = "Available";
+            captchaUrl = kikEngine.getStatus().getCaptchaUrl();
+        } catch (Exception e) {
+            kikStatus = "Unavailable";
+        }
 
         enginesResponseDtos.add(EnginesResponseDto.builder()
                 .platform("kik")
                 .status(kikStatus)
-                .captchaUrl(kikEngine.getStatus().getCaptchaUrl())
+                .captchaUrl(captchaUrl)
                 .build());
 
         return ResponseEntity.ok(enginesResponseDtos);

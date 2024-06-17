@@ -1,11 +1,13 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, inject, OnInit } from '@angular/core';
 import { NavigationEnd, Router, Event } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { RevalidateService } from '../../services/revalidate.service';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [],
+  imports: [LucideAngularModule],
   templateUrl: './header.component.html',
 })
 export class HeaderComponent {
