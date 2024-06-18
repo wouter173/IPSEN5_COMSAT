@@ -19,6 +19,7 @@
         @if (selectedBatch()?.state !== "SENT") {
           <button
             (click)="onSendClick()"
+            data-cy="send-batch"
             [disabled]="selectedBatch()?.state === 'SENDING' || roleService.isResearcher()"
             class="flex items-center justify-center gap-1 rounded-lg bg-primary-blue-1 px-3 py-2 font-semibold text-white transition-all enabled:hover:bg-primary-blue-1/85 enabled:active:scale-[98%] disabled:bg-gray-600"
           >
@@ -33,6 +34,7 @@
         } @else {
           <button
             disabled
+            data-cy="sent"
             class="flex items-center justify-center gap-1 rounded-lg bg-green-600 px-3 py-2 font-semibold text-white transition-all"
           >
             Sent!
@@ -114,10 +116,10 @@
                   </div>
                   @if (selectedBatch()?.state === "NOTSENT") {
                     <div class="flex cursor-pointer gap-3 opacity-30 transition-all hover:opacity-100">
-                      <lucide-icon *ngIf="editingContact !== contact" name="edit-icon" class="size-[16px]" (click)="onEditClick(contact)" />
-                      <lucide-icon *ngIf="editingContact === contact" name="save" class="size-[16px]" (click)="onSaveClick()" />
+                      <lucide-icon *ngIf="editingContact !== contact" name="edit-icon" class="size-[16px]" data-cy="edit-contact" (click)="onEditClick(contact)" />
+                      <lucide-icon *ngIf="editingContact === contact" name="save" class="size-[16px]" data-cy="button-save-contact" (click)="onSaveClick()" />
                       <lucide-icon name="box-select" class="size-[16px]" (click)="grayOut(contact.id, contact.hidden)" />
-                      <lucide-icon name="trash-icon" class="size-[16px]" (click)="onDeleteClick(contact)" />
+                      <lucide-icon name="trash-icon" class="size-[16px]" (click)="onDeleteClick(contact)" data-cy="delete-contact" />
                     </div>
                   }
                 </div>
@@ -131,6 +133,7 @@
                     *ngIf="editingContact === contact"
                     [ngModel]="editingContact.firstName"
                     (ngModelChange)="editingContact.firstName = $event"
+                    data-cy="input-fullname"
                   />
 
                   <span class="text-[#676768]" *ngIf="editingContact === contact">Username</span>
