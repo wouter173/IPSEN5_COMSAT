@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, Input, Signal, effect, OnInit, OnDestroy } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { Contact } from '../../models/contact';
 import { platforms } from '../../models/platform';
@@ -21,14 +21,15 @@ import { RoleService } from '../../services/role.service';
   imports: [LucideAngularModule, SpinnerComponent, FormsModule, CommonModule],
 })
 export class BatchDetailComponent implements OnDestroy {
-  roleService = inject(RoleService);
   @Input() selectedBatchId!: Signal<string | null>;
 
-  public batchesService = inject(BatchesService);
-  public contactService = inject(ContactsService);
-  public templateService = inject(TemplatesService);
+  public roleService = inject(RoleService);
+
+  private batchesService = inject(BatchesService);
+  private contactService = inject(ContactsService);
+  private templateService = inject(TemplatesService);
   public statusService = inject(StatusService);
-  public api = inject(ApiService);
+  private api = inject(ApiService);
 
   public editingContact: Contact | null = null;
   public batchEditmode = false;
@@ -38,14 +39,18 @@ export class BatchDetailComponent implements OnDestroy {
   public templates = this.templateService.templates;
   public selectedBatch = computed(() => this.batchesService.batches().find((batch) => batch.id === this.selectedBatchId()));
   public usedPlatforms = computed(() => {
-    return this.selectedBatch()?.contacts.reduce<string[]>((acc, cur) => (acc.includes(cur.platform) ? acc : [...acc, cur.platform]), []);
+    const contacts = this.selectedBatch()?.contacts;
+    return contacts?.reduce<string[]>((acc, cur) => (acc.includes(cur.platform) ? acc : [...acc, cur.platform]), []) ?? [];
   });
+
   public platformTemplateMap = computed(() => {
     const map: Record<string, Template[]> = {};
+
     this.usedPlatforms()?.forEach((platform) => {
       const templates = this.templates()?.filter((template) => template.platform === platform);
       map[platform] = templates;
     });
+
     return Object.entries(map);
   });
 
@@ -73,6 +78,11 @@ export class BatchDetailComponent implements OnDestroy {
     }
   }
 
+  findTemplate(platform: string, templateId: string) {
+    const res = this.selectedBatch()?.templates.find((template) => template.platform === platform)?.id ?? 'NO_TEMPLATE';
+    return res === templateId;
+  }
+
   toggleBatchEditMode() {
     this.batchEditmode = !this.batchEditmode;
     if (!this.batchEditmode) {
@@ -80,10 +90,24 @@ export class BatchDetailComponent implements OnDestroy {
     }
   }
 
+  onSelectTemplate(e: Event, platform: string) {
+    const selectedBatch = this.selectedBatch();
+    const inputValue = (e.target as HTMLInputElement).value;
+
+    if (selectedBatch && inputValue !== 'NO_TEMPLATE') {
+      const newTemplates = [...selectedBatch.templates.filter((template) => template.platform !== platform).map((t) => t.id), inputValue];
+
+      this.batchesService.updateBatch(selectedBatch.id, { templates: newTemplates }).subscribe({
+        next: () => (this.batchEditmode = false),
+        error: (error) => console.error('Error updating batch name', error),
+      });
+    }
+  }
+
   onSaveBatchChanges() {
     const selectedBatch = this.selectedBatch();
     if (selectedBatch) {
-      this.batchesService.updateBatchName(selectedBatch.id, this.batchName).subscribe({
+      this.batchesService.updateBatch(selectedBatch.id, { name: this.batchName }).subscribe({
         next: () => (this.batchEditmode = false),
         error: (error) => console.error('Error updating batch name', error),
       });

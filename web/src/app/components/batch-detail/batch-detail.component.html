@@ -9,7 +9,7 @@
         </ng-template>
         <button
           (click)="toggleBatchEditMode()"
-          class="flex items-center gap-1 rounded-lg px-3 py-2 font-semibold text-black/40 transition-all group-hover:text-black disabled:text-gray-100 group-hover:disabled:text-gray-100"
+          class="flex items-center gap-1 rounded-lg px-3 py-2 font-semibold text-black/40 transition-all disabled:text-gray-100 group-hover:text-black group-hover:disabled:text-gray-100"
           [disabled]="roleService.isResearcher()"
         >
           <lucide-icon class="size-6" [name]="batchEditmode ? 'save' : 'edit-icon'" />
@@ -59,7 +59,7 @@
           <span class="">Recurring contacts:</span>
           <span class="opacity-60">-</span>
           <span class="">Platforms:</span>
-          <span class="opacity-60">{{ usedPlatforms()?.join(", ") }}</span>
+          <span class="opacity-60">{{ usedPlatforms().join(", ") }}</span>
           <span class="">Regions:</span>
           <span class="opacity-60">2</span>
           <div class="col-span-2">
@@ -88,28 +88,32 @@
       </div>
       <div class="flex h-min w-full flex-col gap-4 rounded-xl border border-black/[0.05] bg-secondary-light-2/50 p-5">
         <h2 class="text-xl font-semibold">Templates</h2>
-        <div class="grid grid-cols-1 gap-2">
-          @if (platformTemplateMap().length > 0) {
-            @for (platform of platformTemplateMap(); track platform) {
-              <label for="" class="flex flex-row items-center gap-1">
+        <form>
+          <div class="grid grid-cols-1 gap-2">
+            @for (platform of platformTemplateMap(); track platform; let idx = $index) {
+              <label class="flex flex-row items-center gap-1">
                 <span class="block w-32 text-sm font-medium opacity-65">{{ platform[0] }}</span>
                 @if (selectedBatch()?.state === "NOTSENT") {
-                  <select name="" id="" class="w-full rounded-md border border-black/5 px-2 py-1.5">
-                    @for (template of platform[1]; track template.id) {
-                      <option value="{{ template.id }}">{{ template.header }}</option>
+                  <select class="w-full rounded-md border border-black/5 px-2 py-1.5" (change)="onSelectTemplate($event, platform[0])">
+                    @if (platform[1].length === 0) {
+                      <option value="NO_TEMPLATE" disabled [selected]="findTemplate(platform[0], 'NO_TEMPLATE')">
+                        No template available
+                      </option>
+                    } @else {
+                      <option value="NO_TEMPLATE" disabled [selected]="findTemplate(platform[0], 'NO_TEMPLATE')">Not selected</option>
                     }
 
-                    @if (platform[1].length === 0) {
-                      <option value="NO_TEMPLATE" disabled selected>No template available</option>
+                    @for (template of platform[1]; track template.id) {
+                      <option [selected]="findTemplate(platform[0], template.id)" value="{{ template.id }}">
+                        {{ template.header }}
+                      </option>
                     }
                   </select>
-                } @else {
-                  <div class="w-full rounded-md border border-black/5 bg-white px-2 py-1.5">template 1</div>
-                }
+                } @else {}
               </label>
             }
-          }
-        </div>
+          </div>
+        </form>
       </div>
       <div class="col-span-2 flex-col">
         <h2 class="mb-2 text-2xl font-semibold">Contacts</h2>

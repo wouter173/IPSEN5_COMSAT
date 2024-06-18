@@ -99,6 +99,7 @@ export class ReportsComponent implements OnInit {
         state: 'SENT',
         createdAt: new Date(),
         lastModified: new Date(),
+        templates: [],
     };
     public batchesWithGeneral = computed(() => [this.generalBatch, ...this.batchesService.batches()]);
 
