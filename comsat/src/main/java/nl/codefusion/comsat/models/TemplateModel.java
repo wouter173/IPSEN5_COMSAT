@@ -1,5 +1,6 @@
 package nl.codefusion.comsat.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Table(name = "templates")
@@ -33,6 +35,10 @@ public class TemplateModel {
 
     @Column(name = "metadata")
     private String metadata;
+
+    @JsonBackReference
+    @OneToMany(mappedBy = "template")
+    private List<BatchTemplateEntryModel> batchTemplates;
 
     @UpdateTimestamp
     @Column(name = "last_modified", nullable = false)

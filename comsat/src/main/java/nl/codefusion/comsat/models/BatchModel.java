@@ -35,6 +35,10 @@ public class BatchModel {
     @OneToMany(mappedBy = "batch")
     private List<BatchContactEntryModel> batchContacts;
 
+    @JsonBackReference
+    @OneToMany(mappedBy = "batch")
+    private List<BatchTemplateEntryModel> batchTemplates;
+
     @UpdateTimestamp
     @Column(name = "last_modified", nullable = false)
     private Date lastModified;
@@ -42,5 +46,6 @@ public class BatchModel {
     @CreationTimestamp
     @Column(name = "created_at", nullable = false)
     private Date createdAt;
+
 }
 

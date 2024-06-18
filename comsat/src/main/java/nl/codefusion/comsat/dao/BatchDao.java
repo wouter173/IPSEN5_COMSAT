@@ -27,11 +27,14 @@ public class BatchDao {
     }
 
     public BatchModel update(UUID id, BatchModel batchModel) {
-        return this.batchRepository.findById(id).map(batch -> {
-            batch.setName(batchModel.getName());
-            batch.setState(batchModel.getState());
-            batch.setLastModified(batchModel.getLastModified());
-            return this.batchRepository.save(batch);
-        }).orElseThrow(() -> new EntityNotFoundException("Batch not found"));
+        BatchModel batch = this.batchRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Batch not found"));
+
+        batch.setBatchTemplates(batchModel.getBatchTemplates());
+        batch.setBatchContacts(batchModel.getBatchContacts());
+        batch.setName(batchModel.getName());
+        batch.setState(batchModel.getState());
+        
+        return this.batchRepository.save(batch);
+
     }
 }
