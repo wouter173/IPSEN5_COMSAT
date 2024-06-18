@@ -9,6 +9,8 @@ import { LoginComponent } from './pages/login/login.component';
 import { TemplatesComponent } from './pages/templates/templates.component';
 import { authGuard } from './guards/auth.guard';
 import { SettingsComponent } from './pages/settings/settings.component';
+import { EnginesComponent } from './pages/engines/engines.component';
+import { EngineCallbackComponent } from './pages/engine-callback/engine-callback.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -23,6 +25,8 @@ export const routes: Routes = [
       { path: 'contacts/:id', component: ContactsComponent },
       { path: 'templates', component: TemplatesComponent },
       { path: 'users', component: UsersComponent },
+      { path: 'engines', component: EnginesComponent },
+      { path: 'engines/captcha-callback', component: EngineCallbackComponent },
       { path: '', component: ReportsComponent },
     ],
   },

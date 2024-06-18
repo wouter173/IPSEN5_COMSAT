@@ -3,13 +3,11 @@ FROM maven:3-eclipse-temurin-21 AS build
 
 # Set the working directory in the container
 WORKDIR /app
-
-# Copy the project files into the container
 COPY . .
 
 # Build the application using Maven
 RUN mvn clean
-RUN mvn package -DskipTests
+RUN mvn package
 
 # Use a smaller base image for the final image
 FROM eclipse-temurin:21.0.1_12-jdk-ubi9-minimal

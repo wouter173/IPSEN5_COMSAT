@@ -52,6 +52,7 @@ export class ApiService {
       }
 
       if (options.authorized && response.status === 403) {
+        console.log(await response.text());
         this.logoutService.logout();
       }
 
