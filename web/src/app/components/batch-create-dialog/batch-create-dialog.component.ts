@@ -70,6 +70,7 @@ export class BatchCreateDialogComponent {
         state: 'NOTSENT',
         createdAt: new Date(),
         lastModified: new Date(),
+        templates: [],
         name,
         contacts: contacts.map((contact) => ({
           ...contact,
@@ -77,8 +78,6 @@ export class BatchCreateDialogComponent {
           status: 'NOTSENT',
         })),
       };
-
-      // this.batchesService.createBatch(newBatch);
 
       this.batchesService.sendBatchData(newBatch).subscribe({
         next: () => console.log('Batch data sent successfully'),

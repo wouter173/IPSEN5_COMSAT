@@ -42,10 +42,6 @@ export class BatchesService {
     );
   }
 
-  public updateBatch(batchId: string, batch: Partial<Batch>) {
-    this._batches.set(this._batches().map((b) => (b.id === batchId ? { ...b, ...batch } : b)));
-  }
-
   public sendBatchData(batch: Batch) {
     return from(this.api.post('/batches', { body: batch }));
   }
@@ -54,7 +50,12 @@ export class BatchesService {
     return from(this.api.get('/batches', { schema: z.array(batchSchema) })).pipe(tap(({ data }) => this._batches.set(data)));
   }
 
-  public updateBatchName(id: string, value: string) {
-    return from(this.api.put('/batches/' + id, { body: { name: value } }));
+  public updateBatch(id: string, batch: Partial<{ state: string; name: string; templates: string[] }>) {
+    return from(this.api.put('/batches/' + id, { body: { ...batch }, schema: batchSchema })).pipe(
+      tap((batch) => {
+        this._batches.set([...this._batches().filter((x) => x.id != batch.data.id), batch.data]);
+        this.getAllBatches().subscribe();
+      }),
+    );
   }
 }

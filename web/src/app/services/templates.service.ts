@@ -34,7 +34,7 @@ export class TemplatesService {
       createdAt: template.createdAt,
     };
 
-    await this.api.post(`/templates`, { body: template });
+    await this.api.put(`/templates/${template.id}`, { body: template });
     await this.fetchTemplates();
   }
 }

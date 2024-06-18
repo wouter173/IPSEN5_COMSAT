@@ -1,10 +1,12 @@
 package nl.codefusion.comsat.dto;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.Date;
 import java.util.UUID;
 
+@Builder
 @Data
 public class TemplateDto {
     private UUID id;
@@ -12,6 +14,6 @@ public class TemplateDto {
     private String header;
     private String body;
     private String metadata;
-    private Date updatedAt;
+    private Date lastModified;
     private Date createdAt;
 }

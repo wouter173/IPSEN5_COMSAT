@@ -24,7 +24,7 @@ public class ContactSeeder {
         BatchModel batch = seedBatch();
 
         seedContact("Roman", "romantest", "kik", "Public", "Male", "English", "North America", batch);
-        seedContact("Wouter", "hutsmanhsleiden", "kik", "Private", "Female", "Spanish", "South America", batch);
+        seedContact("Wouter", "hsltest", "kik", "Private", "Female", "Spanish", "South America", batch);
     }
 
     private ContactModel seedContact(String firstName, String nickname, String platform, String audience, String sex, String language, String region, BatchModel batch) {

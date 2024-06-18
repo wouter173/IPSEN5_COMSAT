@@ -104,15 +104,22 @@ export class TemplatesComponent {
     }
   }
 
-  onSave() {
-    if (this.selectedTemplate) {
-      this.selectedTemplate()!.header = this.templateHeader;
-      this.selectedTemplate()!.platform = this.selectedTemplate()!.platform;
-      this.selectedTemplate()!.lastModified = new Date().toISOString();
-
-      this.templateService.updateTemplate(this.selectedTemplate()!);
-    }
+onSave() {
+  if (this.selectedTemplate()) {
+    const template = this.selectedTemplate();
+    const updatedTemplate: Template = {
+      id: template?.id || uuidv4(),
+      header: this.templateHeader,
+      platform: this.selectedPlatform,
+      lastModified: new Date().toISOString(),
+      body: template?.body || '',
+      metadata: template?.metadata || '',
+      createdAt: template?.createdAt || new Date().toISOString(),
+      translations: template?.translations || []
+    };
+    this.templateService.updateTemplate(updatedTemplate);
   }
+}
 
 
   receiveTemplate(template: Template) {
