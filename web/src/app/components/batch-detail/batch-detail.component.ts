@@ -115,15 +115,17 @@ export class BatchDetailComponent implements OnDestroy {
   }
 
   startPoller() {
+    if (this.poller) clearInterval(this.poller);
     this.poller = setInterval(() => this.batchesService.getAllBatches().subscribe(), 1000) as unknown as number;
+    this.batchesService.getAllBatches().subscribe();
   }
 
   async onSendClick() {
     const id = this.selectedBatchId();
     if (!id) return;
-    this.batchesService.updateBatch(id, { state: 'SENDING' });
 
-    this.api.post(`/batches/${this.selectedBatchId()}/send`);
+    await this.api.post(`/batches/${this.selectedBatchId()}/send`);
+    this.startPoller();
   }
 
   onDeleteClick(contact: Contact) {

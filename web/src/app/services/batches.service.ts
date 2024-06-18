@@ -51,8 +51,11 @@ export class BatchesService {
   }
 
   public updateBatch(id: string, batch: Partial<{ state: string; name: string; templates: string[] }>) {
-    return from(this.api.put('/batches/' + id, { body: { name: batch.name, templates: batch.templates }, schema: batchSchema })).pipe(
-      tap((batch) => this._batches.set([...this._batches().filter((x) => x.id != batch.data.id), batch.data])),
+    return from(this.api.put('/batches/' + id, { body: { ...batch }, schema: batchSchema })).pipe(
+      tap((batch) => {
+        this._batches.set([...this._batches().filter((x) => x.id != batch.data.id), batch.data]);
+        this.getAllBatches().subscribe();
+      }),
     );
   }
 }

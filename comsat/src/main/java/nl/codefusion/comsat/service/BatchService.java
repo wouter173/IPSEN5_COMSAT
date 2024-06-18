@@ -94,10 +94,10 @@ public class BatchService {
 
     public String getBatchState(List<BatchContactEntryModel> contacts) {
         Set<String> statusSet = contacts.stream().filter(x -> !x.isHidden()).map(x -> x.getStatus()).collect(Collectors.toSet());
-
-        String batchStatus = "NOTSENT";
-        if (!statusSet.contains("NOTSENT") || statusSet.size() > 1) batchStatus = "SENDING";
-        if (statusSet.contains("SENT")) batchStatus = "SENT";
+        
+        String batchStatus = "SENT";
+        if (statusSet.contains("NOTSENT")) batchStatus = "NOTSENT";
+        if (statusSet.contains("QUEUED") || statusSet.contains("SENDING")) batchStatus = "SENDING";
 
         return batchStatus;
     }
