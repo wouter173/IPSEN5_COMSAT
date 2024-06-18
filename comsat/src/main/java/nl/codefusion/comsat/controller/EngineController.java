@@ -53,7 +53,13 @@ public class EngineController {
             throw new NoPermissionException();
         }
 
+        String token = solveCaptchaRequestDto.getToken();
+        if (token == null || token.isBlank()) {
+            return ResponseEntity.badRequest().body("Token is required");
+        }
+
         this.kikEngine.solveCaptcha(solveCaptchaRequestDto.getToken());
         return ResponseEntity.ok("Captcha solved");
     }
+
 }
