@@ -13,6 +13,7 @@ import { Template } from '../../models/templates';
 import { ApiService } from '../../services/api.service';
 import { StatusService } from '../../services/status.service';
 import { RoleService } from '../../services/role.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-batch-detail',
@@ -30,6 +31,7 @@ export class BatchDetailComponent implements OnDestroy {
   private templateService = inject(TemplatesService);
   public statusService = inject(StatusService);
   private api = inject(ApiService);
+  private toastr = inject(ToastrService);
 
   public editingContact: Contact | null = null;
   public batchEditmode = false;
@@ -78,7 +80,11 @@ export class BatchDetailComponent implements OnDestroy {
     }
   }
 
-  findTemplate(platform: string, templateId: string) {
+  findTemplate(platform: string) {
+    return this.selectedBatch()?.templates.find((template) => template.platform === platform);
+  }
+
+  checkTemplateId(platform: string, templateId: string) {
     const res = this.selectedBatch()?.templates.find((template) => template.platform === platform)?.id ?? 'NO_TEMPLATE';
     return res === templateId;
   }
@@ -117,15 +123,18 @@ export class BatchDetailComponent implements OnDestroy {
   startPoller() {
     if (this.poller) clearInterval(this.poller);
     this.poller = setInterval(() => this.batchesService.getAllBatches().subscribe(), 1000) as unknown as number;
-    this.batchesService.getAllBatches().subscribe();
   }
 
   async onSendClick() {
     const id = this.selectedBatchId();
     if (!id) return;
 
-    await this.api.post(`/batches/${this.selectedBatchId()}/send`);
-    this.startPoller();
+    const { response } = await this.api.post(`/batches/${this.selectedBatchId()}/send`);
+    if (response.status === 200) {
+      this.startPoller();
+    } else {
+      this.toastr.error(await response.text());
+    }
   }
 
   onDeleteClick(contact: Contact) {

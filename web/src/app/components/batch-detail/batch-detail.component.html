@@ -62,28 +62,6 @@
           <span class="opacity-60">{{ usedPlatforms().join(", ") }}</span>
           <span class="">Regions:</span>
           <span class="opacity-60">2</span>
-          <div class="col-span-2">
-            <div class="my-2 h-px w-full bg-black/5"></div>
-          </div>
-          @if (selectedBatch()?.state !== "SENT") {
-            <span class="">Messages sent:</span>
-            <span class="opacity-60">-</span>
-            <span class="">Errors:</span>
-            <span class="opacity-60">-</span>
-            <span class="">Read:</span>
-            <span class="opacity-60">-</span>
-            <span class="">Replies:</span>
-            <span class="opacity-60">-</span>
-          } @else {
-            <span class="">Messages sent:</span>
-            <span class="opacity-60">32</span>
-            <span class="">Errors:</span>
-            <span class="opacity-60">5</span>
-            <span class="">Read:</span>
-            <span class="opacity-60">18</span>
-            <span class="">Replies:</span>
-            <span class="opacity-60">4</span>
-          }
         </div>
       </div>
       <div class="flex h-min w-full flex-col gap-4 rounded-xl border border-black/[0.05] bg-secondary-light-2/50 p-5">
@@ -96,20 +74,22 @@
                 @if (selectedBatch()?.state === "NOTSENT") {
                   <select class="w-full rounded-md border border-black/5 px-2 py-1.5" (change)="onSelectTemplate($event, platform[0])">
                     @if (platform[1].length === 0) {
-                      <option value="NO_TEMPLATE" disabled [selected]="findTemplate(platform[0], 'NO_TEMPLATE')">
+                      <option value="NO_TEMPLATE" disabled [selected]="checkTemplateId(platform[0], 'NO_TEMPLATE')">
                         No template available
                       </option>
                     } @else {
-                      <option value="NO_TEMPLATE" disabled [selected]="findTemplate(platform[0], 'NO_TEMPLATE')">Not selected</option>
+                      <option value="NO_TEMPLATE" disabled [selected]="checkTemplateId(platform[0], 'NO_TEMPLATE')">Not selected</option>
                     }
 
                     @for (template of platform[1]; track template.id) {
-                      <option [selected]="findTemplate(platform[0], template.id)" value="{{ template.id }}">
+                      <option [selected]="checkTemplateId(platform[0], template.id)" value="{{ template.id }}">
                         {{ template.header }}
                       </option>
                     }
                   </select>
-                } @else {}
+                } @else {
+                  <span class="text-[#676768]">{{ findTemplate(platform[0])?.header }}</span>
+                }
               </label>
             }
           </div>
@@ -132,12 +112,14 @@
                       <span class="text-xs font-semibold text-[#676768]">{{ contact.nickname }}</span>
                     </div>
                   </div>
-                  <div class="flex cursor-pointer gap-3 opacity-30 transition-all hover:opacity-100">
-                    <lucide-icon *ngIf="editingContact !== contact" name="edit-icon" class="size-[16px]" (click)="onEditClick(contact)" />
-                    <lucide-icon *ngIf="editingContact === contact" name="save" class="size-[16px]" (click)="onSaveClick()" />
-                    <lucide-icon name="box-select" class="size-[16px]" (click)="grayOut(contact.id, contact.hidden)" />
-                    <lucide-icon name="trash-icon" class="size-[16px]" (click)="onDeleteClick(contact)" />
-                  </div>
+                  @if (selectedBatch()?.state === "NOTSENT") {
+                    <div class="flex cursor-pointer gap-3 opacity-30 transition-all hover:opacity-100">
+                      <lucide-icon *ngIf="editingContact !== contact" name="edit-icon" class="size-[16px]" (click)="onEditClick(contact)" />
+                      <lucide-icon *ngIf="editingContact === contact" name="save" class="size-[16px]" (click)="onSaveClick()" />
+                      <lucide-icon name="box-select" class="size-[16px]" (click)="grayOut(contact.id, contact.hidden)" />
+                      <lucide-icon name="trash-icon" class="size-[16px]" (click)="onDeleteClick(contact)" />
+                    </div>
+                  }
                 </div>
                 <div class="grid grid-cols-[120px,auto] text-sm font-medium">
                   <span class="text-[#676768]">Status</span>
