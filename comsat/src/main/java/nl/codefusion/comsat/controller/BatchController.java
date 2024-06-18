@@ -43,7 +43,11 @@ public class BatchController {
 
     @PostMapping("/{id}/send")
     public ResponseEntity<String> sendBatch(@PathVariable String id) {
-        batchService.sendBatch(UUID.fromString(id));
+        try {
+            batchService.sendBatch(UUID.fromString(id));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error sending batch: " + e.getMessage());
+        }
         return ResponseEntity.ok("Batch sent successfully");
     }
 

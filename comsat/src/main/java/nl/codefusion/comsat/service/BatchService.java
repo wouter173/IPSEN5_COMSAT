@@ -9,6 +9,7 @@ import nl.codefusion.comsat.engine.KikEngine;
 import nl.codefusion.comsat.models.BatchContactEntryModel;
 import nl.codefusion.comsat.models.BatchModel;
 import nl.codefusion.comsat.models.ContactModel;
+import nl.codefusion.comsat.models.TemplateModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +28,7 @@ public class BatchService {
     private final KikEngine kikEngine;
     private final PseudonymService pseudonymService;
     private final PermissionService permissionService;
+    private final TemplateRenderService templateRenderService;
 
     @Transactional
     public void processBatch(BatchDto batchDto) {
@@ -67,16 +69,21 @@ public class BatchService {
 
     }
 
-    public void sendBatch(UUID batchId) {
+    public void sendBatch(UUID batchId) throws Exception {
         List<BatchContactEntryModel> batchContactEntries = batchContactEntryDao.findAllByBatchId(batchId);
 
         List<EngineContactDto> contacts = new ArrayList<>();
         for (BatchContactEntryModel contactEntry : batchContactEntries) {
             if (contactEntry.isHidden()) continue;
 
-            //TODO Template generation
-            String msg = "test test";
 
+            TemplateModel template = contactEntry.getBatch().getBatchTemplates().stream()
+                    .map(batchTemplate -> batchTemplate.getTemplate())
+                    .filter(templateEntry -> templateEntry.getPlatform().equals(contactEntry.getContact().getPlatform()))
+                    .findFirst().orElseThrow(() -> new Exception("No template found for platform " + contactEntry.getContact().getPlatform()));
+
+            String msg = templateRenderService.renderTemplate(contactEntry.getContact(), template);
+            
             contactEntry.setMessage(msg);
             batchContactEntryDao.update(contactEntry.getId(), contactEntry);
 
@@ -94,7 +101,7 @@ public class BatchService {
 
     public String getBatchState(List<BatchContactEntryModel> contacts) {
         Set<String> statusSet = contacts.stream().filter(x -> !x.isHidden()).map(x -> x.getStatus()).collect(Collectors.toSet());
-        
+
         String batchStatus = "SENT";
         if (statusSet.contains("NOTSENT")) batchStatus = "NOTSENT";
         if (statusSet.contains("QUEUED") || statusSet.contains("SENDING")) batchStatus = "SENDING";
