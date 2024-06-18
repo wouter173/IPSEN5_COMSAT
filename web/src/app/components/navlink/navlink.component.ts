@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 
@@ -9,7 +9,7 @@ import { LucideAngularModule } from 'lucide-angular';
   imports: [RouterLink, LucideAngularModule, CommonModule],
   templateUrl: './navlink.component.html',
 })
-export class NavlinkComponent {
+export class NavlinkComponent implements OnInit {
   @Input() pathname: string;
   @Input() icon: string;
   @Input() key: string;
@@ -24,6 +24,10 @@ export class NavlinkComponent {
     this.updateCurrentPath();
   }
 
+  ngOnInit(): void {
+    this.updateCurrentPath();
+  }
+
   private updateCurrentPath(): void {
     this.isActive = this.isCurrentPath(this.pathname);
 
@@ -33,6 +37,7 @@ export class NavlinkComponent {
   }
 
   private isCurrentPath(pathname: string): boolean {
+    if (!pathname) return false;
     if (pathname === '/') return this.router.url === pathname;
     return this.router.url.startsWith(pathname);
   }
