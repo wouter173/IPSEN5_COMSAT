@@ -28,10 +28,8 @@ describe('Template', () => {
 
     cy.get('ngx-editor[id="editor"]').type('Random Template Text');
 
-cy.scrollTo('topRight');
-cy.wait(500);
-cy.scrollTo('topRight');
-cy.wait(500);
-cy.get('button').contains('Save').scrollTo('topRight').click();
+    cy.scrollTo('topRight');
+    cy.wait(300);
+    cy.contains('button', 'Save').click({force: true});
   });
 });
