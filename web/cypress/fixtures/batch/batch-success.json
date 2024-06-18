@@ -1,0 +1,35 @@
+[
+  {
+    "id": "d02880d8-f7b7-439d-ac1d-af01053c04dc",
+    "name": "Batch-1",
+    "state": "NOTSENT",
+    "lastModified": "2024-06-18 20:11:31.009",
+    "createdAt": "2024-06-18 20:11:31.009",
+    "contacts": [
+      {
+        "id": "9477d7c6-13b5-4fcf-81d3-6a4c432da6a9",
+        "firstName": "Roman",
+        "nickname": "romantest",
+        "platform": "kik",
+        "audience": "Public",
+        "sex": "Male",
+        "language": "English",
+        "region": "North America",
+        "status": "NOTSENT",
+        "hidden": false
+      },
+      {
+        "id": "817d2144-ed26-4bfb-919d-ca936e989c83",
+        "firstName": "Wouter",
+        "nickname": "hutsmanhsleiden",
+        "platform": "kik",
+        "audience": "Private",
+        "sex": "Female",
+        "language": "Spanish",
+        "region": "South America",
+        "status": "NOTSENT",
+        "hidden": false
+      }
+    ]
+  }
+]
