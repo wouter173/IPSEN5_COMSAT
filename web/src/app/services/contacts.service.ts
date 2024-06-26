@@ -29,6 +29,10 @@ export class ContactsService {
     return from(this.api.delete(`/contacts/${id}`));
   }
 
+  public removeBatchFromContact(contactId: string, batchId: string): Observable<unknown> {
+    return from(this.api.put(`/contacts/${contactId}/batches/${batchId}/remove`));
+  }
+
   public updateContact(id: string, contact: Contact): Observable<unknown> {
     return from(this.api.put(`/contacts/${id}`, { body: contact }));
   }

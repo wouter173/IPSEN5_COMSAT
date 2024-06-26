@@ -137,17 +137,24 @@ export class BatchDetailComponent implements OnDestroy {
     }
   }
 
-  onDeleteClick(contact: Contact) {
-    if (window.confirm('Are you sure you want to delete this contact?')) {
-      this.contactService.deleteContact(contact.id).subscribe(() => {
-        // Remove the deleted contact from the local contacts array
-        const index = this.selectedBatch()?.contacts.findIndex((c) => c.id === contact.id);
-        if (index !== undefined && index !== -1) {
-          this.selectedBatch()?.contacts.splice(index, 1);
-        }
-      });
-    }
+onDeleteClick(contact: Contact) {
+  const batchId = this.selectedBatchId();
+  if (batchId === null) {
+    // Handle the null case here. For example, show an error message.
+    console.error('Batch ID is null');
+    return;
   }
+
+  if (window.confirm('Are you sure you want to remove this contact from the batch?')) {
+    this.contactService.removeBatchFromContact(contact.id, batchId).subscribe(() => {
+      // Remove the deleted contact from the local contacts array
+      const index = this.selectedBatch()?.contacts.findIndex((c) => c.id === contact.id);
+      if (index !== undefined && index !== -1) {
+        this.selectedBatch()?.contacts.splice(index, 1);
+      }
+    });
+  }
+}
 
   onEditClick(contact: Contact) {
     //To edit the contact
