@@ -56,16 +56,25 @@ public class ContactService {
         String nickname;
 
         List<EntryResponseDto> entries = contactModel.getBatchContacts().stream()
-                .map(entry -> EntryResponseDto.builder()
-                        .id(entry.getId())
-                        .status(entry.getStatus())
-                        .message(entry.getMessage())
-                        .hidden(entry.isHidden())
-                        .batchId(entry.getBatch().getId())
-                        .batchName(entry.getBatch().getName())
-                        .createdAt(entry.getCreatedAt())
-                        .lastModified(entry.getLastModified())
-                        .build())
+                .map(entry -> {
+                    UUID batchId = null;
+                    String batchName = null;
+                    if (entry.getBatch() != null) {
+                        batchId = entry.getBatch().getId();
+                        batchName = entry.getBatch().getName();
+                    }
+
+                    return EntryResponseDto.builder()
+                            .id(entry.getId())
+                            .status(entry.getStatus())
+                            .message(entry.getMessage())
+                            .hidden(entry.isHidden())
+                            .batchId(batchId)
+                            .batchName(batchName)
+                            .createdAt(entry.getCreatedAt())
+                            .lastModified(entry.getLastModified())
+                            .build();
+                })
                 .toList();
 
         if (hasDetails) {
