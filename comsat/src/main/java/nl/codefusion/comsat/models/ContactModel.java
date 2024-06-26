@@ -51,7 +51,7 @@ public class ContactModel {
     private boolean deleted;
 
     @JsonBackReference
-    @OneToMany(mappedBy = "contact", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "contact", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<BatchContactEntryModel> batchContacts;
 
     @UpdateTimestamp
@@ -61,4 +61,9 @@ public class ContactModel {
     @CreationTimestamp
     @Column(name = "created_at", nullable = false)
     private Date createdAt;
+
+    public void removeBatchFromContact(BatchContactEntryModel batchContact) {
+        batchContacts.remove(batchContact);
+        batchContact.setBatch(null);
+    }
 }

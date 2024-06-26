@@ -38,6 +38,15 @@ public class ContactController {
         throw new NoPermissionException();
     }
 
+    @PutMapping("/{contactId}/batches/{batchId}/remove")
+    public ResponseEntity<Void> removeBatchFromContact(@PathVariable UUID contactId, @PathVariable UUID batchId) throws NoPermissionException {
+        if (!permissionService.hasPermission(permissionService.getPrincipalRoles(), Permission.UPDATE_CONTACT)) {
+            throw new NoPermissionException();
+        }
+        contactService.removeBatchFromContact(contactId, batchId);
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteContact(@PathVariable String id) throws NoPermissionException {
         if (permissionService.hasPermission(permissionService.getPrincipalRoles(), Permission.DELETE_CONTACT)) {
